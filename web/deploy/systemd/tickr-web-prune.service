@@ -1,0 +1,11 @@
+[Unit]
+Description=tickr.bot web: delete expired unconfirmed waitlist addresses
+Requires=tickr-web.service
+After=tickr-web.service
+
+[Service]
+Type=oneshot
+User=tickrweb
+WorkingDirectory=/srv/tickr-web/repo/web/deploy
+EnvironmentFile=/srv/tickr-web/etc/compose.env
+ExecStart=/usr/bin/docker compose exec -T app /entrypoint.sh /venv/bin/python manage.py prune_waitlist

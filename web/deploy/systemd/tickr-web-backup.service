@@ -1,0 +1,11 @@
+[Unit]
+Description=tickr.bot web: nightly database dump to S3
+Requires=tickr-web.service
+After=tickr-web.service
+
+[Service]
+Type=oneshot
+User=tickrweb
+WorkingDirectory=/srv/tickr-web/repo/web/deploy
+EnvironmentFile=/srv/tickr-web/etc/compose.env
+ExecStart=/srv/tickr-web/repo/web/deploy/backup.sh
