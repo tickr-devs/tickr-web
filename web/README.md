@@ -39,7 +39,8 @@ account, or is not confirmed, is skipped; if the email fails, no account is left
 An admin is an account with `is_staff` and `is_superuser`; everyone else is a member. Admins see
 two more sections in the same cabinet, **Early access** and **People**, and they open only in a
 session signed in with a passkey or an authenticator app (members and other sessions get 403).
-On **People** an admin makes another account an admin or removes the role (`tickrweb/roles.py`).
+On **People** an admin makes another account an admin or removes the role (`tickrweb/roles.py`);
+only an account that already has a passkey or an authenticator app can be made admin.
 The last admin cannot be removed, and every change is emailed to all admins and the person.
 
 The first admin, who has nobody to invite them, is made with
