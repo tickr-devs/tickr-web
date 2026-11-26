@@ -17,3 +17,9 @@ if [ ! -s "$dump" ]; then
 fi
 aws s3 cp "$dump" "s3://${TICKR_WEB_BACKUP_BUCKET}/backups/tickrweb/${stamp}.dump" --only-show-errors
 echo "backup ${stamp} uploaded"
+# One point for the alarm tickr-web-backup-missing (ops/aws/web/main.tf): no point for a day means
+# no dump reached S3. The region is this machine's own, read from the instance metadata (IMDSv2).
+imds=http://169.254.169.254/latest
+token=$(curl -sSf -X PUT "$imds/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 60")
+region=$(curl -sSf -H "X-aws-ec2-metadata-token: $token" "$imds/meta-data/placement/region")
+aws cloudwatch put-metric-data --region "$region" --namespace Tickr/Web --metric-name BackupUploaded --value 1
