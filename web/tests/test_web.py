@@ -158,7 +158,7 @@ def test_cabinet_shows_the_account_and_is_not_cached(client):
     client.force_login(user)
     response = client.get("/app")
     assert b"owner@example.com" in response.content
-    assert b"Sample data" in response.content
+    assert b"Sample data" not in response.content
     assert response.context["device_count"] == 1
     assert response.context["passkey_count"] == 0
     assert response["Cache-Control"] == "no-store"
@@ -229,11 +229,14 @@ def test_every_signed_in_page_opens(client, path):
         assert client.get(response["Location"]).status_code == 200, path
 
 
-def test_staff_see_the_admin_link_and_members_do_not(client):
+def test_admin_sections_show_in_the_cabinet_only_for_admins(client):
     _sign_in_with(client, _invite("member@example.com"), {"method": "code"})
-    assert "/app/admin/" not in client.get("/app").text
-    staff = Client()
+    page = client.get("/app").text
+    assert "/app/people" not in page and "/app/early-access" not in page
+    owner = Client()
     _sign_in_with(
-        staff, _invite("owner@example.com", "--staff"), {"method": "mfa", "type": "webauthn"}
+        owner, _invite("owner@example.com", "--superuser"), {"method": "mfa", "type": "webauthn"}
     )
-    assert "/app/admin/" in staff.get("/app").text
+    page = owner.get("/app").text
+    assert "/app/people" in page and "/app/early-access" in page
+    assert "/app/admin/" not in page

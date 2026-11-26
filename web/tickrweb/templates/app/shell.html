@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+{# Every signed-in page: side navigation and the page's content. #}
+{% block body %}
+<div class="shell">
+<nav class="nav" aria-label="{% translate 'Cabinet' %}">
+<a href="{% url 'cabinet' %}"{% if nav_active == "/app" %} aria-current="page"{% endif %}>{% translate "Overview" %}</a>
+<a href="{% url 'mfa_index' %}"{% if nav_active == "/account/2fa/" %} aria-current="page"{% endif %}>{% translate "Security" %}</a>
+<a href="{% url 'usersessions_list' %}"{% if nav_active == "/account/sessions/" %} aria-current="page"{% endif %}>{% translate "Devices" %}</a>
+{% if nav_admin %}
+<p class="label sep">{% translate "Admin" %}</p>
+<a href="{% url 'early_access' %}"{% if nav_active == "/app/early-access" %} aria-current="page"{% endif %}>{% translate "Early access" %}</a>
+<a href="{% url 'people' %}"{% if nav_active == "/app/people" %} aria-current="page"{% endif %}>{% translate "People" %}</a>
+{% endif %}
+</nav>
+<main class="main">
+{% if messages %}<ul class="msgs" role="status">{% for message in messages %}<li class="{{ message.tags }}">{{ message }}</li>{% endfor %}</ul>{% endif %}
+{% block content %}{% endblock %}
+</main>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "mfa/base_manage.html" %}
+{% load i18n %}
+{# Security: passkeys first, then password, authenticator app and recovery codes. #}
+{% block head_title %}{% translate "Security" %}{% endblock %}
+{% block content %}
+<h1>{% translate "Security" %}</h1>
+<div class="cards">
+<section class="card"><header><h2>{% translate "Passkeys" %}</h2></header>
+<div class="body"><p class="dim">{% translate "Sign in with Face ID, Touch ID or your device's lock. Needed for the admin sections." %}</p></div>
+{% with n=authenticators.webauthn|length %}
+{% if n %}{% url 'mfa_list_webauthn' as href %}{% translate "Your passkeys" as label %}{% include "app/foot.html" with href=href label=label count=n %}{% endif %}
+{% url 'mfa_add_webauthn' as add_url %}{% translate "Add a passkey" as label %}{% include "app/foot.html" with href=add_url label=label count=None %}
+{% endwith %}
+</section>
+<section class="card"><header><h2>{% translate "Password" %}</h2></header>
+<dl class="rows"><div><dt>{% translate "Password" %}</dt><dd>{% if user.has_usable_password %}{% translate "Set" %}{% else %}<span class="dim">{% translate "Not set: you sign in with a passkey or an emailed code" %}</span>{% endif %}</dd></div></dl>
+{% if user.has_usable_password %}{% url 'account_change_password' as href %}{% translate "Change password" as label %}{% else %}{% url 'account_set_password' as href %}{% translate "Set a password" as label %}{% endif %}
+{% include "app/foot.html" with href=href label=label count=None %}
+</section>
+{% if "totp" in MFA_SUPPORTED_TYPES %}
+<section class="card"><header><h2>{% translate "Authenticator app" %}</h2></header>
+<dl class="rows"><div><dt>{% translate "Status" %}</dt><dd>{% if authenticators.totp %}<span class="st"><i></i>{% translate "On" %}</span>{% else %}<span class="st off"><i></i>{% translate "Off" %}</span>{% endif %}</dd></div></dl>
+{% if authenticators.totp %}{% url 'mfa_deactivate_totp' as href %}{% translate "Turn off" as label %}{% else %}{% url 'mfa_activate_totp' as href %}{% translate "Set up" as label %}{% endif %}
+{% include "app/foot.html" with href=href label=label count=None %}
+</section>
+{% endif %}
+{% if "recovery_codes" in MFA_SUPPORTED_TYPES and is_mfa_enabled %}
+{% with unused=authenticators.recovery_codes.get_unused_codes|length %}
+<section class="card"><header><h2>{% translate "Recovery codes" %}</h2></header>
+<div class="body"><p class="dim">{% translate "One-time codes for when you lose your passkey and authenticator app." %}</p></div>
+{% if authenticators.recovery_codes and unused and not MFA_RECOVERY_CODES_SHOW_ONCE %}{% url 'mfa_view_recovery_codes' as href %}{% translate "View codes" as label %}{% include "app/foot.html" with href=href label=label count=unused %}{% endif %}
+{% url 'mfa_generate_recovery_codes' as href %}{% translate "Make new codes" as label %}{% include "app/foot.html" with href=href label=label count=None %}
+</section>
+{% endwith %}
+{% endif %}
+</div>
+{% endblock %}
