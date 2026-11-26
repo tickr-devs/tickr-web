@@ -1,0 +1,45 @@
+# tickr.bot: one site. Static marketing pages from /srv/site, the Django app behind /login,
+# /account, /app and /api, Django's collected static files at /static. Caddy gets and renews the
+# HTTPS certificate itself (Let's Encrypt) once DNS points at this server.
+{$TICKR_WEB_HOST} {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options nosniff
+		Referrer-Policy same-origin
+		-Server
+	}
+
+	@app path /login /login/* /account /account/* /app /app/* /api /api/*
+	handle @app {
+		reverse_proxy app:8000 {
+			# The visitor's address, for the waitlist's per-IP limit (never stored).
+			header_up X-Forwarded-For {remote_host}
+		}
+	}
+
+	handle_path /static/* {
+		root * /srv/static
+		header Cache-Control "public, max-age=3600"
+		file_server
+	}
+
+	handle {
+		root * /srv/site
+		# The marketing pages set no CSP yet (they use inline scripts and Google Fonts).
+		header X-Frame-Options DENY
+		try_files {path} {path}/index.html
+		file_server
+	}
+
+	handle_errors 404 {
+		root * /srv/site
+		rewrite * /404.html
+		file_server
+	}
+}
+
+www.{$TICKR_WEB_HOST} {
+	redir https://{$TICKR_WEB_HOST}{uri} permanent
+}

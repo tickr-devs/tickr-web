@@ -1,0 +1,85 @@
+# tickr.bot web server (its own machine, never the bot's): Postgres, the Django app, Caddy.
+# Paths on the host come from /srv/tickr-web/etc/compose.env (written by ops/aws/web/user-data.sh; see ops/aws/web/README.md).
+name: tickr-web
+services:
+  db:
+    image: postgres:16-bookworm
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: tickrweb
+      POSTGRES_USER: tickrweb
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    secrets: [db_password]
+    # No published port: only the app reaches Postgres, over the internal network.
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks: [backend]
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "tickrweb"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  app:
+    build:
+      context: ..
+    image: tickr-web:latest
+    restart: unless-stopped
+    init: true
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      TICKR_WEB_ENV_FILE: /run/tickr-web/env
+      TICKR_WEB_DB_NAME: tickrweb
+      TICKR_WEB_DB_USER: tickrweb
+      TICKR_WEB_DB_HOST: db
+      TICKR_WEB_DB_PORT: "5432"
+    secrets: [db_password]
+    volumes:
+      - ${TICKR_WEB_ENV_FILE_HOST:?}:/run/tickr-web/env:ro
+    networks: [backend, front]
+    read_only: true
+    tmpfs: [/tmp]
+
+  caddy:
+    image: caddy:2.10
+    restart: unless-stopped
+    depends_on: [app]
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      TICKR_WEB_HOST: ${TICKR_WEB_HOST:?}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ${TICKR_WEB_SITE_DIR:?}:/srv/site:ro
+      - static:/srv/static:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    networks: [front]
+
+  # Copies the image's collected static files into the volume Caddy serves. Runs at each deploy.
+  static:
+    image: tickr-web:latest
+    profiles: [deploy]
+    entrypoint: ["sh", "-c", "find /out -mindepth 1 -delete && cp -r /app/staticfiles/. /out/"]
+    user: root
+    volumes:
+      - static:/out
+
+secrets:
+  db_password:
+    file: ${TICKR_WEB_DB_PASSWORD_FILE_HOST:?}
+
+networks:
+  backend:
+    internal: true
+  front: {}
+
+volumes:
+  pgdata: {}
+  static: {}
+  caddy-data: {}
+  caddy-config: {}
