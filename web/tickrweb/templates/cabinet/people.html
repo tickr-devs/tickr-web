@@ -1,0 +1,21 @@
+{% extends "app/shell.html" %}
+{% load i18n %}
+{% block head_title %}{% translate "People" %}{% endblock %}
+{% block content %}
+<h1>{% translate "People" %}</h1>
+<p class="lede">{% translate "Everyone with an account. Admins see Early access and People and can change roles; they open these sections only when signed in with a passkey or an authenticator app." %}</p>
+<section class="card"><div class="scroll"><table class="table">
+<thead><tr><th>{% translate "Email" %}</th><th>{% translate "Role" %}</th><th>{% translate "Passkeys" %}</th><th>{% translate "Last sign-in" %}</th><th></th></tr></thead>
+<tbody>
+{% for p in people %}<tr>
+<td>{{ p.email }}{% if p == user %} <span class="dim">({% translate "you" %})</span>{% endif %}</td>
+<td>{% if p.is_staff and p.is_superuser %}{% translate "Admin" %}{% else %}{% translate "Member" %}{% endif %}</td>
+<td class="num">{{ p.passkeys }}</td>
+<td class="dim">{% if p.last_login %}{{ p.last_login|date:"M j, H:i" }} ET{% else %}{% translate "Never" %}{% endif %}</td>
+<td><form method="post" action="{% url 'set_role' p.pk %}" class="inline">{% csrf_token %}
+{% if p.is_staff and p.is_superuser %}<input type="hidden" name="role" value="member"><button class="btn sec" type="submit"{% if admin_count == 1 %} disabled title="{% translate 'tickr.bot needs at least one admin.' %}"{% endif %}>{% translate "Remove admin" %}</button>
+{% else %}<input type="hidden" name="role" value="admin"><button class="btn sec" type="submit">{% translate "Make admin" %}</button>{% endif %}
+</form></td>
+</tr>{% endfor %}
+</tbody></table></div></section>
+{% endblock %}

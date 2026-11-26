@@ -12,8 +12,9 @@ keys. It imports nothing from `src/tickr`.
 | `/static/` | This app's CSS and allauth's scripts (`collectstatic`), served by Caddy |
 | `/login` | Sign-in: password, passkey, or a code emailed to you |
 | `/account/…` | allauth: passkeys, password, emailed codes, signed-in devices |
-| `/app` | The cabinet (signed in only) |
-| `/app/admin/` | Django admin (staff only, behind the same sign-in) |
+| `/app` | The cabinet (signed in only): Overview, Security, Devices |
+| `/app/early-access`, `/app/people` | Admin sections of the cabinet (admins only) |
+| `/app/admin/` | Django admin: a hidden fallback, not linked anywhere; to be removed |
 | `/api/…` | JSON endpoints; `/api/healthz` answers `ok` |
 
 Public pages must not use `/login`, `/account`, `/app`, `/api` or `/static`.
@@ -30,15 +31,21 @@ only if:
 
 ## Accounts
 
-Public sign-up is closed. People join the early-access list on the site; in the admin, select
-confirmed addresses under Subscribers and run **Invite to tickr.bot**: each gets an account and an
-email that says to sign in at `/login` (an address already invited, or not confirmed, is skipped;
-if the email fails, no account is left). The first admin, who has nobody to invite them, is made
-with `python manage.py invite you@example.com [--staff | --superuser]`, which creates an
-account with a verified address and no password and sends no email. Its owner signs in at `/login` with an emailed
-code, then adds a passkey and a password under `/account/`. The admin (`/app/admin/`) opens only
-for staff in a session signed in with a passkey or an authenticator app; Django's own admin
-login form is never served.
+Public sign-up is closed. People join the early-access list on the site. An admin opens
+**Early access** in the cabinet, ticks confirmed addresses and presses **Invite selected**: each
+gets an account and an email that says to sign in at `/login` (an address that already has an
+account, or is not confirmed, is skipped; if the email fails, no account is left).
+
+An admin is an account with `is_staff` and `is_superuser`; everyone else is a member. Admins see
+two more sections in the same cabinet, **Early access** and **People**, and they open only in a
+session signed in with a passkey or an authenticator app (members and other sessions get 403).
+On **People** an admin makes another account an admin or removes the role (`tickrweb/roles.py`).
+The last admin cannot be removed, and every change is emailed to all admins and the person.
+
+The first admin, who has nobody to invite them, is made with
+`python manage.py invite you@example.com --superuser`, which creates an account with a verified
+address and no password and sends no email. Its owner signs in at `/login` with an emailed code,
+then adds a passkey under Security. Django's own admin login form is never served.
 
 ## Configuration
 

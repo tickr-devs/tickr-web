@@ -1,0 +1,5 @@
+{% autoescape off %}{% if made_admin %}{{ by }} made {{ email }} an admin of tickr.bot.{% else %}{{ by }} removed {{ email }} from the admins of tickr.bot.{% endif %}
+
+If this was not expected, sign in and check People:
+{{ people_url }}
+{% endautoescape %}

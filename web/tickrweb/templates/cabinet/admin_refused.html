@@ -1,0 +1,10 @@
+{% extends "app/shell.html" %}
+{% load i18n %}
+{% block head_title %}{% translate "Admin" %}{% endblock %}
+{% block content %}
+<h1>{% translate "Admin only" %}</h1>
+<section class="card">
+<div class="body"><p>{% if nav_admin %}{% translate "Admin sections open only in a session signed in with a passkey or an authenticator app. Sign out, then sign in with your passkey." %}{% else %}{% translate "This section is for tickr.bot admins." %}{% endif %}</p></div>
+{% url 'mfa_index' as href %}{% translate "Security" as label %}{% include "app/foot.html" with href=href label=label count=None %}
+</section>
+{% endblock %}
