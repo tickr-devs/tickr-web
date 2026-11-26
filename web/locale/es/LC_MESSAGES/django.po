@@ -1,0 +1,224 @@
+# tickr.bot web app, US Spanish.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-25 16:10-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
+
+#: tickrweb/templates/account/login.html:4
+#: tickrweb/templates/account/login.html:6
+#: tickrweb/templates/account/login.html:18
+msgid "Sign In"
+msgstr "Iniciar sesión"
+
+#: tickrweb/templates/account/login.html:9
+msgid "Sign in with a passkey"
+msgstr "Iniciar sesión con una llave de acceso"
+
+#: tickrweb/templates/account/login.html:21
+msgid "Send me a sign-in code"
+msgstr "Envíame un código de inicio de sesión"
+
+#: tickrweb/templates/admin_refused.html:3
+#: tickrweb/templates/admin_refused.html:6
+msgid "Admin"
+msgstr "Administración"
+
+#: tickrweb/templates/admin_refused.html:7
+msgid ""
+"The admin opens only for staff who signed in with a passkey or an "
+"authenticator app."
+msgstr "La administración solo se abre para el personal que inició sesión con una llave de acceso o una app de autenticación."
+
+#: tickrweb/templates/admin_refused.html:8
+#: tickrweb/templates/cabinet/index.html:57
+msgid "Passkeys and two-step sign-in"
+msgstr "Llaves de acceso y verificación en dos pasos"
+
+#: tickrweb/templates/base.html:19 tickrweb/templates/cabinet/index.html:3
+#: tickrweb/templates/cabinet/index.html:6
+#: tickrweb/templates/cabinet/index.html:15
+#: tickrweb/templates/cabinet/index.html:28
+#: tickrweb/templates/cabinet/index.html:49
+msgid "Account"
+msgstr "Cuenta"
+
+#: tickrweb/templates/base.html:20
+msgid "Sign out"
+msgstr "Cerrar sesión"
+
+#: tickrweb/templates/cabinet/index.html:7
+msgid "Your tickr.bot"
+msgstr "Tu tickr.bot"
+
+#: tickrweb/templates/cabinet/index.html:9
+msgid "Sections"
+msgstr "Secciones"
+
+#: tickrweb/templates/cabinet/index.html:10
+#: tickrweb/templates/cabinet/index.html:19
+msgid "Bot"
+msgstr "Bot"
+
+#: tickrweb/templates/cabinet/index.html:11
+#: tickrweb/templates/cabinet/index.html:26
+msgid "Brokerage"
+msgstr "Corretaje"
+
+#: tickrweb/templates/cabinet/index.html:12
+#: tickrweb/templates/cabinet/index.html:31
+msgid "Settings"
+msgstr "Configuración"
+
+#: tickrweb/templates/cabinet/index.html:13
+#: tickrweb/templates/cabinet/index.html:38
+msgid "Training"
+msgstr "Entrenamiento"
+
+#: tickrweb/templates/cabinet/index.html:14
+#: tickrweb/templates/cabinet/index.html:44
+#: tickrweb/templates/cabinet/index.html:46
+msgid "Plan"
+msgstr "Plan"
+
+#: tickrweb/templates/cabinet/index.html:18
+msgid "Sample data"
+msgstr "Datos de ejemplo"
+
+#: tickrweb/templates/cabinet/index.html:21
+msgid "Status"
+msgstr "Estado"
+
+#: tickrweb/templates/cabinet/index.html:21
+msgid "Not running"
+msgstr "Detenido"
+
+#: tickrweb/templates/cabinet/index.html:22
+msgid "Mode"
+msgstr "Modo"
+
+#: tickrweb/templates/cabinet/index.html:22
+msgid "Paper trading"
+msgstr "Operaciones simuladas"
+
+#: tickrweb/templates/cabinet/index.html:23
+msgid "Sessions"
+msgstr "Sesiones"
+
+#: tickrweb/templates/cabinet/index.html:23
+msgid "Pre-market · Regular · After-hours"
+msgstr "Pre-mercado · Regular · Post-mercado"
+
+#: tickrweb/templates/cabinet/index.html:24
+msgid "Flat by"
+msgstr "Sin posiciones al"
+
+#: tickrweb/templates/cabinet/index.html:24
+msgid "End of each day"
+msgstr "Final de cada día"
+
+#: tickrweb/templates/cabinet/index.html:28
+msgid "Your own brokerage account"
+msgstr "Tu propia cuenta de corretaje"
+
+#: tickrweb/templates/cabinet/index.html:29
+msgid "Connection"
+msgstr "Conexión"
+
+#: tickrweb/templates/cabinet/index.html:29
+msgid "Not connected"
+msgstr "Sin conectar"
+
+#: tickrweb/templates/cabinet/index.html:33
+msgid "Position size"
+msgstr "Tamaño de posición"
+
+#: tickrweb/templates/cabinet/index.html:34
+msgid "Daily loss limit"
+msgstr "Límite de pérdida diaria"
+
+#: tickrweb/templates/cabinet/index.html:34
+msgid "<span class=\"num\">$5,000</span> incl. fees"
+msgstr "<span class=\"num\">$5,000</span> con comisiones"
+
+#: tickrweb/templates/cabinet/index.html:35
+msgid "Planned loss per trade"
+msgstr "Pérdida prevista por operación"
+
+#: tickrweb/templates/cabinet/index.html:36
+msgid "Open positions"
+msgstr "Posiciones abiertas"
+
+#: tickrweb/templates/cabinet/index.html:36
+msgid "<span class=\"num\">6</span> at most"
+msgstr "<span class=\"num\">6</span> como máximo"
+
+#: tickrweb/templates/cabinet/index.html:40
+msgid "Model"
+msgstr "Modelo"
+
+#: tickrweb/templates/cabinet/index.html:40
+msgid "Not trained yet"
+msgstr "Aún sin entrenar"
+
+#: tickrweb/templates/cabinet/index.html:41
+msgid "Learns from"
+msgstr "Aprende de"
+
+#: tickrweb/templates/cabinet/index.html:41
+msgid "Your settings and your choices"
+msgstr "Tu configuración y tus decisiones"
+
+#: tickrweb/templates/cabinet/index.html:42
+msgid "Last run"
+msgstr "Última ejecución"
+
+#: tickrweb/templates/cabinet/index.html:42
+msgid "None"
+msgstr "Ninguna"
+
+#: tickrweb/templates/cabinet/index.html:46
+msgid "Trial"
+msgstr "Prueba"
+
+#: tickrweb/templates/cabinet/index.html:47
+msgid "Price"
+msgstr "Precio"
+
+#: tickrweb/templates/cabinet/index.html:47
+msgid "Never a share of your profit"
+msgstr "Nunca un porcentaje de tus ganancias"
+
+#: tickrweb/templates/cabinet/index.html:51
+msgid "Email"
+msgstr "Correo electrónico"
+
+#: tickrweb/templates/cabinet/index.html:52
+msgid "Signed in"
+msgstr "Sesión iniciada"
+
+#: tickrweb/templates/cabinet/index.html:53
+#: tickrweb/templates/cabinet/index.html:59
+msgid "Signed-in devices"
+msgstr "Dispositivos con sesión iniciada"
+
+#: tickrweb/templates/cabinet/index.html:54
+msgid "Passkeys"
+msgstr "Llaves de acceso"
+
+#: tickrweb/templates/cabinet/index.html:58
+msgid "Password"
+msgstr "Contraseña"

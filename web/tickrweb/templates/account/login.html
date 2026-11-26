@@ -1,0 +1,27 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n allauth %}
+{# allauth's sign-in page without the sign-up line (accounts are invite-only), passkey first. #}
+{% block head_title %}{% trans "Sign In" %}{% endblock head_title %}
+{% block content %}
+<h1>{% trans "Sign In" %}</h1>
+{% if PASSKEY_LOGIN_ENABLED %}
+<div class="alt">
+<button type="submit" form="mfa_login" id="passkey_login" class="primary">{% trans "Sign in with a passkey" %}</button>
+</div>
+<hr>
+{% endif %}
+{% url 'account_login' as login_url %}
+<form method="post" action="{{ login_url }}">
+{% csrf_token %}
+{% element fields form=form unlabeled=True %}{% endelement %}
+{{ redirect_field }}
+<button type="submit">{% trans "Sign In" %}</button>
+</form>
+{% if LOGIN_BY_CODE_ENABLED %}
+<p class="alt"><a class="ghost" href="{{ request_login_code_url }}">{% trans "Send me a sign-in code" %}</a></p>
+{% endif %}
+{% endblock content %}
+{% block extra_body %}
+{{ block.super }}
+{% if PASSKEY_LOGIN_ENABLED %}{% include "mfa/webauthn/snippets/login_script.html" with button_id="passkey_login" %}{% endif %}
+{% endblock %}

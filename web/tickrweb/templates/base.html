@@ -1,0 +1,29 @@
+{% load i18n static %}<!DOCTYPE html>
+{% get_current_language as LANG %}
+<html lang="{{ LANG }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="dark">
+<title>{% block head_title %}{% endblock %} · tickr.bot</title>
+<link rel="stylesheet" href="{% static 'web/app.css' %}">
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+<a class="brand" href="/" aria-label="tickr.bot">{% include "brand.svg" %}</a>
+<div class="top-r">
+{% if user.is_authenticated %}
+<a href="{% url 'cabinet' %}">{% translate "Account" %}</a>
+<form class="inline" method="post" action="{% url 'account_logout' %}">{% csrf_token %}<button class="link" type="submit">{% translate "Sign out" %}</button></form>
+{% endif %}
+</div>
+</header>
+{% if messages %}<ul class="msgs" role="status">{% for message in messages %}<li>{{ message }}</li>{% endfor %}</ul>{% endif %}
+{% block body %}{% block content %}{% endblock %}{% endblock %}
+</div>
+{% block extra_body %}{% endblock %}
+</body>
+</html>

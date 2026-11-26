@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block head_title %}{% translate "Account" %}{% endblock %}
+{% block content %}
+<main class="acct">
+<p class="label">{% translate "Account" %}</p>
+<h1>{% translate "Your tickr.bot" %}</h1>
+<div class="grid">
+<nav class="side" aria-label="{% translate 'Sections' %}">
+<a href="#bot">{% translate "Bot" %}</a>
+<a href="#broker">{% translate "Brokerage" %}</a>
+<a href="#settings">{% translate "Settings" %}</a>
+<a href="#training">{% translate "Training" %}</a>
+<a href="#plan">{% translate "Plan" %}</a>
+<a href="#account">{% translate "Account" %}</a>
+</nav>
+<div class="cards">
+{% translate "Sample data" as sample %}
+<section id="bot" class="card"><header><h2>{% translate "Bot" %}</h2><span class="tag">{{ sample }}</span></header>
+<dl class="rows">
+<div><dt>{% translate "Status" %}</dt><dd><span class="st off"><i></i>{% translate "Not running" %}</span></dd></div>
+<div><dt>{% translate "Mode" %}</dt><dd>{% translate "Paper trading" %}</dd></div>
+<div><dt>{% translate "Sessions" %}</dt><dd>{% translate "Pre-market · Regular · After-hours" %}</dd></div>
+<div><dt>{% translate "Flat by" %}</dt><dd>{% translate "End of each day" %}</dd></div>
+</dl></section>
+<section id="broker" class="card"><header><h2>{% translate "Brokerage" %}</h2><span class="tag">{{ sample }}</span></header>
+<dl class="rows">
+<div><dt>{% translate "Account" %}</dt><dd>{% translate "Your own brokerage account" %}</dd></div>
+<div><dt>{% translate "Connection" %}</dt><dd><span class="st off"><i></i>{% translate "Not connected" %}</span></dd></div>
+</dl></section>
+<section id="settings" class="card"><header><h2>{% translate "Settings" %}</h2><span class="tag">{{ sample }}</span></header>
+<dl class="rows">
+<div><dt>{% translate "Position size" %}</dt><dd><span class="num">$1,000</span></dd></div>
+<div><dt>{% translate "Daily loss limit" %}</dt><dd>{% blocktranslate %}<span class="num">$5,000</span> incl. fees{% endblocktranslate %}</dd></div>
+<div><dt>{% translate "Planned loss per trade" %}</dt><dd><span class="num">$50</span></dd></div>
+<div><dt>{% translate "Open positions" %}</dt><dd>{% blocktranslate %}<span class="num">6</span> at most{% endblocktranslate %}</dd></div>
+</dl></section>
+<section id="training" class="card"><header><h2>{% translate "Training" %}</h2><span class="tag">{{ sample }}</span></header>
+<dl class="rows">
+<div><dt>{% translate "Model" %}</dt><dd>{% translate "Not trained yet" %}</dd></div>
+<div><dt>{% translate "Learns from" %}</dt><dd>{% translate "Your settings and your choices" %}</dd></div>
+<div><dt>{% translate "Last run" %}</dt><dd class="dim">{% translate "None" %}</dd></div>
+</dl></section>
+<section id="plan" class="card"><header><h2>{% translate "Plan" %}</h2><span class="tag">{{ sample }}</span></header>
+<dl class="rows">
+<div><dt>{% translate "Plan" %}</dt><dd>{% translate "Trial" %}</dd></div>
+<div><dt>{% translate "Price" %}</dt><dd>{% translate "Never a share of your profit" %}</dd></div>
+</dl></section>
+<section id="account" class="card"><header><h2>{% translate "Account" %}</h2></header>
+<dl class="rows">
+<div><dt>{% translate "Email" %}</dt><dd>{{ user.email }}</dd></div>
+<div><dt>{% translate "Signed in" %}</dt><dd>{{ user.last_login|date:"M j, H:i" }} ET</dd></div>
+<div><dt>{% translate "Signed-in devices" %}</dt><dd><span class="num">{{ device_count }}</span></dd></div>
+<div><dt>{% translate "Passkeys" %}</dt><dd><span class="num">{{ passkey_count }}</span></dd></div>
+</dl>
+<ul class="menu">
+<li><a href="{% url 'mfa_index' %}">{% translate "Passkeys and two-step sign-in" %} ›</a></li>
+<li><a href="{% if user.has_usable_password %}{% url 'account_change_password' %}{% else %}{% url 'account_set_password' %}{% endif %}">{% translate "Password" %} ›</a></li>
+<li><a href="{% url 'usersessions_list' %}">{% translate "Signed-in devices" %} ›</a></li>
+</ul>
+</section>
+</div>
+</div>
+</main>
+{% endblock %}

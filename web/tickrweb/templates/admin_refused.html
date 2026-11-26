@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block head_title %}{% translate "Admin" %}{% endblock %}
+{% block content %}
+<main class="gate">
+<h1>{% translate "Admin" %}</h1>
+<p class="lede">{% translate "The admin opens only for staff who signed in with a passkey or an authenticator app." %}</p>
+<p><a href="{% url 'mfa_index' %}">{% translate "Passkeys and two-step sign-in" %} ›</a></p>
+</main>
+{% endblock %}
