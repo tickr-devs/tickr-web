@@ -186,3 +186,24 @@ def test_an_access_error_is_logged_with_its_message(client, monkeypatch, caplog)
     monkeypatch.setattr("tickrweb.waitlist.EmailMultiAlternatives.send", deny)
     _join(client)
     assert "no ses:GetAccount" in caplog.text
+
+
+def test_an_access_error_naming_a_recipient_is_logged_without_it(client, monkeypatch, caplog):
+    message = (
+        "User: arn:aws:sts::123456789012:assumed-role/tickr-web/i-0abc is not authorized to "
+        "perform: ses:SendEmail on resource: "
+        "arn:aws:ses:us-east-1:123456789012:identity/a@example.com because no identity-based "
+        "policy allows the ses:SendEmail action"
+    )
+
+    class Denied(Exception):
+        response = {"Error": {"Code": "AccessDeniedException", "Message": message}}
+
+    def deny(*args, **kwargs):
+        raise Denied
+
+    monkeypatch.setattr("tickrweb.waitlist.EmailMultiAlternatives.send", deny)
+    _join(client)
+    assert "identity/<address> because" in caplog.text
+    assert "ses:SendEmail on resource" in caplog.text
+    assert "a@example.com" not in caplog.text
