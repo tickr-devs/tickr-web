@@ -202,3 +202,38 @@ def test_per_ip_limits_count_each_visitor_behind_the_proxy(settings):
     assert _ask_code("a3@example.com", "203.0.113.1").status_code == 200  # form error
     assert _ask_code("a4@example.com", "198.51.100.7, 203.0.113.1").status_code == 200
     assert _ask_code("b0@example.com", "203.0.113.2").status_code == 302
+
+
+SIGNED_IN_PAGES = [
+    "/app",
+    "/account/2fa/",
+    "/account/password/change/",
+    "/account/password/reset/",
+    "/account/sessions/",
+    "/account/2fa/webauthn/add/",
+    "/account/2fa/totp/activate/",
+    "/account/reauthenticate/",
+    "/account/reauthenticate/code/",
+]
+
+
+@pytest.mark.parametrize("path", SIGNED_IN_PAGES)
+def test_every_signed_in_page_opens(client, path):
+    owner = _invite("owner@example.com", "--superuser")
+    owner.set_password("correct horse battery staple")
+    owner.save()
+    _sign_in_with(client, owner, {"method": "mfa", "type": "webauthn"})
+    response = client.get(path)
+    assert response.status_code in {200, 302}, path
+    if response.status_code == 302:
+        assert client.get(response["Location"]).status_code == 200, path
+
+
+def test_staff_see_the_admin_link_and_members_do_not(client):
+    _sign_in_with(client, _invite("member@example.com"), {"method": "code"})
+    assert "/app/admin/" not in client.get("/app").text
+    staff = Client()
+    _sign_in_with(
+        staff, _invite("owner@example.com", "--staff"), {"method": "mfa", "type": "webauthn"}
+    )
+    assert "/app/admin/" in staff.get("/app").text

@@ -17,6 +17,7 @@
 <div class="top-r">
 {% if user.is_authenticated %}
 <a href="{% url 'cabinet' %}">{% translate "Account" %}</a>
+{% if user.is_staff %}<a href="{% url 'admin:index' %}">{% translate "Admin" %}</a>{% endif %}
 <form class="inline" method="post" action="{% url 'account_logout' %}">{% csrf_token %}<button class="link" type="submit">{% translate "Sign out" %}</button></form>
 {% endif %}
 </div>

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.humanize",  # allauth's signed-in devices page uses its template tags
     "allauth",
     "allauth.account",
     "allauth.mfa",
