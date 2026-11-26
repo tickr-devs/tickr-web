@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block head_title %}{% translate "Early access" %}{% endblock %}
+{% block content %}
+<main class="gate">
+<p class="label">{% translate "Early access" %}</p>
+{% if outcome == "confirm" %}
+<h1>{% translate "Confirm your address" %}</h1>
+<p class="lede">{% translate "One tap and you're on the tickr.bot early-access list." %}</p>
+<form method="post" action="?t={{ token|urlencode }}"><button type="submit">{% translate "Confirm" %}</button></form>
+{% elif outcome == "confirmed" %}
+<h1>{% translate "You're on the list" %}</h1>
+<p class="lede">{% translate "We'll email you when tickr.bot opens. Every email has a link to leave the list." %}</p>
+{% elif outcome == "ask" %}
+<h1>{% translate "Leave the list?" %}</h1>
+<p class="lede">{% translate "Your address will be deleted from the tickr.bot list." %}</p>
+<form method="post" action="?t={{ token|urlencode }}"><button type="submit">{% translate "Delete my address" %}</button></form>
+{% elif outcome == "removed" %}
+<h1>{% translate "Address deleted" %}</h1>
+<p class="lede">{% translate "You won't get any more email from tickr.bot." %}</p>
+{% else %}
+<h1>{% translate "This link has expired" %}</h1>
+<p class="lede">{% translate "Sign up again on the early-access page to get a new one." %}</p>
+{% endif %}
+<p><a href="/">tickr.bot ›</a></p>
+</main>
+{% endblock %}

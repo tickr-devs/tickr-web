@@ -1,0 +1,12 @@
+{% load i18n %}{% autoescape off %}{% translate "Hi," %}
+
+{% translate "Someone, hopefully you, asked to join the tickr.bot early-access list with this address. Confirm it here:" %}
+
+{{ confirm_url }}
+
+{% translate "If it wasn't you, ignore this email and the address is deleted in 7 days. To remove it now:" %}
+
+{{ unsubscribe_url }}
+
+tickr.bot
+{% endautoescape %}

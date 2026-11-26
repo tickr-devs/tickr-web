@@ -202,6 +202,23 @@ elif DEBUG:
 else:
     raise ImproperlyConfigured("Environment variable TICKR_WEB_SES_REGION is not set.")
 
+# --- Early-access list (tickrweb/waitlist.py) ---
+# The rate-limit counters live in this process's memory: gunicorn runs ONE worker process
+# (with threads), so the counts are shared by all requests. Restarting the app clears them.
+CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}}
+# Sign-up attempts allowed from one IP address per WAITLIST_WINDOW_SECONDS.
+WAITLIST_PER_IP = 5
+# Length of the per-IP window, in seconds (1 hour).
+WAITLIST_WINDOW_SECONDS = 3600
+# New or unconfirmed addresses accepted per WAITLIST_DAY_SECONDS (confirmation emails sent).
+WAITLIST_NEW_PER_DAY = 500
+# Length of that window, in seconds (1 day).
+WAITLIST_DAY_SECONDS = 86400
+# Seconds before the same unconfirmed address can be sent another confirmation email (1 hour).
+WAITLIST_RESEND_COOLDOWN_SECONDS = 3600
+# Seconds a confirmation link stays valid; unconfirmed rows older than this are pruned (7 days).
+WAITLIST_CONFIRM_MAX_AGE_SECONDS = 604800
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
