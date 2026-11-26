@@ -1,5 +1,5 @@
 # tickr.bot web server (its own machine, never the bot's): Postgres, the Django app, Caddy.
-# Paths on the host come from /srv/tickr-web/etc/compose.env (see web/deploy/README.md).
+# Paths on the host come from /srv/tickr-web/etc/compose.env (written by ops/aws/web/user-data.sh; see ops/aws/web/README.md).
 name: tickr-web
 services:
   db:

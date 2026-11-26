@@ -12,6 +12,12 @@ if ! git -C "$repo" diff --quiet HEAD -- web; then
   echo "web/ has uncommitted changes: commit them first." >&2
   exit 1
 fi
+# Only reviewed code reaches the server: HEAD must be on main as GitHub has it.
+git -C "$repo" fetch --quiet origin main
+if ! git -C "$repo" merge-base --is-ancestor HEAD origin/main; then
+  echo "HEAD is not on origin/main: ship only merged commits (git switch main && git pull)." >&2
+  exit 1
+fi
 instance=$(terraform -chdir="$here" output -raw instance_id)
 bucket=$(terraform -chdir="$here" output -raw bucket)
 commit=$(git -C "$repo" rev-parse --short HEAD)
@@ -25,7 +31,8 @@ if [ $# -ge 1 ]; then
     exit 1
   fi
   site_key="site-$stamp.tgz"
-  tar -czf - -C "$1" . | aws s3 cp - "s3://$bucket/releases/$site_key" --only-show-errors
+  # COPYFILE_DISABLE: macOS tar would otherwise add ._* files, which would then be published.
+  COPYFILE_DISABLE=1 tar -czf - -C "$1" . | aws s3 cp - "s3://$bucket/releases/$site_key" --only-show-errors
 fi
 command_id=$(aws ssm send-command --instance-ids "$instance" \
   --document-name AWS-RunShellScript \
