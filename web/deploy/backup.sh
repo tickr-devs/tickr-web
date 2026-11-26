@@ -22,4 +22,7 @@ echo "backup ${stamp} uploaded"
 imds=http://169.254.169.254/latest
 token=$(curl -sSf -X PUT "$imds/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 60")
 region=$(curl -sSf -H "X-aws-ec2-metadata-token: $token" "$imds/meta-data/placement/region")
-aws cloudwatch put-metric-data --region "$region" --namespace Tickr/Web --metric-name BackupUploaded --value 1
+if ! aws cloudwatch put-metric-data --region "$region" --namespace Tickr/Web --metric-name BackupUploaded --value 1; then
+  echo "backup ${stamp}: the dump IS in S3, but the alarm's metric was not sent (tickr-web-backup-missing will fire)." >&2
+  exit 1
+fi
