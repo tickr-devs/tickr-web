@@ -1,14 +1,15 @@
 """Create an account for one email address and mark the address verified.
 
 The account has no password: its owner signs in with a code sent to that address, then adds a
-password and a passkey under /account/. No password ever passes through this command.
+password and a passkey under /account/. No password ever passes through this command, and it
+sends no email (the admin's "Invite" action on the early-access list does).
 """
 
-from allauth.account.models import EmailAddress
-from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 from django.core.validators import validate_email
-from django.db import transaction
+
+from tickrweb.invites import AlreadyHasAccount, create_invited_account
 
 
 class Command(BaseCommand):
@@ -27,16 +28,10 @@ class Command(BaseCommand):
         email = email.strip().lower()
         try:
             validate_email(email)
-        except Exception as error:
+        except ValidationError as error:
             raise CommandError("That is not an email address.") from error
-        if EmailAddress.objects.filter(email__iexact=email).exists():
-            raise CommandError("An account with that email address already exists.")
-        user_model = get_user_model()
-        with transaction.atomic():
-            user = user_model(
-                username=email, email=email, is_staff=staff or superuser, is_superuser=superuser
-            )
-            user.set_unusable_password()
-            user.save()
-            EmailAddress.objects.create(user=user, email=email, verified=True, primary=True)
+        try:
+            create_invited_account(email, staff=staff, superuser=superuser)
+        except AlreadyHasAccount as error:
+            raise CommandError("An account with that email address already exists.") from error
         self.stdout.write(f"Invited {email}. Sign in at /login with an emailed code.")

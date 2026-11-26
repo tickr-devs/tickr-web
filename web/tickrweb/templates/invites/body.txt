@@ -1,0 +1,10 @@
+{% load i18n %}{% autoescape off %}{% translate "Hi," %}
+
+{% translate "You're invited to tickr.bot. Sign in with this email address; we'll send you a one-time code:" %}
+
+{{ login_url }}
+
+{% translate "After you sign in, add a passkey under Account so next time it takes one tap." %}
+
+tickr.bot
+{% endautoescape %}
