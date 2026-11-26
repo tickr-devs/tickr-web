@@ -1,0 +1,1 @@
+{% load i18n %}{% translate "Your tickr.bot account is ready" %}

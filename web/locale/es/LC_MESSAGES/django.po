@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-25 16:11-0500\n"
+"POT-Creation-Date: 2026-11-26 16:09-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,44 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
 "1 : 2;\n"
+
+#: tickrweb/admin.py:23 tickrweb/templates/base.html:19
+#: tickrweb/templates/cabinet/index.html:3
+#: tickrweb/templates/cabinet/index.html:6
+#: tickrweb/templates/cabinet/index.html:15
+#: tickrweb/templates/cabinet/index.html:28
+#: tickrweb/templates/cabinet/index.html:49
+msgid "Account"
+msgstr "Cuenta"
+
+#
+#: tickrweb/admin.py:30
+msgid "Invite to tickr.bot"
+msgstr "Invitar a tickr.bot"
+
+#: tickrweb/admin.py:48
+#, python-format
+msgid "Invited %d address."
+msgid_plural "Invited %d addresses."
+msgstr[0] "Se invitó %d dirección."
+msgstr[1] "Se invitaron %d direcciones."
+msgstr[2] "Se invitaron %d direcciones."
+
+#: tickrweb/admin.py:55
+#, python-format
+msgid "Skipped %d: not confirmed yet or already has an account."
+msgid_plural "Skipped %d: not confirmed yet or already have an account."
+msgstr[0] "Se omitió %d: aún sin confirmar o ya tiene cuenta."
+msgstr[1] "Se omitieron %d: aún sin confirmar o ya tienen cuenta."
+msgstr[2] "Se omitieron %d: aún sin confirmar o ya tienen cuenta."
+
+#: tickrweb/admin.py:66
+#, python-format
+msgid "%d invitation could not be sent; no account was created."
+msgid_plural "%d invitations could not be sent; no accounts were created."
+msgstr[0] "No se pudo enviar %d invitación; no se creó ninguna cuenta."
+msgstr[1] "No se pudieron enviar %d invitaciones; no se crearon cuentas."
+msgstr[2] "No se pudieron enviar %d invitaciones; no se crearon cuentas."
 
 #: tickrweb/templates/account/login.html:4
 #: tickrweb/templates/account/login.html:6
@@ -41,20 +79,14 @@ msgstr "Administración"
 msgid ""
 "The admin opens only for staff who signed in with a passkey or an "
 "authenticator app."
-msgstr "La administración solo se abre para el personal que inició sesión con una llave de acceso o una app de autenticación."
+msgstr ""
+"La administración solo se abre para el personal que inició sesión con una "
+"llave de acceso o una app de autenticación."
 
 #: tickrweb/templates/admin_refused.html:8
 #: tickrweb/templates/cabinet/index.html:57
 msgid "Passkeys and two-step sign-in"
 msgstr "Llaves de acceso y verificación en dos pasos"
-
-#: tickrweb/templates/base.html:19 tickrweb/templates/cabinet/index.html:3
-#: tickrweb/templates/cabinet/index.html:6
-#: tickrweb/templates/cabinet/index.html:15
-#: tickrweb/templates/cabinet/index.html:28
-#: tickrweb/templates/cabinet/index.html:49
-msgid "Account"
-msgstr "Cuenta"
 
 #: tickrweb/templates/base.html:20
 msgid "Sign out"
@@ -223,21 +255,46 @@ msgstr "Llaves de acceso"
 msgid "Password"
 msgstr "Contraseña"
 
+#: tickrweb/templates/invites/body.txt:1
 #: tickrweb/templates/waitlist/confirm_body.txt:1
 msgid "Hi,"
 msgstr "Hola:"
+
+#: tickrweb/templates/invites/body.txt:3
+msgid ""
+"You're invited to tickr.bot. Sign in with this email address; we'll send you "
+"a one-time code:"
+msgstr ""
+"Te invitamos a tickr.bot. Inicia sesión con esta dirección de correo; te "
+"enviaremos un código de un solo uso:"
+
+#: tickrweb/templates/invites/body.txt:7
+msgid ""
+"After you sign in, add a passkey under Account so next time it takes one tap."
+msgstr ""
+"Después de iniciar sesión, añade una llave de acceso en Cuenta para que la "
+"próxima vez baste un toque."
+
+#
+#: tickrweb/templates/invites/subject.txt:1
+msgid "Your tickr.bot account is ready"
+msgstr "Tu cuenta de tickr.bot está lista"
 
 #: tickrweb/templates/waitlist/confirm_body.txt:3
 msgid ""
 "Someone, hopefully you, asked to join the tickr.bot early-access list with "
 "this address. Confirm it here:"
-msgstr "Alguien, esperamos que tú, pidió unirse a la lista de acceso anticipado de tickr.bot con esta dirección. Confírmala aquí:"
+msgstr ""
+"Alguien, esperamos que tú, pidió unirse a la lista de acceso anticipado de "
+"tickr.bot con esta dirección. Confírmala aquí:"
 
 #: tickrweb/templates/waitlist/confirm_body.txt:7
 msgid ""
 "If it wasn't you, ignore this email and the address is deleted in 7 days. To "
 "remove it now:"
-msgstr "Si no fuiste tú, ignora este correo y la dirección se eliminará en 7 días. Para eliminarla ahora:"
+msgstr ""
+"Si no fuiste tú, ignora este correo y la dirección se eliminará en 7 días. "
+"Para eliminarla ahora:"
 
 #: tickrweb/templates/waitlist/confirm_subject.txt:1
 msgid "Confirm your place on the tickr.bot list"
@@ -268,7 +325,9 @@ msgstr "Ya estás en la lista"
 msgid ""
 "We'll email you when tickr.bot opens. Every email has a link to leave the "
 "list."
-msgstr "Te escribiremos cuando abra tickr.bot. Cada correo incluye un enlace para salir de la lista."
+msgstr ""
+"Te escribiremos cuando abra tickr.bot. Cada correo incluye un enlace para "
+"salir de la lista."
 
 #: tickrweb/templates/waitlist/result.html:15
 msgid "Leave the list?"
@@ -296,4 +355,5 @@ msgstr "Este enlace ha caducado"
 
 #: tickrweb/templates/waitlist/result.html:23
 msgid "Sign up again on the early-access page to get a new one."
-msgstr "Regístrate de nuevo en la página de acceso anticipado para recibir uno nuevo."
+msgstr ""
+"Regístrate de nuevo en la página de acceso anticipado para recibir uno nuevo."
