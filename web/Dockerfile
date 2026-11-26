@@ -28,4 +28,5 @@ ENTRYPOINT ["/entrypoint.sh"]
 # Threads serve requests in parallel. Seconds before a stuck request is killed: 30.
 # The access log has no client address and no query string: waitlist links carry the address in
 # their signed token, and the privacy page promises that IPs are never stored with an email.
-CMD ["/venv/bin/gunicorn", "tickrweb.wsgi", "--bind", "0.0.0.0:8000", "--workers", "1", "--threads", "8", "--timeout", "30", "--access-logfile", "-", "--access-logformat", "%(t)s \"%(m)s %(U)s\" %(s)s %(b)s %(L)ss"]
+# No control socket: it would live in the user's home, and the container's filesystem is read-only.
+CMD ["/venv/bin/gunicorn", "tickrweb.wsgi", "--bind", "0.0.0.0:8000", "--no-control-socket", "--workers", "1", "--threads", "8", "--timeout", "30", "--access-logfile", "-", "--access-logformat", "%(t)s \"%(m)s %(U)s\" %(s)s %(b)s %(L)ss"]

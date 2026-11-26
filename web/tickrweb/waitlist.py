@@ -24,6 +24,7 @@ from django.utils import timezone, translation
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods, require_POST
 
+from .mail import failure_summary
 from .models import Subscriber
 
 log = logging.getLogger(__name__)
@@ -122,8 +123,8 @@ def join(request):
         return _reply("confirm")
     try:
         send_confirmation(subscriber)
-    except Exception:
-        log.exception("waitlist confirmation email not sent")
+    except Exception as error:
+        log.error("waitlist confirmation email not sent: %s", failure_summary(error))
         return _reply("error", 502)
     return _reply("confirm")
 

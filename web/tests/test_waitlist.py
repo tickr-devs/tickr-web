@@ -160,3 +160,29 @@ def test_a_resent_link_restarts_the_row_clock(client):
     cache.clear()
     _join(client)
     assert Subscriber.objects.get().signed_up_at > old
+
+
+def test_a_failed_send_is_logged_without_the_address(client, monkeypatch, caplog):
+    class Refused(Exception):
+        response = {"Error": {"Code": "MessageRejected", "Message": "failed: a@example.com"}}
+
+    def refuse(*args, **kwargs):
+        raise Refused
+
+    monkeypatch.setattr("tickrweb.waitlist.EmailMultiAlternatives.send", refuse)
+    response = _join(client)
+    assert response.json() == {"status": "error"}
+    assert "Refused MessageRejected" in caplog.text
+    assert "a@example.com" not in caplog.text
+
+
+def test_an_access_error_is_logged_with_its_message(client, monkeypatch, caplog):
+    class Denied(Exception):
+        response = {"Error": {"Code": "AccessDeniedException", "Message": "no ses:GetAccount"}}
+
+    def deny(*args, **kwargs):
+        raise Denied
+
+    monkeypatch.setattr("tickrweb.waitlist.EmailMultiAlternatives.send", deny)
+    _join(client)
+    assert "no ses:GetAccount" in caplog.text
