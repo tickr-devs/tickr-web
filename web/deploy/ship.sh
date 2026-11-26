@@ -6,6 +6,8 @@
 # SSM and prints its output. Needs: aws CLI signed in (profile from AWS_PROFILE), terraform state
 # of this folder (for the instance id and bucket).
 set -eu
+# No pager: AWS CLI v2 otherwise shows the final result in `less`, which waits for a key press.
+export AWS_PAGER=""
 here=$(cd "$(dirname "$0")" && pwd)
 repo=$(git -C "$here" rev-parse --show-toplevel)
 if ! git -C "$repo" diff --quiet HEAD -- web; then
