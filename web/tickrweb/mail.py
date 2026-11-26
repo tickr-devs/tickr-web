@@ -20,5 +20,6 @@ def failure_summary(error: Exception) -> str:
     details = response.get("Error", {})
     code = details.get("Code", "")
     if code in {"AccessDenied", "AccessDeniedException"}:
-        return f"{type(error).__name__} {code}: {_ADDRESS.sub('<address>', details.get('Message', ''))}"
+        message = _ADDRESS.sub("<address>", details.get("Message", ""))
+        return f"{type(error).__name__} {code}: {message}"
     return f"{type(error).__name__} {code}"
