@@ -226,3 +226,61 @@ def test_ses_calls_give_up_before_a_grant_expires():
     calls_per_email = 2  # django-ses v2: get_account, then send_email
     worst = calls_per_email * attempts * (config.connect_timeout + config.read_timeout)
     assert worst < settings.BOT_GRANT_SECONDS
+
+
+@pytest.fixture
+def no_rate_history():
+    from django.core.cache import cache
+
+    cache.clear()
+    yield
+    cache.clear()
+
+
+def _wrong_password(email):
+    return _post(f"{API}/auth/login", {"email": email, "password": "not the password"})
+
+
+def test_a_blocked_sign_in_says_how_long_to_wait(no_rate_history):
+    _account("owner@example.com", "--superuser")
+    for _ in range(5):
+        response = _wrong_password("owner@example.com")
+        assert response.status_code == 400
+        assert "Retry-After" not in response
+    response = _wrong_password("owner@example.com")
+    codes = [e["code"] for e in response.json()["errors"]]
+    assert response.status_code == 400 and "too_many_login_attempts" in codes
+    window = 15 * 60  # login_failed in settings: 5 per 15 minutes
+    assert window - 5 <= int(response["Retry-After"]) <= window
+
+
+def test_the_wait_counts_down_from_the_oldest_attempt(no_rate_history, monkeypatch):
+    from tickrweb import retry_after
+
+    _account("owner@example.com", "--superuser")
+    for _ in range(6):
+        _wrong_password("owner@example.com")
+    later = time.time() + 600
+    monkeypatch.setattr(retry_after.time, "time", lambda: later)
+    from django.test import RequestFactory
+
+    wait = retry_after.seconds_until_allowed(RequestFactory().post("/"), "owner@example.com")
+    assert 295 <= wait <= 300
+
+
+def test_a_broken_wait_lookup_still_refuses_without_a_header(no_rate_history, monkeypatch, caplog):
+    from tickrweb import retry_after
+
+    def broken(*args):
+        raise AttributeError("renamed in a newer allauth")
+
+    monkeypatch.setattr(retry_after, "seconds_until_allowed", broken)
+    _account("owner@example.com", "--superuser")
+    for _ in range(5):
+        _wrong_password("owner@example.com")
+    response = _wrong_password("owner@example.com")
+    assert response.status_code == 400
+    assert "too_many_login_attempts" in [e["code"] for e in response.json()["errors"]]
+    assert "Retry-After" not in response
+    assert "Retry-After not added: AttributeError" in caplog.text
+    assert "renamed" not in caplog.text

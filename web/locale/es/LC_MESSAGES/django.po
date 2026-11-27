@@ -15,7 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
 
 #: tickrweb/admin.py:23 tickrweb/templates/cabinet/index.html:29
 msgid "Account"
@@ -464,8 +465,9 @@ msgid ""
 "People who asked for early access on the site. Invite confirmed addresses: "
 "each gets an account and an email to sign in."
 msgstr ""
-"Personas que pidieron acceso anticipado en el sitio. Invite a las direcciones"
-" confirmadas: cada una recibe una cuenta y un correo para iniciar sesión."
+"Personas que pidieron acceso anticipado en el sitio. Invite a las "
+"direcciones confirmadas: cada una recibe una cuenta y un correo para iniciar "
+"sesión."
 
 #: tickrweb/templates/cabinet/early_access.html:12
 msgid "Invite"
@@ -666,8 +668,8 @@ msgid ""
 "Sign in with Face ID, Touch ID or your device's lock. Needed for the admin "
 "sections."
 msgstr ""
-"Inicie sesión con Face ID, Touch ID o el bloqueo de su dispositivo. Necesaria"
-" para las secciones de administración."
+"Inicie sesión con Face ID, Touch ID o el bloqueo de su dispositivo. "
+"Necesaria para las secciones de administración."
 
 #: tickrweb/templates/mfa/index.html:11
 msgid "Remove"
@@ -746,8 +748,8 @@ msgid ""
 "Someone, hopefully you, asked to join the tickr.bot early-access list with "
 "this address. Confirm it here:"
 msgstr ""
-"Alguien, esperamos que usted, pidió unirse a la lista de acceso anticipado de"
-" tickr.bot con esta dirección. Confírmela aquí:"
+"Alguien, esperamos que usted, pidió unirse a la lista de acceso anticipado "
+"de tickr.bot con esta dirección. Confírmela aquí:"
 
 #: tickrweb/templates/waitlist/confirm_body.txt:7
 msgid ""
