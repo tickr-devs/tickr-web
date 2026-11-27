@@ -199,10 +199,11 @@ input[type=checkbox]{width:18px;height:18px;margin:0;accent-color:var(--prim);ve
   .h1{font-size:30px}
 }
 
-/* Signed-in shell: side bar + content; on a phone a top bar with the menu (a <details>, no script) */
+/* Signed-in shell: side bar + content (the side bar stays in the window and keeps the account chip at its bottom); on a phone a top bar with the menu (a <details>, no script) */
 .shell{display:flex;min-height:100vh}
-.sbar{flex:0 0 248px;display:flex;flex-direction:column;gap:2px;padding:14px 12px;border-right:1px solid var(--line);background:var(--side)}
+.sbar{flex:0 0 248px;position:sticky;top:0;align-self:flex-start;height:100vh;height:100dvh;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:2px;padding:14px 12px;border-right:1px solid var(--line);background:var(--side)}
 .sbar>.wm{padding:2px 8px 12px}
+.sbar>.me{position:sticky;bottom:0;box-shadow:0 -12px 12px var(--side)}
 .navi{display:flex;align-items:center;gap:10px;min-height:40px;padding:0 12px;border-radius:10px;color:var(--mut);font:500 14px/1.2 var(--text)}
 .navi svg{width:17px;height:17px;flex-shrink:0}
 .navi:hover{background:var(--sel);color:var(--tx)}
@@ -210,7 +211,7 @@ input[type=checkbox]{width:18px;height:18px;margin:0;accent-color:var(--prim);ve
 .navi .n{margin-left:auto;font:600 11px var(--mono);color:var(--dim)}
 .navi .dv{margin-left:auto;width:8px;height:8px;border-radius:2px;border:1px dashed var(--violet)}
 .ngrp{margin:16px 12px 6px}
-.me{display:flex;flex-direction:column;gap:10px;margin-top:auto;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--card)}
+.me{display:flex;flex-direction:column;gap:10px;margin-top:auto;flex-shrink:0;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--card)}
 .me .who{display:flex;align-items:center;gap:10px;min-width:0}
 .me b{display:block;font-size:13px;font-weight:600;overflow-wrap:anywhere}
 .me .ft{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
@@ -228,7 +229,7 @@ input[type=checkbox]{width:18px;height:18px;margin:0;accent-color:var(--prim);ve
   .mtop details>summary{list-style:none;display:grid;place-items:center;width:44px;height:44px;border-radius:12px;border:1px solid var(--line2);background:var(--card);color:var(--tx);cursor:pointer}
   .mtop details>summary::-webkit-details-marker{display:none}
   .mtop details>summary svg{width:18px;height:18px}
-  .msheet{position:absolute;left:12px;right:12px;top:64px;display:flex;flex-direction:column;gap:2px;padding:8px 10px;border-radius:16px;border:1px solid var(--line2);background:var(--card);box-shadow:var(--shadow)}
+  .msheet{position:absolute;left:12px;right:12px;top:64px;display:flex;flex-direction:column;gap:2px;padding:8px 10px;border-radius:16px;border:1px solid var(--line2);background:var(--card);box-shadow:var(--shadow);max-height:calc(100dvh - 76px);overflow-y:auto;overscroll-behavior:contain}
   .msheet .me{margin-top:10px}
   .content{padding:18px 16px 40px}
   .grid2,.grid3{grid-template-columns:minmax(0,1fr)}
