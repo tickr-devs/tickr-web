@@ -59,8 +59,8 @@ the bot grant (`iss` https://tickr.bot, `aud` [https://api.tickr.bot], `sub` = a
 `client_id` tickr-ios or tickr-mac, `jti`), which the app hands to the bot once. Only an admin
 whose session was signed in with a passkey or an authenticator app gets one. The bot checks it
 offline with the public key from `/api/app/grant-key.pem`, pinned in its config; tickr.bot never
-calls the bot. With `TICKR_WEB_APPLE_TEAM_ID` set on the server, tickr.bot serves
-`/.well-known/apple-app-site-association` so the apps can use passkeys for tickr.bot.
+calls the bot. `/.well-known/apple-app-site-association` names the apps (team id in settings) so
+they can use passkeys for tickr.bot.
 
 The signing key is made by the app container at its first start (`deploy/entrypoint.sh`,
 `tickrweb/grant_key.py`) in the `grant-key` volume and never leaves the server. It is not in the

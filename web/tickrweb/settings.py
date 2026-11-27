@@ -205,9 +205,9 @@ with open(_required("TICKR_WEB_GRANT_KEY_FILE"), encoding="ascii") as _key:
 BOT_API_AUDIENCE = "https://api.tickr.bot"
 # Seconds a bot grant is valid: the app redeems it at the bot right away.
 BOT_GRANT_SECONDS = 60
-# Apple team id that signs the apps (public: it is in every signed app). With it, tickr.bot serves
+# Apple team id that signs the apps (public: it is in every signed app). tickr.bot names it in
 # /.well-known/apple-app-site-association so the apps can use passkeys for tickr.bot.
-APPLE_TEAM_ID = _optional("TICKR_WEB_APPLE_TEAM_ID")
+APPLE_TEAM_ID = "2C66ZTA2N4"
 # The apps' bundle ids (apps/ TICKR_BUNDLE_ID_PREFIX + ".ios" / ".mac").
 APPLE_APP_BUNDLE_IDS = ["bot.tickr.ios", "bot.tickr.mac"]
 

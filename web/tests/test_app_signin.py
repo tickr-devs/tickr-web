@@ -75,6 +75,7 @@ def test_admin_with_authenticator_gets_a_bot_grant():
     assert response["Cache-Control"] == "no-store"
     body = response.json()
     assert body["expires_in"] == settings.BOT_GRANT_SECONDS
+    assert body["email"] == "owner@example.com"
     header = jwt.get_unverified_header(body["grant"])
     assert header["alg"] == "RS256" and header["kid"]
     claims = jwt.decode(
@@ -167,13 +168,18 @@ def test_config_lists_the_ways_in():
     assert config["mfa"]["passkey_login_enabled"] is True
 
 
-def test_apple_passkey_file(settings):
-    assert Client().get("/.well-known/apple-app-site-association").status_code == 404
-    settings.APPLE_TEAM_ID = "ABCDE12345"
+def test_apple_passkey_file():
     body = Client().get("/.well-known/apple-app-site-association").json()
     assert body == {
-        "webcredentials": {"apps": ["ABCDE12345.bot.tickr.ios", "ABCDE12345.bot.tickr.mac"]}
+        "webcredentials": {"apps": ["2C66ZTA2N4.bot.tickr.ios", "2C66ZTA2N4.bot.tickr.mac"]}
     }
+
+
+def test_password_reset_from_the_app_mails_a_link_to_the_site():
+    _account("owner@example.com", "--superuser")
+    response = _post(f"{API}/auth/password/request", {"email": "owner@example.com"})
+    assert response.status_code == 200
+    assert "/account/password/reset/key/" in mail.outbox[0].body
 
 
 def test_the_signing_key_is_made_once_and_only_readable_by_its_owner(tmp_path):

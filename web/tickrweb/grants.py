@@ -4,7 +4,8 @@ The apps use allauth's headless JSON API for the "app" client under /api/auth/ap
 in the site offers: passkey, email + password, a code by email, then TOTP or a passkey as the
 second step), holding the session in the X-Session-Token header. Then:
 
-POST /api/app/bot-grant {client_id, resource} with X-Session-Token returns a 60-second RS256
+POST /api/app/bot-grant {client_id, resource} with X-Session-Token returns {grant, expires_in,
+email (for "Signed in as …")}; the grant is a 60-second RS256
 JWT, the bot grant: iss https://tickr.bot, aud [BOT_API_AUDIENCE], sub = account id, client_id,
 iat, exp, jti, scope "bot", token_use "access", header kid. The bot checks it offline with the
 pinned public key (GET /api/app/grant-key.pem) and issues its own device token; tickr.bot never
@@ -97,7 +98,9 @@ def bot_grant(request):
         "token_use": "access",
     }
     grant = jwt.encode(claims, _private_key(), algorithm="RS256", headers={"kid": key_id()})
-    response = JsonResponse({"grant": grant, "expires_in": settings.BOT_GRANT_SECONDS})
+    response = JsonResponse(
+        {"grant": grant, "expires_in": settings.BOT_GRANT_SECONDS, "email": user.email}
+    )
     response["Cache-Control"] = "no-store"
     return response
 
@@ -111,7 +114,5 @@ def grant_key(request):
 @require_GET
 def apple_app_site_association(request):
     """Lets the apps use passkeys for tickr.bot (Associated Domains, webcredentials)."""
-    if not settings.APPLE_TEAM_ID:
-        return HttpResponse(status=404)
     apps = [f"{settings.APPLE_TEAM_ID}.{bundle}" for bundle in settings.APPLE_APP_BUNDLE_IDS]
     return JsonResponse({"webcredentials": {"apps": apps}})
