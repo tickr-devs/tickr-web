@@ -177,6 +177,11 @@ input[type=checkbox]{width:18px;height:18px;margin:0;accent-color:var(--prim);ve
 .col .head{display:flex;flex-direction:column;gap:6px}
 .col .head .lede{max-width:none}
 .fcard{padding:14px 16px 4px}
+/* Authenticator app setup: the QR at a fixed scannable size (white quiet zone in both themes) beside the form */
+.totp{display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:start;max-width:640px}
+.totp .qr{display:block;width:200px;height:200px;padding:10px;border-radius:12px;background:#FFFFFF;border:1px solid var(--line)}
+.totp input.secret{font:500 14px var(--mono);letter-spacing:.04em}
+@media (max-width:560px){.totp{grid-template-columns:minmax(0,1fr)}.totp .qr{justify-self:center}}
 .fcard>.rw:first-of-type{border-top:0}
 .fcard .bs.wide{margin:4px 0 8px}
 .legal{display:flex;justify-content:center;gap:16px}

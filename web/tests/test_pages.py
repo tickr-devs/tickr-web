@@ -44,7 +44,7 @@ SIGNED_IN = [
 ]
 
 
-def _owner_client(lang):
+def _owner_client(lang, reauthenticated_at=None):
     call_command("invite", "owner@example.com", "--superuser")
     user = get_user_model().objects.get(email="owner@example.com")
     Authenticator.objects.create(user=user, type=Authenticator.Type.WEBAUTHN, data={"name": "Mac"})
@@ -57,6 +57,10 @@ def _owner_client(lang):
     session = client.session
     session["account_authentication_methods_user"] = str(user.pk)
     session["account_authentication_methods"] = [{"at": 0, "method": "mfa", "type": "webauthn"}]
+    if reauthenticated_at is not None:
+        session["account_authentication_methods"].append(
+            {"at": reauthenticated_at, "method": "mfa", "type": "webauthn", "reauthenticated": True}
+        )
     session.save()
     return client
 
@@ -85,6 +89,18 @@ def test_expired_early_access_link_renders(lang):
 @pytest.mark.parametrize("path", SIGNED_IN)
 def test_signed_in_pages_render(path, lang):
     _check(_owner_client(lang).get(path), lang)
+
+
+@pytest.mark.parametrize("lang", ["en", "es"])
+def test_authenticator_setup_shows_a_scannable_qr_and_a_code_field(lang):
+    # Turning it on asks for a recent sign-in, so this one is fresh.
+    client = _owner_client(lang, reauthenticated_at=time.time())
+    response = client.get("/account/2fa/totp/activate/")
+    _check(response, lang)
+    html = response.content.decode()
+    qr = r'<img class="qr" src="data:image/svg\+xml;base64,[^"]+"[^>]* width="200" height="200"'
+    assert re.search(qr, html)
+    assert 'id="authenticator_secret"' in html and 'autocomplete="one-time-code"' in html
 
 
 def test_language_switch_keeps_the_page():

@@ -1,0 +1,20 @@
+{% extends "mfa/totp/base.html" %}
+{% load i18n %}
+{# Turn on the authenticator app (SiteCabinet, "security"): scan the code, or type the secret, then enter the app's code. #}
+{% block head_title %}{% translate "Authenticator app" %}{% endblock head_title %}
+{% block content %}
+<div class="ph"><h1 class="h1">{% translate "Authenticator app" %}</h1></div>
+<p class="lede">{% translate "Scan the code with your authenticator app, then enter the 6-digit code it shows." %}</p>
+{% if form.errors %}<div class="ban error" role="alert"><span class="gi">{% include "icons/alert.svg" %}</span><span class="bt">{% for f in form %}{% for e in f.errors %}<b>{{ e }}</b>{% endfor %}{% endfor %}{% for e in form.non_field_errors %}<b>{{ e }}</b>{% endfor %}</span></div>{% endif %}
+<section class="card totp">
+<img class="qr" src="{{ totp_svg_data_uri }}" alt="{% translate 'QR code for your authenticator app' %}" width="200" height="200">
+{% url 'mfa_activate_totp' as action_url %}
+<form method="post" action="{{ action_url }}" class="fstack">
+{% csrf_token %}
+<label class="lbl" for="authenticator_secret">{% translate "Or type this key" %}</label>
+<input class="secret" type="text" id="authenticator_secret" value="{{ form.secret }}" readonly spellcheck="false" autocomplete="off">
+{% for field in form %}{% if field.is_hidden %}{{ field }}{% else %}<label class="lbl" for="{{ field.id_for_label }}">{% translate "Code" %}</label><input class="code" type="text" name="{{ field.html_name }}" id="{{ field.id_for_label }}" inputmode="numeric" autocomplete="one-time-code" placeholder="······" required{% if form.errors %} aria-invalid="true"{% endif %}>{% endif %}{% endfor %}
+<button type="submit" class="bp tall">{% translate "Turn on" %}</button>
+</form>
+</section>
+{% endblock content %}
