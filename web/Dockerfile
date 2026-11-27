@@ -18,7 +18,7 @@ RUN TICKR_WEB_HOST=build TICKR_WEB_SECRET_KEY=build TICKR_WEB_FROM_EMAIL=build@e
     TICKR_WEB_DB_NAME=build TICKR_WEB_DB_USER=build TICKR_WEB_DB_HOST=build TICKR_WEB_DB_PORT=5432 \
     TICKR_WEB_DEBUG=1 /venv/bin/python manage.py collectstatic --noinput -v0
 
-# Must equal service_uid in ops/aws/web/variables.tf: the server's account with that uid owns the
+# Must equal service_uid in tickr-infra ops/aws/web/variables.tf (checked by tickr-infra CI): the server's account with that uid owns the
 # secrets file and the database password (mode 600), bind-mounted into this container.
 RUN groupadd --system --gid 10001 web && useradd --system --uid 10001 --gid 10001 --no-create-home web
 USER 10001:10001

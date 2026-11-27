@@ -1,0 +1,20 @@
+# tickr-web: .github/dependabot.yml (owner yes 2026-11-27 16:58Z: automatic allauth/Django updates).
+# Security updates are separate (repo Settings > Code security: Dependabot security updates ON);
+# this file adds a weekly version bump PR for the web app and the workflow actions.
+version: 2
+updates:
+  - package-ecosystem: "uv"
+    directory: "/web"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    groups:
+      # Django, allauth and the rest in one PR a week, so CI runs once per bump.
+      web-python:
+        patterns: ["*"]
+    open-pull-requests-limit: 5
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"

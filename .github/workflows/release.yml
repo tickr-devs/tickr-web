@@ -1,0 +1,49 @@
+name: release
+# Cuts a release of this repository by hand: Actions > release > Run workflow, pick patch, minor
+# or major. Tags the newest main with the next semver (v1.4.0; the first release is v1.0.0) and
+# opens a GitHub Release whose notes GitHub writes from the pull requests merged since the last
+# tag. Edit the release afterwards to add its "Compatibility" line (which bot, contract or infra
+# release it needs). Never runs on its own: a release is cut when something is shipped.
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Which part of the version goes up"
+        type: choice
+        options: [patch, minor, major]
+        default: minor
+# Only this job writes: the tag and the release.
+permissions:
+  contents: write
+concurrency:
+  group: release
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Tag the next version and publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BUMP: ${{ inputs.bump }}
+        run: |
+          last=$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | head -n 1)
+          if [ -z "$last" ]; then
+            next=v1.0.0
+          else
+            IFS=. read -r major minor patch <<< "${last#v}"
+            case "$BUMP" in
+              major) next="v$((major + 1)).0.0" ;;
+              minor) next="v${major}.$((minor + 1)).0" ;;
+              patch) next="v${major}.${minor}.$((patch + 1))" ;;
+              *) echo "unknown bump: $BUMP" >&2; exit 1 ;;
+            esac
+          fi
+          commit=$(git rev-parse HEAD)
+          echo "Releasing $next at $commit (previous: ${last:-none})"
+          gh release create "$next" --target "$commit" --title "$next" --generate-notes
