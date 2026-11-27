@@ -205,3 +205,13 @@ def test_early_access_lists_each_state():
         "waiting@example.com": "waiting",
         "owner@example.com": "member",
     }
+
+
+def test_early_access_rows_pick_by_tap_and_the_button_counts_them():
+    owner = _account("owner@example.com", "--superuser")
+    _subscriber("new@example.com")
+    page = _client(owner).get("/app/early-access").text
+    assert 'class="tb pick"' in page
+    assert 'data-count-label="Invite {count}"' in page
+    assert 'data-empty-label="Invite selected"' in page
+    assert "/static/web/app.js" in page

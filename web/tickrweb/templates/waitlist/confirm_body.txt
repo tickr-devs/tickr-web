@@ -1,6 +1,6 @@
 {% load i18n %}{% autoescape off %}{% translate "Hi," %}
 
-{% translate "Someone, hopefully you, asked to join the tickr.bot early-access list with this address. Confirm it here:" %}
+{% translate "Someone, hopefully you, asked to join the tickr.bot beta list with this address. Confirm it here:" %}
 
 {{ confirm_url }}
 

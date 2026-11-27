@@ -31,8 +31,8 @@ only if:
 
 ## Accounts
 
-Public sign-up is closed. People join the early-access list on the site. An admin opens
-**Early access** in the cabinet, ticks confirmed addresses and presses **Invite selected**: each
+Public sign-up is closed. People join the beta list on the site. An admin opens
+**Early access** in the cabinet, taps the confirmed rows and presses **Invite N**: each
 gets an account and an email that says to sign in at `/login` (an address that already has an
 account, or is not confirmed, is skipped; if the email fails, no account is left).
 
@@ -95,4 +95,7 @@ uv run pytest -q
 CI runs the same in the `web-tests` job against a Postgres 16 service.
 
 Spanish texts: `locale/es/LC_MESSAGES/django.po`; after editing it run
-`uv run python manage.py compilemessages --settings tickrweb.settings_test -i .venv`.
+`uv run python manage.py compilemessages --settings tickrweb.settings_test -i .venv`. The public
+site's Spanish is `site/pages/<page>.es.json` (shared parts in `site/build.py`); the build writes
+every page twice, English at `/<page>/` and Spanish at `/es/<page>/`, and refuses a key without
+Spanish.

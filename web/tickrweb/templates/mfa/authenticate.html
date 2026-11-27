@@ -10,7 +10,7 @@
 {% url 'mfa_authenticate' as action_url %}
 <form method="post" action="{{ action_url }}" class="fstack" style="padding-bottom:8px">
 {% csrf_token %}
-{% for field in form %}{% if field.is_hidden %}{{ field }}{% else %}<label class="sr" for="{{ field.id_for_label }}">{% translate "Code" %}</label><input class="code" type="text" name="{{ field.html_name }}" id="{{ field.id_for_label }}" autocomplete="one-time-code" placeholder="······" required autofocus>{% endif %}{% endfor %}
+{% for field in form %}{% if field.is_hidden %}{{ field }}{% else %}<label class="sr" for="{{ field.id_for_label }}">{% translate "Code" %}</label><input class="code" type="text" name="{{ field.html_name }}" id="{{ field.id_for_label }}" autocomplete="one-time-code" placeholder="······" required autofocus{% if form.errors %} aria-invalid="true" value="{{ field.value|default:'' }}"{% endif %}>{% endif %}{% endfor %}
 <button type="submit" class="bp tall">{% translate "Verify" %}</button>
 </form>
 {% if "webauthn" in MFA_SUPPORTED_TYPES %}
