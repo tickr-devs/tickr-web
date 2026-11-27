@@ -14,7 +14,7 @@ from django.test import Client
 
 pytestmark = pytest.mark.django_db
 
-BOT = "https://bot.tickr.bot"
+BOT = "https://api.tickr.bot"
 REDIRECT = "tickr://signin"
 STRONG = {"method": "mfa", "type": "webauthn"}
 
@@ -119,6 +119,14 @@ def test_the_apps_cannot_refresh():
     )
     assert response.status_code in {400, 401}
     assert "access_token" not in response.json()
+
+
+def test_only_the_bot_api_is_a_resource():
+    owner = _account("owner@example.com", "--superuser")
+    _, challenge = _pkce()
+    response = _authorize(_client(owner), challenge, resource="https://evil.example")
+    assert "code=" not in response.get("Location", "")
+    assert b"code=" not in response.content
 
 
 def test_a_code_works_once():

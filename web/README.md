@@ -54,8 +54,8 @@ then adds a passkey under Security. Django's own admin login form is never serve
 The Mac and iPhone apps sign in here instead of pairing (`tickrweb/oidc.py`, allauth's OpenID
 provider). They are public clients `tickr-ios` and `tickr-mac` (migration `0002_app_clients`):
 authorization code with PKCE S256, redirect `tickr://signin`, scope `bot`, sending
-`resource=https://bot.tickr.bot`. The token endpoint answers with a 60-second RS256 JWT, the bot
-grant (`iss` https://tickr.bot, `aud` https://bot.tickr.bot, `sub` = account id, `client_id`,
+`resource=https://api.tickr.bot`. The token endpoint answers with a 60-second RS256 JWT, the bot
+grant (`iss` https://tickr.bot, `aud` https://api.tickr.bot, `sub` = account id, `client_id`,
 `jti`), which the app hands to the bot once. The bot checks it offline with the public key from
 `/.well-known/jwks.json`, pinned in its config; tickr.bot never calls the bot. Only an admin in a
 passkey or authenticator session gets a code.

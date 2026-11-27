@@ -3,7 +3,8 @@
 tickr.bot is an OpenID provider (allauth.idp.oidc) for two public native clients, `tickr-ios` and
 `tickr-mac` (RFC 8252: authorization code + PKCE S256, redirect `tickr://signin`). The token
 endpoint answers with a 60-second RS256 JWT access token, the bot grant:
-iss https://tickr.bot, aud https://bot.tickr.bot (the app sends `resource`), sub = account id,
+iss https://tickr.bot, aud = settings.BOT_API_AUDIENCE (the app sends it as `resource`; no other
+resource is accepted), sub = account id,
 client_id, iat, exp, jti, scope "bot". The bot checks it offline with the pinned public key and
 issues its own device token; tickr.bot never talks to the bot.
 
@@ -14,6 +15,7 @@ gate as the cabinet's admin sections). Everyone else sees the refusal page inste
 from allauth.idp.oidc import views as oidc_views
 from allauth.idp.oidc.adapter import DefaultOIDCAdapter
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
@@ -26,6 +28,10 @@ BOT_SCOPE = "bot"
 class Adapter(DefaultOIDCAdapter):
     def get_issuer(self) -> str:
         return f"https://{settings.SITE_HOST}"
+
+    def validate_resource_uris(self, *, uris, **kwargs):
+        if any(uri != settings.BOT_API_AUDIENCE for uri in uris):
+            raise ValidationError("unknown resource")
 
     def get_scope_choices(self):
         return [(BOT_SCOPE, _("Use your tickr.bot bot from this app"))]

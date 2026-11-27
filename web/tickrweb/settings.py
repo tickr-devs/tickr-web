@@ -194,6 +194,9 @@ USERSESSIONS_TRACK_ACTIVITY = True
 
 # --- The apps sign in here: OpenID provider (allauth.idp.oidc), see tickrweb/oidc.py ---
 IDP_OIDC_ADAPTER = "tickrweb.oidc.Adapter"
+# The bot API, the only resource a grant may be for: the apps send it as `resource` and it becomes
+# the grant's `aud`, which the bot checks (its remote_signin_audience).
+BOT_API_AUDIENCE = "https://api.tickr.bot"
 # RSA private key (PEM) that signs the bot grants. Made on the server at first start
 # (deploy/entrypoint.sh), kept in a volume, never copied anywhere; the bot pins its public key.
 with open(_required("TICKR_WEB_OIDC_KEY_FILE"), encoding="ascii") as _key:
