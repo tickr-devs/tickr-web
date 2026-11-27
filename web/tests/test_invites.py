@@ -1,4 +1,4 @@
-"""Inviting early-access addresses from the admin: one account and one email per address."""
+"""Inviting early-access addresses from the cabinet: one account and one email per address."""
 
 import pytest
 from allauth.account.models import EmailAddress
@@ -12,7 +12,7 @@ from tickrweb.models import Subscriber
 
 pytestmark = pytest.mark.django_db
 
-CHANGELIST = "/app/admin/tickrweb/subscriber/"
+EARLY_ACCESS = "/app/early-access"
 
 
 def _admin(client):
@@ -33,18 +33,14 @@ def _subscriber(email, lang="en", confirmed=True):
 
 
 def _invite(client, *subscribers):
-    return client.post(
-        CHANGELIST,
-        {"action": "invite_selected", "_selected_action": [s.pk for s in subscribers]},
-        follow=True,
-    )
+    return client.post(EARLY_ACCESS, {"invite": [s.pk for s in subscribers]}, follow=True)
 
 
 def test_invites_a_confirmed_address_once(client):
     _admin(client)
     ana = _subscriber("ana@example.com")
     response = _invite(client, ana)
-    assert "Invited 1 address." in response.text
+    assert "Invited 1 person." in response.text
     address = EmailAddress.objects.get(email="ana@example.com")
     assert address.verified
     assert not address.user.has_usable_password()
@@ -52,15 +48,14 @@ def test_invites_a_confirmed_address_once(client):
     assert [m.to for m in mail.outbox] == [["ana@example.com"]]
     assert f"https://{settings.SITE_HOST}/login" in mail.outbox[0].body
 
-    response = _invite(client, ana)
-    assert "Skipped 1" in response.text
+    _invite(client, ana)
+    assert EmailAddress.objects.filter(email="ana@example.com").count() == 1
     assert len(mail.outbox) == 1
 
 
 def test_skips_unconfirmed_addresses(client):
     _admin(client)
-    response = _invite(client, _subscriber("new@example.com", confirmed=False))
-    assert "Skipped 1" in response.text
+    _invite(client, _subscriber("new@example.com", confirmed=False))
     assert not EmailAddress.objects.filter(email="new@example.com").exists()
     assert mail.outbox == []
 
@@ -84,20 +79,14 @@ def test_a_failed_email_leaves_no_account(client, monkeypatch):
     assert not get_user_model().objects.filter(email="bo@example.com").exists()
 
 
-def test_staff_without_add_user_permission_has_no_invite_action(client):
+def test_staff_who_is_not_an_admin_cannot_invite(client):
     call_command("invite", "helper@example.com", "--staff")
     helper = get_user_model().objects.get(email="helper@example.com")
-    helper.user_permissions.add(*_view_subscriber())
     client.force_login(helper)
     session = client.session
     session["account_authentication_methods_user"] = str(helper.pk)
     session["account_authentication_methods"] = [{"at": 0, "method": "mfa", "type": "webauthn"}]
     session.save()
-    _invite(client, _subscriber("cy@example.com"))
+    response = _invite(client, _subscriber("cy@example.com"))
+    assert response.status_code == 403
     assert not EmailAddress.objects.filter(email="cy@example.com").exists()
-
-
-def _view_subscriber():
-    from django.contrib.auth.models import Permission
-
-    return Permission.objects.filter(codename__in=["view_subscriber", "change_subscriber"])

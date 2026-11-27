@@ -36,7 +36,6 @@ ALLOWED_HOSTS = [SITE_HOST]
 CSRF_TRUSTED_ORIGINS = [f"https://{SITE_HOST}"]
 
 INSTALLED_APPS = [
-    "tickrweb.admin_apps.TickrAdminConfig",  # the admin with tickrweb.admin_site rules
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",

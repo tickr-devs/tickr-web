@@ -14,7 +14,6 @@ keys. It imports nothing from `src/tickr`.
 | `/account/…` | allauth: passkeys, password, emailed codes, signed-in devices |
 | `/app` | The cabinet (signed in only): Overview, Security, Devices |
 | `/app/early-access`, `/app/people` | Admin sections of the cabinet (admins only) |
-| `/app/admin/` | Django admin: a hidden fallback, not linked anywhere; to be removed |
 | `/api/auth/app/v1/…`, `/api/app/…`, `/.well-known/apple-app-site-association` | The apps' native sign-in (below) |
 | `/api/…` | JSON endpoints; `/api/healthz` answers `ok` |
 
@@ -47,7 +46,7 @@ The last admin cannot be removed, and every change is emailed to all admins and 
 The first admin, who has nobody to invite them, is made with
 `python manage.py invite you@example.com --superuser`, which creates an account with a verified
 address and no password and sends no email. Its owner signs in at `/login` with an emailed code,
-then adds a passkey under Security. Django's own admin login form is never served.
+then adds a passkey under Security.
 
 ## The apps' sign-in
 
