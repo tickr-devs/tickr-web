@@ -8,6 +8,7 @@ nothing and the apps say "try again later".
 """
 
 import json
+import logging
 import math
 import time
 
@@ -18,6 +19,8 @@ from django.core.cache import cache
 # The headless (app client) password sign-in, as mounted in urls.py.
 LOGIN_PATH = "/api/auth/app/v1/auth/login"
 BLOCKED_CODE = "too_many_login_attempts"
+
+log = logging.getLogger(__name__)
 
 
 def _blocked(response) -> bool:
@@ -62,12 +65,16 @@ class LoginRetryAfterMiddleware:
         response = self.get_response(request)
         if request.method != "POST" or request.path != LOGIN_PATH or not _blocked(response):
             return response
+        # Retry-After is only a hint: any failure here (allauth internals renamed, an unreadable
+        # body) leaves the refusal as allauth sent it, never a 500.
         try:
             email = json.loads(request.body).get("email")
-        except (ValueError, AttributeError):
+            wait = (
+                seconds_until_allowed(request, email) if isinstance(email, str) and email else None
+            )
+        except Exception as error:  # noqa: BLE001 (fail open, see above)
+            log.warning("Retry-After not added: %s", type(error).__name__)
             return response
-        if isinstance(email, str) and email:
-            wait = seconds_until_allowed(request, email)
-            if wait:
-                response["Retry-After"] = str(wait)
+        if wait:
+            response["Retry-After"] = str(wait)
         return response
