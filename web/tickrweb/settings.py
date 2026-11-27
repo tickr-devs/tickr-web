@@ -190,9 +190,12 @@ ACCOUNT_RATE_LIMITS = {
 ACCOUNT_LOGIN_BY_CODE_TIMEOUT = 900
 # Wrong tries before an emailed sign-in code is void.
 ACCOUNT_LOGIN_BY_CODE_MAX_ATTEMPTS = 3
-# Emailed codes: 6 digits, no dash (the approved app mockup draws six digit cells). With 3 tries
-# per code and the request limits above, a guess succeeds 3 times in a million.
-ALLAUTH_USER_CODE_FORMAT = {"numeric": True, "length": 6, "dashed": False}
+# Emailed sign-in codes only: 6 digits, no dash (the approved app mockup draws six digit cells).
+# One code allows 3 tries (1 in 1,000,000 each); with 3 codes per 5 minutes per address
+# (request_login_code above) that is at most 9 guesses per 5 minutes per account. Acceptable only
+# because an emailed code alone never opens the admin sections or a bot grant (passkey or
+# authenticator required); keep it that way. Other by-code flows keep allauth's longer format.
+ACCOUNT_LOGIN_BY_CODE_FORMAT = {"numeric": True, "length": 6, "dashed": False}
 
 MFA_SUPPORTED_TYPES = ["webauthn", "totp", "recovery_codes"]
 MFA_PASSKEY_LOGIN_ENABLED = True
