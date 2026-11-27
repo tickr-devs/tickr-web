@@ -11,3 +11,5 @@ dist/
 .env.*
 *.sqlite3
 *.sqlite3-*
+# The built public site (python3 web/site/build.py).
+web/site/out/

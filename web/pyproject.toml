@@ -31,3 +31,7 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+# The site builder holds whole HTML templates; their lines stay as the markup is.
+"site/build.py" = ["E501"]
