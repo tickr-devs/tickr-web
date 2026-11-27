@@ -1,0 +1,20 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n %}
+{# Enter the emailed code (SiteSignIn, "email code"). #}
+{% block head_title %}{% translate "Sign in" %}{% endblock head_title %}
+{% block back %}<button type="submit" form="logout-from-stage" class="bk">{% include "icons/back.svg" %}{% translate "Back" %}</button>{% endblock %}
+{% block content %}
+<div class="head"><h1 class="h1">{% translate "Check your email" %}</h1><p class="lede">{% blocktranslate %}Enter the 6-digit code we sent to {{ email }}.{% endblocktranslate %}</p></div>
+{% if verify_form.errors %}<div class="ban error" role="alert"><span class="gi">{% include "icons/alert.svg" %}</span><span class="bt">{% for f in verify_form %}{% for e in f.errors %}<b>{{ e }}</b>{% endfor %}{% endfor %}{% for e in verify_form.non_field_errors %}<b>{{ e }}</b>{% endfor %}</span></div>{% endif %}
+<section class="card">
+<form method="post" action="{% url 'account_confirm_login_code' %}" class="fstack">
+{% csrf_token %}
+{% for field in verify_form %}{% if field.is_hidden %}{{ field }}{% else %}<label class="sr" for="{{ field.id_for_label }}">{% translate "Code" %}</label><input class="code" type="text" name="{{ field.html_name }}" id="{{ field.id_for_label }}" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="······" required autofocus>{% endif %}{% endfor %}
+{{ redirect_field }}
+<button type="submit" class="bp tall">{% translate "Verify" %}</button>
+</form>
+<div class="actions" style="justify-content:space-between"><span class="note">{% translate "Code expires in 15 min." %}</span>{% if can_resend %}<button type="submit" form="resend" class="lk">{% translate "Resend code" %}</button>{% endif %}</div>
+</section>
+<form id="resend" method="post" action="{% url 'account_confirm_login_code' %}"><input type="hidden" name="action" value="resend">{{ redirect_field }}{% csrf_token %}</form>
+<form id="logout-from-stage" method="post" action="{% url 'account_logout' %}"><input type="hidden" name="next" value="{% url 'account_login' %}">{% csrf_token %}</form>
+{% endblock content %}

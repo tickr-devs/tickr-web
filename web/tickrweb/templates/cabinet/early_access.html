@@ -1,26 +1,27 @@
 {% extends "app/shell.html" %}
 {% load i18n %}
+{# Admin › Early access (SiteCabinet, "access"). #}
 {% block head_title %}{% translate "Early access" %}{% endblock %}
 {% block content %}
-<h1>{% translate "Early access" %}</h1>
+<div class="ph"><h1 class="h1">{% translate "Early access" %}</h1></div>
 <p class="lede">{% translate "People who asked for early access on the site. Invite confirmed addresses: each gets an account and an email to sign in." %}</p>
 <form method="post">{% csrf_token %}
 <section class="card">
 {% if rows %}
-<div class="scroll"><table class="table">
-<thead><tr><th class="c"><span class="dim">✓</span></th><th>{% translate "Email" %}</th><th>{% translate "Language" %}</th><th>{% translate "Signed up" %}</th><th>{% translate "Status" %}</th></tr></thead>
+<div class="scroll"><table class="tb">
+<thead><tr><th class="c"><span class="sr">{% translate "Invite" %}</span></th><th>{% translate "Email" %}</th><th>{% translate "Language" %}</th><th>{% translate "Signed up" %}</th><th>{% translate "Status" %}</th></tr></thead>
 <tbody>
 {% for r in rows %}<tr>
 <td class="c">{% if r.state == "confirmed" %}<input type="checkbox" name="invite" value="{{ r.s.pk }}" aria-label="{% blocktranslate with email=r.s.email %}Invite {{ email }}{% endblocktranslate %}">{% endif %}</td>
-<td>{{ r.s.email }}</td>
-<td>{{ r.s.get_lang_display }}</td>
-<td class="dim">{{ r.s.signed_up_at|date:"M j, Y" }}</td>
-<td>{% if r.state == "member" %}<span class="st"><i></i>{% translate "Has an account" %}</span>{% elif r.state == "confirmed" %}<span class="st warn"><i></i>{% translate "Confirmed" %}</span>{% else %}<span class="st off"><i></i>{% translate "Waiting for confirmation" %}</span>{% endif %}</td>
+<td class="full">{{ r.s.email }}</td>
+<td data-l="{% translate 'Language' %}">{{ r.s.get_lang_display }}</td>
+<td class="num dim" data-l="{% translate 'Signed up' %}">{{ r.s.signed_up_at|date:"M j, Y" }}</td>
+<td>{% if r.state == "member" %}<span class="badge green">{% translate "Has an account" %}</span>{% elif r.state == "confirmed" %}<span class="badge amber">{% translate "Confirmed" %}</span>{% else %}<span class="badge">{% translate "Waiting for confirmation" %}</span>{% endif %}</td>
 </tr>{% endfor %}
 </tbody></table></div>
-<div class="actions"><button class="btn" type="submit"{% if not invitable %} disabled{% endif %}>{% translate "Invite selected" %}</button></div>
+<div class="actions" style="justify-content:flex-end"><button class="bp" type="submit"{% if not invitable %} disabled{% endif %}>{% include "icons/send.svg" %}{% translate "Invite selected" %}</button></div>
 {% else %}
-<div class="empty"><strong>{% translate "Nobody yet" %}</strong>{% translate "Addresses from the early-access form on the site show here." %}</div>
+<div class="lrow"><span class="it soft">{% include "icons/inbox.svg" %}</span><span class="sp"><b>{% translate "Nobody yet" %}</b><small>{% translate "Addresses from the early-access form on the site show here." %}</small></span></div>
 {% endif %}
 </section>
 </form>

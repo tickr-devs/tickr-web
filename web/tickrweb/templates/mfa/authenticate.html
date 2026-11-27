@@ -1,0 +1,27 @@
+{% extends "mfa/base_entrance.html" %}
+{% load i18n %}
+{# Two-step verification (SiteSignIn, "two-step"): an authenticator or recovery code, or a passkey. #}
+{% block head_title %}{% translate "Sign in" %}{% endblock head_title %}
+{% block back %}<button type="submit" form="logout-from-stage" class="bk">{% include "icons/back.svg" %}{% translate "Back" %}</button>{% endblock %}
+{% block content %}
+<div class="head"><h1 class="h1">{% translate "Two-step verification" %}</h1><p class="lede">{% translate "Enter the 6-digit code from your authenticator app, or one of your recovery codes. Each recovery code works once." %}</p></div>
+{% if form.errors %}<div class="ban error" role="alert"><span class="gi">{% include "icons/alert.svg" %}</span><span class="bt">{% for f in form %}{% for e in f.errors %}<b>{{ e }}</b>{% endfor %}{% endfor %}{% for e in form.non_field_errors %}<b>{{ e }}</b>{% endfor %}</span></div>{% endif %}
+<section class="card fcard">
+{% url 'mfa_authenticate' as action_url %}
+<form method="post" action="{{ action_url }}" class="fstack" style="padding-bottom:8px">
+{% csrf_token %}
+{% for field in form %}{% if field.is_hidden %}{{ field }}{% else %}<label class="sr" for="{{ field.id_for_label }}">{% translate "Code" %}</label><input class="code" type="text" name="{{ field.html_name }}" id="{{ field.id_for_label }}" autocomplete="one-time-code" placeholder="······" required autofocus>{% endif %}{% endfor %}
+<button type="submit" class="bp tall">{% translate "Verify" %}</button>
+</form>
+{% if "webauthn" in MFA_SUPPORTED_TYPES %}
+<button type="button" form="webauthn_form" id="mfa_webauthn_authenticate" class="rw"><span class="it" style="--itc:var(--teal)">{% include "icons/key.svg" %}</span><span class="sp">{% translate "Use passkey instead" %}</span><span class="cc">{% include "icons/chev.svg" %}</span></button>
+{% endif %}
+</section>
+{% if "webauthn" in MFA_SUPPORTED_TYPES %}
+<form id="webauthn_form" method="post" action="{{ action_url }}" hidden>{% csrf_token %}{% for field in webauthn_form %}{{ field }}{% endfor %}</form>
+{{ js_data|json_script:"js_data" }}
+{% include "mfa/webauthn/snippets/scripts.html" %}
+<script data-allauth-onload="allauth.webauthn.forms.authenticateForm" type="application/json">{"ids": {"authenticate": "mfa_webauthn_authenticate", "credential": "{{ webauthn_form.credential.auto_id }}", "data": "js_data"}}</script>
+{% endif %}
+<form id="logout-from-stage" method="post" action="{% url 'account_logout' %}"><input type="hidden" name="next" value="{% url 'account_login' %}">{% csrf_token %}</form>
+{% endblock content %}

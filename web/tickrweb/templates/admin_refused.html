@@ -1,10 +1,9 @@
-{% extends "base.html" %}
+{% extends "allauth/layouts/base.html" %}
 {% load i18n %}
+{# Django admin refused: the session was not signed in with a passkey or an authenticator app. #}
 {% block head_title %}{% translate "Admin" %}{% endblock %}
+{% block back %}<a class="bk" href="{% url 'cabinet' %}">{% include "icons/back.svg" %}{% translate "Overview" %}</a>{% endblock %}
 {% block content %}
-<main class="gate">
-<h1>{% translate "Admin" %}</h1>
-<p class="lede">{% translate "The admin opens only for staff who signed in with a passkey or an authenticator app." %}</p>
-<p><a href="{% url 'mfa_index' %}">{% translate "Passkeys and two-step sign-in" %} ›</a></p>
-</main>
+<div class="head"><h1 class="h1">{% translate "Admin" %}</h1><p class="lede">{% translate "The admin opens only for staff who signed in with a passkey or an authenticator app." %}</p></div>
+<section class="card">{% url 'mfa_index' as href %}{% translate "Passkeys and two-step sign-in" as label %}{% include "app/foot.html" with href=href label=label count=None %}</section>
 {% endblock %}

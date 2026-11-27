@@ -1,0 +1,2 @@
+{# Django messages as banners (success green, warning amber, error pink). #}
+{% if messages %}<ul class="msgs" role="status">{% for message in messages %}<li class="ban {{ message.tags }}"><span class="gi">{% if message.level >= 30 %}{% include "icons/alert.svg" %}{% else %}{% include "icons/check.svg" %}{% endif %}</span><span class="bt"><b>{{ message }}</b></span></li>{% endfor %}</ul>{% endif %}

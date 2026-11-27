@@ -1,0 +1,11 @@
+{% load i18n %}{# The cabinet's navigation, in the side bar and in the phone menu. #}
+<a class="navi" href="{% url 'cabinet' %}"{% if nav_active == "/app" %} aria-current="page"{% endif %}>{% include "icons/grid.svg" %}<span>{% translate "Overview" %}</span></a>
+<a class="navi" href="{% url 'mfa_index' %}"{% if nav_active == "/account/2fa/" %} aria-current="page"{% endif %}>{% include "icons/shield.svg" %}<span>{% translate "Security" %}</span></a>
+<a class="navi" href="{% url 'usersessions_list' %}"{% if nav_active == "/account/sessions/" %} aria-current="page"{% endif %}>{% include "icons/devices.svg" %}<span>{% translate "Devices" %}</span></a>
+{% if nav_admin %}
+<p class="lbl ngrp">{% translate "Admin" %}</p>
+<a class="navi" href="{% url 'early_access' %}"{% if nav_active == "/app/early-access" %} aria-current="page"{% endif %}>{% include "icons/inbox.svg" %}<span>{% translate "Early access" %}</span></a>
+<a class="navi" href="{% url 'people' %}"{% if nav_active == "/app/people" %} aria-current="page"{% endif %}>{% include "icons/people.svg" %}<span>{% translate "People" %}</span></a>
+{% endif %}
+<div class="me"><div class="who"><span class="it" style="--itc:var(--teal);border-radius:99px">{% include "icons/people.svg" %}</span><div><b>{{ user.email }}</b><span class="note">{% if nav_admin %}{% translate "Admin" %}{% else %}{% translate "Member" %}{% endif %}</span></div></div>
+<div class="ft">{% include "app/lang.html" %}<form class="inline" method="post" action="{% url 'account_logout' %}">{% csrf_token %}<button class="lk" type="submit">{% translate "Sign out" %}</button></form></div></div>

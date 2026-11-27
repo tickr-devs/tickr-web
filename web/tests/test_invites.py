@@ -68,7 +68,7 @@ def test_skips_unconfirmed_addresses(client):
 def test_spanish_invitation(client):
     _admin(client)
     _invite(client, _subscriber("eva@example.com", lang="es"))
-    assert mail.outbox[0].subject == "Tu cuenta de tickr.bot está lista"
+    assert mail.outbox[0].subject == "Su cuenta de tickr.bot está lista"
 
 
 def test_a_failed_email_leaves_no_account(client, monkeypatch):

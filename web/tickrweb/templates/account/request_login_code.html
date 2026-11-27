@@ -1,0 +1,17 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n %}
+{# Ask for a sign-in code by email (SiteSignIn, "email code"). #}
+{% block head_title %}{% translate "Sign in" %}{% endblock head_title %}
+{% block back %}<a class="bk" href="{% url 'account_login' %}">{% include "icons/back.svg" %}{% translate "Back" %}</a>{% endblock %}
+{% block content %}
+<div class="head"><h1 class="h1">{% translate "Email me a sign-in code" %}</h1><p class="lede">{% translate "We’ll email you a 6-digit code. It works for 15 min." %}</p></div>
+<section class="card" aria-label="{% translate 'Email me a sign-in code' %}">
+<form method="post" action="{{ request_login_code_url }}" class="fstack">
+{% csrf_token %}
+{% for field in form %}{% if field.is_hidden %}{{ field }}{% else %}<div><div class="frow"><span class="it" style="--itc:var(--tile-blue)">{% include "icons/mail.svg" %}</span><label class="sr" for="{{ field.id_for_label }}">{% translate "Email" %}</label><input type="email" name="{{ field.html_name }}" id="{{ field.id_for_label }}" value="{{ field.value|default_if_none:'' }}" placeholder="{% translate 'Email' %}" autocomplete="username" required></div>{% if field.errors %}<ul class="ferr">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}</div>{% endif %}{% endfor %}
+{% if form.non_field_errors %}<ul class="ferr flat">{% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+{{ redirect_field }}
+<button type="submit" class="bp tall">{% translate "Send Code" %}</button>
+</form>
+</section>
+{% endblock content %}
