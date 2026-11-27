@@ -8,7 +8,7 @@
 <form method="post">{% csrf_token %}
 <section class="card">
 {% if rows %}
-<div class="scroll"><table class="tb">
+<div class="scroll"><table class="tb pick">
 <thead><tr><th class="c"><span class="sr">{% translate "Invite" %}</span></th><th>{% translate "Email" %}</th><th>{% translate "Language" %}</th><th>{% translate "Signed up" %}</th><th>{% translate "Status" %}</th></tr></thead>
 <tbody>
 {% for r in rows %}<tr>
@@ -19,7 +19,7 @@
 <td>{% if r.state == "member" %}<span class="badge green">{% translate "Has an account" %}</span>{% elif r.state == "confirmed" %}<span class="badge amber">{% translate "Confirmed" %}</span>{% else %}<span class="badge">{% translate "Waiting for confirmation" %}</span>{% endif %}</td>
 </tr>{% endfor %}
 </tbody></table></div>
-<div class="actions" style="justify-content:flex-end"><button class="bp" type="submit"{% if not invitable %} disabled{% endif %}>{% include "icons/send.svg" %}{% translate "Invite selected" %}</button></div>
+<div class="actions" style="justify-content:flex-end"><button class="bp" type="submit"{% if not invitable %} disabled{% endif %} data-empty-label="{% translate 'Invite selected' %}" data-count-label="{% translate 'Invite {count}' %}">{% include "icons/send.svg" %}<span class="lbl-t">{% translate "Invite selected" %}</span></button></div>
 {% else %}
 <div class="lrow"><span class="it soft">{% include "icons/inbox.svg" %}</span><span class="sp"><b>{% translate "Nobody yet" %}</b><small>{% translate "Addresses from the early-access form on the site show here." %}</small></span></div>
 {% endif %}

@@ -1,0 +1,16 @@
+{
+ "__title": "Contacto · tickr.bot",
+ "label": "Contacto",
+ "h1a": "Escríbanos.",
+ "lede": "Preguntas, la beta, sus datos, un problema de seguridad que encontró: una sola dirección para todo. Una persona lee cada correo.",
+ "copy": "Copiar",
+ "c1k": "Antes de escribir",
+ "c1b": "Las preguntas frecuentes",
+ "c1p": "Respuestas cortas a las dudas comunes. <a href=\"{{u:faq}}\">Leer las preguntas ›</a>",
+ "c2k": "Sus datos",
+ "c2b": "Salir de la lista",
+ "c2p": "Escriba desde la dirección con la que se apuntó y pida que lo quitemos.",
+ "c3k": "Seguridad",
+ "c3b": "¿Encontró un problema?",
+ "c3p": "Avísenos antes que a nadie, con detalle suficiente para reproducirlo."
+}

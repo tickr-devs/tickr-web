@@ -1,15 +1,15 @@
 {"slug":"contact","title":"Contact · tickr.bot","desc":"How to reach tickr.bot."}
 <section class="wrap phero">
-<p class="label" data-reveal data-i18n="label">Contact</p>
-<h1 data-reveal><span data-i18n="h1a">Write to us.</span></h1>
-<p class="lede" data-reveal data-i18n="lede">Questions, the beta, your data, a security problem you found: one address for all of it. A person reads every email.</p>
-<div data-reveal><span class="mail" id="addr">hello@tickr.bot</span> <button class="copy" type="button" id="copy" data-i18n="copy">Copy</button></div>
+<p class="label" data-i18n="label">Contact</p>
+<h1><span data-i18n="h1a">Write to us.</span></h1>
+<p class="lede" data-i18n="lede">Questions, the beta, your data, a security problem you found: one address for all of it. A person reads every email.</p>
+<div><span class="mail" id="addr">hello@tickr.bot</span> <button class="copy" type="button" id="copy" data-i18n="copy">Copy</button></div>
 </section>
 <section class="wrap sec" aria-label="More">
 <div class="cols">
-<div data-reveal><span class="k" data-i18n="c1k">Before you write</span><b data-i18n="c1b">The FAQ</b><p data-i18n="c1p">Short answers to the common questions. <a href="{{u:faq}}">Read the FAQ ›</a></p></div>
-<div data-reveal><span class="k" data-i18n="c2k">Your data</span><b data-i18n="c2b">Leave the list</b><p data-i18n="c2p">Write from the address you signed up with and ask to be removed.</p></div>
-<div data-reveal><span class="k" data-i18n="c3k">Security</span><b data-i18n="c3b">Found a problem?</b><p data-i18n="c3p">Tell us before anyone else, with enough detail to reproduce it.</p></div>
+<div><span class="k" data-i18n="c1k">Before you write</span><b data-i18n="c1b">The FAQ</b><p data-i18n="c1p">Short answers to the common questions. <a href="{{u:faq}}">Read the FAQ ›</a></p></div>
+<div><span class="k" data-i18n="c2k">Your data</span><b data-i18n="c2b">Leave the list</b><p data-i18n="c2p">Write from the address you signed up with and ask to be removed.</p></div>
+<div><span class="k" data-i18n="c3k">Security</span><b data-i18n="c3b">Found a problem?</b><p data-i18n="c3p">Tell us before anyone else, with enough detail to reproduce it.</p></div>
 </div>
 </section>
 <div class="end" style="padding-top:0"></div>
@@ -20,8 +20,4 @@ document.getElementById('copy').addEventListener('click', function () {
   function sel() { var r = document.createRange(); r.selectNodeContents(document.getElementById('addr')); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
   if (navigator.clipboard) navigator.clipboard.writeText(a).then(ok, sel); else sel();
 });
-window.TK_ES = {__title:'Contacto · tickr.bot',label:'Contacto',h1a:'Escríbanos.',lede:'Preguntas, la beta, sus datos, un problema de seguridad que encontró: una sola dirección para todo. Una persona lee cada correo.',copy:'Copiar',
-c1k:'Antes de escribir',c1b:'Las preguntas frecuentes',c1p:'Respuestas cortas a las dudas comunes. <a href="{{u:faq}}">Leer las preguntas ›</a>',
-c2k:'Sus datos',c2b:'Salir de la lista',c2p:'Escriba desde la dirección con la que se apuntó y pida que lo quitemos.',
-c3k:'Seguridad',c3b:'¿Encontró un problema?',c3p:'Avísenos antes que a nadie, con detalle suficiente para reproducirlo.'};
 </script>

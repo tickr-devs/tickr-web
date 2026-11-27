@@ -9,7 +9,7 @@
 <section class="card">
 <form method="post" action="{% url 'account_confirm_login_code' %}" class="fstack">
 {% csrf_token %}
-{% for field in verify_form %}{% if field.is_hidden %}{{ field }}{% else %}<label class="sr" for="{{ field.id_for_label }}">{% translate "Code" %}</label><input class="code" type="text" name="{{ field.html_name }}" id="{{ field.id_for_label }}" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="······" required autofocus>{% endif %}{% endfor %}
+{% for field in verify_form %}{% if field.is_hidden %}{{ field }}{% else %}<label class="sr" for="{{ field.id_for_label }}">{% translate "Code" %}</label><input class="code" type="text" name="{{ field.html_name }}" id="{{ field.id_for_label }}" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="······" required autofocus{% if verify_form.errors %} aria-invalid="true" value="{{ field.value|default:'' }}"{% endif %}>{% endif %}{% endfor %}
 {{ redirect_field }}
 <button type="submit" class="bp tall">{% translate "Verify" %}</button>
 </form>

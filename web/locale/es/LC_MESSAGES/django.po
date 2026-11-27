@@ -499,6 +499,12 @@ msgstr "Esperando confirmación"
 msgid "Invite selected"
 msgstr "Invitar seleccionados"
 
+msgid "Beta"
+msgstr "Beta"
+
+msgid "Invite {count}"
+msgstr "Invitar a {count}"
+
 #: tickrweb/templates/cabinet/early_access.html:24
 msgid "Nobody yet"
 msgstr "Nadie todavía"
@@ -745,11 +751,11 @@ msgstr "Cerrar sesión en los demás navegadores"
 
 #: tickrweb/templates/waitlist/confirm_body.txt:3
 msgid ""
-"Someone, hopefully you, asked to join the tickr.bot early-access list with "
-"this address. Confirm it here:"
+"Someone, hopefully you, asked to join the tickr.bot beta list with this "
+"address. Confirm it here:"
 msgstr ""
-"Alguien, esperamos que usted, pidió unirse a la lista de acceso anticipado "
-"de tickr.bot con esta dirección. Confírmela aquí:"
+"Alguien, esperamos que usted, pidió unirse a la lista de la beta de "
+"tickr.bot con esta dirección. Confírmela aquí:"
 
 #: tickrweb/templates/waitlist/confirm_body.txt:7
 msgid ""
@@ -768,8 +774,8 @@ msgid "Confirm your address"
 msgstr "Confirme su dirección"
 
 #: tickrweb/templates/waitlist/result.html:7
-msgid "One tap and you're on the tickr.bot early-access list."
-msgstr "Un toque y estará en la lista de acceso anticipado de tickr.bot."
+msgid "One tap and you're on the tickr.bot beta list."
+msgstr "Un toque y estará en la lista de la beta de tickr.bot."
 
 #: tickrweb/templates/waitlist/result.html:8
 msgid "You're on the list"
@@ -800,9 +806,8 @@ msgid "You won't get any more email from tickr.bot."
 msgstr "No recibirá más correos de tickr.bot."
 
 #: tickrweb/templates/waitlist/result.html:11
-msgid "Sign up again on the early-access page to get a new one."
-msgstr ""
-"Regístrese de nuevo en la página de acceso anticipado para recibir uno nuevo."
+msgid "Sign up again on the beta page to get a new one."
+msgstr "Regístrese de nuevo en la página de la beta para recibir uno nuevo."
 
 #: tickrweb/templates/waitlist/result.html:13
 msgid "Confirm"
