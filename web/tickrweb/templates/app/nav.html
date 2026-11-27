@@ -1,5 +1,7 @@
 {% load i18n %}{# The cabinet's navigation, in the side bar and in the phone menu. #}
 <a class="navi" href="{% url 'cabinet' %}"{% if nav_active == "/app" %} aria-current="page"{% endif %}>{% include "icons/grid.svg" %}<span>{% translate "Overview" %}</span></a>
+<a class="navi" href="{% url 'bot' %}"{% if nav_active == "/app/bot" %} aria-current="page"{% endif %}>{% include "icons/bot.svg" %}<span>{% translate "Bot" %}</span><span class="dv" title="{% translate 'In development' %}"></span></a>
+<a class="navi" href="{% url 'apps' %}"{% if nav_active == "/app/apps" %} aria-current="page"{% endif %}>{% include "icons/apps.svg" %}<span>{% translate "Apps" %}</span></a>
 <a class="navi" href="{% url 'mfa_index' %}"{% if nav_active == "/account/2fa/" %} aria-current="page"{% endif %}>{% include "icons/shield.svg" %}<span>{% translate "Security" %}</span></a>
 <a class="navi" href="{% url 'usersessions_list' %}"{% if nav_active == "/account/sessions/" %} aria-current="page"{% endif %}>{% include "icons/devices.svg" %}<span>{% translate "Devices" %}</span></a>
 {% if nav_admin %}

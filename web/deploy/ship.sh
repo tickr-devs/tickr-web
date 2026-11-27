@@ -2,7 +2,7 @@
 # Ship a release of the tickr.bot web server, from the Mac (owner):
 #   web/deploy/ship.sh [SITE_DIR]
 # Packs web/ at the current commit (a clean tree only), uploads it, and with SITE_DIR also the
-# built public site (e.g. a copy of site-v2/out). Then runs tickr-web-deploy on the server over
+# built public site (python3 web/site/build.py makes web/site/out/site). Then runs tickr-web-deploy on the server over
 # SSM and prints its output. Needs: aws CLI signed in (profile from AWS_PROFILE) and a clone of
 # tickr-infra whose ops/aws/web holds the web server's terraform state (instance id and bucket):
 # next to this repo by default (../tickr-infra), or TICKR_INFRA_DIR.

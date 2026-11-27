@@ -1,8 +1,19 @@
 """Every page renders in the shared style, in English and Spanish, and the language switch works."""
 
+import re
+import time
+from html.parser import HTMLParser
+
 import pytest
 from allauth.mfa.models import Authenticator
+from allauth.mfa.totp.internal.auth import (
+    TOTP,
+    format_hotp_value,
+    generate_totp_secret,
+    hotp_value,
+)
 from django.contrib.auth import get_user_model
+from django.core import mail
 from django.core.management import call_command
 from django.test import Client
 from django.utils import timezone, translation
@@ -11,6 +22,8 @@ from tickrweb.models import Subscriber
 from tickrweb.templatetags.devices import device_name
 
 pytestmark = pytest.mark.django_db
+
+PASSWORD = "correct horse battery staple"
 
 ENTRANCE = [
     "/login",
@@ -21,6 +34,8 @@ ENTRANCE = [
 ]
 SIGNED_IN = [
     "/app",
+    "/app/bot",
+    "/app/apps",
     "/account/2fa/",
     "/account/sessions/",
     "/account/logout/",
@@ -103,3 +118,59 @@ def test_language_switch_keeps_the_page():
 def test_devices_show_a_readable_browser_name(agent, name):
     with translation.override("en"):
         assert device_name(agent) == name
+
+
+class _Forms(HTMLParser):
+    """The forms of a page: action plus the names and values of their inputs."""
+
+    def __init__(self):
+        super().__init__()
+        self.forms = []
+
+    def handle_starttag(self, tag, attrs):
+        a = dict(attrs)
+        if tag == "form":
+            self.forms.append({"action": a.get("action") or "", "fields": {}})
+        elif tag in ("input", "button") and self.forms and a.get("name"):
+            self.forms[-1]["fields"][a["name"]] = a.get("value") or ""
+
+
+def _form_with(response, field):
+    """The page's form that has an input named field, as (action, its other fields)."""
+    parser = _Forms()
+    parser.feed(response.content.decode())
+    form = next(f for f in parser.forms if field in f["fields"])
+    return form["action"] or response.request["PATH_INFO"], form["fields"]
+
+
+def _sign_in_lands_in_the_cabinet(client, response):
+    assert response.status_code == 302 and response["Location"] == "/app"
+    assert client.get("/app").status_code == 200
+
+
+def test_emailed_code_sign_in_through_the_pages():
+    call_command("invite", "eva@example.com")
+    mail.outbox.clear()
+    client = Client()
+    action, fields = _form_with(client.get("/account/login/code/"), "email")
+    response = client.post(action, {**fields, "email": "eva@example.com"}, follow=True)
+    code = re.search(r"\b([A-Z0-9]{6})\b", mail.outbox[-1].body).group(1)
+    action, fields = _form_with(response, "code")
+    _sign_in_lands_in_the_cabinet(client, client.post(action, {**fields, "code": code}))
+
+
+def test_authenticator_sign_in_through_the_pages():
+    call_command("invite", "owner@example.com", "--superuser")
+    user = get_user_model().objects.get(email="owner@example.com")
+    user.set_password(PASSWORD)
+    user.save()
+    secret = generate_totp_secret()
+    TOTP.activate(user, secret)
+    client = Client()
+    action, fields = _form_with(client.get("/login"), "password")
+    response = client.post(
+        action, {**fields, "login": "owner@example.com", "password": PASSWORD}, follow=True
+    )
+    action, fields = _form_with(response, "code")
+    code = format_hotp_value(hotp_value(secret, int(time.time()) // 30))
+    _sign_in_lands_in_the_cabinet(client, client.post(action, {**fields, "code": code}))

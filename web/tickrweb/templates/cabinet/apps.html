@@ -1,0 +1,18 @@
+{% extends "app/shell.html" %}
+{% load i18n %}
+{# Apps (SiteCabinet, "apps"): the apps are in private testing; the list of signed-in apps is in development. #}
+{% block head_title %}{% translate "Apps" %}{% endblock %}
+{% block content %}
+<div class="ph"><h1 class="h1">{% translate "Apps" %}</h1></div>
+<div class="grid2">
+<section class="card"><div class="lrow app"><span class="it" style="--itc:var(--blue)">{% include "icons/laptop.svg" %}</span><span class="sp"><b>{% translate "Tickr for Mac" %}</b><small>{% translate "Requires macOS 26." %}</small></span><span class="badge amber">{% translate "Private testing" %}</span></div></section>
+<section class="card"><div class="lrow app"><span class="it" style="--itc:var(--violet)">{% include "icons/phone.svg" %}</span><span class="sp"><b>{% translate "Tickr for iPhone and iPad" %}</b><small>{% translate "Requires iOS 26 or iPadOS 26." %}</small></span><span class="badge amber">{% translate "Private testing" %}</span></div></section>
+</div>
+<section class="card"><div class="ch">{% translate "Signed in to the apps" as t %}{% include "app/label.html" with text=t %}{% include "app/dev.html" %}</div>
+<div class="ghost" aria-hidden="true">
+<div class="lrow"><span class="it soft">{% include "icons/laptop.svg" %}</span><span class="sp"><span class="sk" style="width:140px"></span><small><span class="sk" style="width:90px"></span></small></span><span class="sk" style="width:60px"></span></div>
+<div class="lrow"><span class="it soft">{% include "icons/phone.svg" %}</span><span class="sp"><span class="sk" style="width:120px"></span><small><span class="sk" style="width:80px"></span></small></span><span class="sk" style="width:60px"></span></div>
+</div>
+<p class="devnote">{% include "icons/clock.svg" %}<span>{% translate "Each Mac, iPhone and iPad signed in to your bot will show here, with Sign out." %}</span></p>
+</section>
+{% endblock %}

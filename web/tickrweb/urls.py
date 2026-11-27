@@ -13,6 +13,8 @@ urlpatterns = [
     # After allauth's URLs, so that reverse("account_login") gives /login.
     path("login", login, name="account_login"),
     path("app", views.cabinet, name="cabinet"),
+    path("app/bot", views.bot, name="bot"),
+    path("app/apps", views.apps, name="apps"),
     path("app/early-access", views.early_access, name="early_access"),
     path("app/people", views.people, name="people"),
     path("app/people/<int:pk>/role", views.set_role, name="set_role"),
