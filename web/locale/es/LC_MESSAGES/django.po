@@ -15,8 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
-"1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #: tickrweb/admin.py:23 tickrweb/templates/cabinet/index.html:29
 msgid "Account"
@@ -58,7 +57,8 @@ msgstr ""
 #: tickrweb/passwords.py:57
 msgid "Your password can't be one that appeared in a data breach."
 msgstr ""
-"Su contraseña no puede ser una que haya aparecido en una filtración de datos."
+"Su contraseña no puede ser una que haya aparecido en una filtración de "
+"datos."
 
 #: tickrweb/templates/account/confirm_login_code.html:4
 #: tickrweb/templates/account/login.html:5
@@ -174,7 +174,8 @@ msgid "Reset password"
 msgstr "Restablecer contraseña"
 
 #: tickrweb/templates/account/password_reset.html:7
-msgid "Enter your account email. We’ll email you a link to set a new password."
+msgid ""
+"Enter your account email. We’ll email you a link to set a new password."
 msgstr ""
 "Ingrese el correo de su cuenta. Le enviaremos un enlace para crear una "
 "contraseña nueva."
@@ -307,8 +308,8 @@ msgstr "Apps"
 #: tickrweb/templates/app/nav.html:5
 #: tickrweb/templates/cabinet/admin_refused.html:8
 #: tickrweb/templates/cabinet/index.html:21
-#: tickrweb/templates/cabinet/index.html:27 tickrweb/templates/mfa/index.html:4
-#: tickrweb/templates/mfa/index.html:6
+#: tickrweb/templates/cabinet/index.html:27
+#: tickrweb/templates/mfa/index.html:4 tickrweb/templates/mfa/index.html:6
 msgid "Security"
 msgstr "Seguridad"
 
@@ -357,9 +358,9 @@ msgid ""
 "Admin sections open only in a session signed in with a passkey or an "
 "authenticator app. Sign out, then sign in with your passkey."
 msgstr ""
-"Las secciones de administración solo se abren en una sesión iniciada con una "
-"llave de acceso o una app de autenticación. Cierre sesión y vuelva a entrar "
-"con su llave de acceso."
+"Las secciones de administración solo se abren en una sesión iniciada con una"
+" llave de acceso o una app de autenticación. Cierre sesión y vuelva a entrar"
+" con su llave de acceso."
 
 #: tickrweb/templates/cabinet/admin_refused.html:7
 msgid "This section is for tickr.bot admins."
@@ -458,7 +459,8 @@ msgstr ""
 #: tickrweb/templates/cabinet/bot.html:19
 msgid "Pause, stop and emergency stop stay in the Mac and iPhone apps."
 msgstr ""
-"Pausar, detener y la parada de emergencia siguen en las apps de Mac y iPhone."
+"Pausar, detener y la parada de emergencia siguen en las apps de Mac y "
+"iPhone."
 
 #: tickrweb/templates/cabinet/early_access.html:7
 msgid ""
@@ -466,8 +468,8 @@ msgid ""
 "each gets an account and an email to sign in."
 msgstr ""
 "Personas que pidieron acceso anticipado en el sitio. Invite a las "
-"direcciones confirmadas: cada una recibe una cuenta y un correo para iniciar "
-"sesión."
+"direcciones confirmadas: cada una recibe una cuenta y un correo para iniciar"
+" sesión."
 
 #: tickrweb/templates/cabinet/early_access.html:12
 msgid "Invite"
@@ -636,15 +638,16 @@ msgstr "Hola:"
 
 #: tickrweb/templates/invites/body.txt:3
 msgid ""
-"You're invited to tickr.bot. Sign in with this email address; we'll send you "
-"a one-time code:"
+"You're invited to tickr.bot. Sign in with this email address; we'll send you"
+" a one-time code:"
 msgstr ""
 "Lo invitamos a tickr.bot. Inicie sesión con esta dirección de correo; le "
 "enviaremos un código de un solo uso:"
 
 #: tickrweb/templates/invites/body.txt:7
 msgid ""
-"After you sign in, add a passkey under Account so next time it takes one tap."
+"After you sign in, add a passkey under Account so next time it takes one "
+"tap."
 msgstr ""
 "Después de iniciar sesión, añada una llave de acceso en Cuenta para que la "
 "próxima vez baste un toque."
@@ -759,8 +762,8 @@ msgstr ""
 
 #: tickrweb/templates/waitlist/confirm_body.txt:7
 msgid ""
-"If it wasn't you, ignore this email and the address is deleted in 7 days. To "
-"remove it now:"
+"If it wasn't you, ignore this email and the address is deleted in 7 days. To"
+" remove it now:"
 msgstr ""
 "Si no fue usted, ignore este correo y la dirección se eliminará en 7 días. "
 "Para eliminarla ahora:"
@@ -855,3 +858,23 @@ msgstr "%(email)s ahora es administrador."
 #, python-format
 msgid "%(email)s is no longer an admin."
 msgstr "%(email)s ya no es administrador."
+
+#: tickrweb/templates/mfa/totp/activate_form.html
+msgid ""
+"Scan the code with your authenticator app, then enter the 6-digit code it "
+"shows."
+msgstr ""
+"Escanee el código con su app de autenticación y luego escriba el código de 6"
+" dígitos que muestra."
+
+#: tickrweb/templates/mfa/totp/activate_form.html
+msgid "QR code for your authenticator app"
+msgstr "Código QR para su app de autenticación"
+
+#: tickrweb/templates/mfa/totp/activate_form.html
+msgid "Or type this key"
+msgstr "O escriba esta clave"
+
+#: tickrweb/templates/mfa/totp/activate_form.html
+msgid "Turn on"
+msgstr "Activar"
