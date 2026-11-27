@@ -2,7 +2,7 @@
 
 An admin is an account with is_staff and is_superuser both set; everyone else is a member.
 Admins see the admin sections of the cabinet (Early access, People), and only in a session
-signed in with a passkey or an authenticator app (admin_site.signed_in_with_a_strong_factor).
+signed in with a passkey or an authenticator app (signed_in_with_a_strong_factor).
 Another admin grants or removes the role on the People page. Only an account that already has
 a passkey or an authenticator app can be made admin (so a new admin is never only as strong as
 their mailbox); the last admin cannot be removed; every change is emailed to all admins.
@@ -10,6 +10,7 @@ their mailbox); the last admin cannot be removed; every change is emailed to all
 
 import logging
 
+from allauth.account.authentication import get_authentication_records
 from allauth.mfa.models import Authenticator
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -18,7 +19,6 @@ from django.db import transaction
 from django.template.loader import render_to_string
 from django.utils import translation
 
-from .admin_site import signed_in_with_a_strong_factor
 from .mail import failure_summary
 
 log = logging.getLogger(__name__)
@@ -36,6 +36,12 @@ class NoStrongFactor(Exception):
 
 def has_strong_factor(user) -> bool:
     return Authenticator.objects.filter(user=user, type__in=STRONG_FACTORS).exists()
+
+
+def signed_in_with_a_strong_factor(request) -> bool:
+    """This session was signed in with a passkey or an authenticator app, not a mailbox."""
+    records = get_authentication_records(request, request.user)
+    return any(r.get("method") == "mfa" and r.get("type") in STRONG_FACTORS for r in records)
 
 
 def is_admin(user) -> bool:

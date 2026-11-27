@@ -2,7 +2,7 @@
 
 The account has no password: its owner signs in with a code sent to that address, then adds a
 password and a passkey under /account/. No password ever passes through this command, and it
-sends no email (the admin's "Invite" action on the early-access list does).
+sends no email (Invite on the cabinet's Early access page does).
 """
 
 from django.core.exceptions import ValidationError
@@ -18,7 +18,9 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument("email")
         parser.add_argument(
-            "--staff", action="store_true", help="May open /app/admin/ (with a passkey)."
+            "--staff",
+            action="store_true",
+            help="Staff flag only; an admin needs --superuser as well.",
         )
         parser.add_argument(
             "--superuser", action="store_true", help="Every admin permission (implies --staff)."
