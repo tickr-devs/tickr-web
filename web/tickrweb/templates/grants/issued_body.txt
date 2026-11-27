@@ -1,0 +1,4 @@
+{% autoescape off %}{{ email }} signed in to the bot from {{ app }} at {{ when }} ET.
+
+If this was not you or another admin, sign in at {{ security_url }}, end the other sessions under Devices and change the password; then sign the device out on the bot.
+{% endautoescape %}

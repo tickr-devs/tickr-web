@@ -64,7 +64,9 @@ they can use passkeys for tickr.bot.
 
 The signing key is made by the app container at its first start (`deploy/entrypoint.sh`,
 `tickrweb/grant_key.py`) in the `grant-key` volume and never leaves the server. It is not in the
-database backups: a rebuilt server makes a new key, and the bot then needs the new public key.
+database backups: a rebuilt server (or a lost `grant-key` volume) makes a new key at the next
+start, and the bot then refuses every app sign-in until its pinned PEM is replaced with the new
+`/api/app/grant-key.pem`. Every grant is emailed to all admins.
 
 ## Configuration
 

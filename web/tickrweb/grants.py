@@ -12,12 +12,17 @@ pinned public key (GET /api/app/grant-key.pem) and issues its own device token; 
 talks to the bot. The app then signs out (DELETE /api/auth/app/v1/auth/session).
 
 Only an admin whose session was signed in with a passkey or an authenticator app gets a grant
-(the same gate as the cabinet's admin sections).
+(the same gate as the cabinet's admin sections), and every grant is emailed to all admins.
+
+This module uses allauth.headless.internal.sessionkit (not public API): allauth is pinned below
+the next major version, and tests/test_app_signin.py checks the gate through a real headless
+sign-in, so an upgrade that changes the session cannot pass silently.
 """
 
 import base64
 import hashlib
 import json
+import logging
 import time
 import uuid
 from types import SimpleNamespace
@@ -26,17 +31,25 @@ import jwt
 from allauth.headless.internal.sessionkit import authenticate_by_x_session_token
 from cryptography.hazmat.primitives import serialization
 from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse, JsonResponse
+from django.template.loader import render_to_string
+from django.utils import timezone, translation
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
 
 from .admin_site import signed_in_with_a_strong_factor
-from .roles import is_admin
+from .mail import failure_summary
+from .roles import admins, is_admin
+
+log = logging.getLogger(__name__)
 
 # The apps that may ask for a grant (their bundle ids end in .ios and .mac).
 CLIENT_IDS = {"tickr-ios", "tickr-mac"}
 # The only scope a grant carries: reach the bot API.
 BOT_SCOPE = "bot"
+# How each app is named in the notice email.
+APP_NAMES = {"tickr-ios": "the iPhone/iPad app", "tickr-mac": "the Mac app"}
 
 
 def _private_key():
@@ -98,11 +111,32 @@ def bot_grant(request):
         "token_use": "access",
     }
     grant = jwt.encode(claims, _private_key(), algorithm="RS256", headers={"kid": key_id()})
+    _tell_admins(user.email, client_id)
     response = JsonResponse(
         {"grant": grant, "expires_in": settings.BOT_GRANT_SECONDS, "email": user.email}
     )
     response["Cache-Control"] = "no-store"
     return response
+
+
+def _tell_admins(email: str, client_id: str) -> None:
+    """Every grant is emailed to all admins: the key is the bot's trust anchor, so a grant nobody
+    expected must be seen. A mail failure is logged and does not stop the sign-in (the bot also
+    alerts on every new device)."""
+    context = {
+        "email": email,
+        "app": APP_NAMES[client_id],
+        "when": timezone.localtime().strftime("%b %d, %H:%M"),
+        "security_url": f"https://{settings.SITE_HOST}/account/2fa/",
+    }
+    try:
+        with translation.override("en"):
+            subject = render_to_string("grants/issued_subject.txt", context).strip()
+            body = render_to_string("grants/issued_body.txt", context)
+        recipients = sorted({a.email for a in admins()})
+        EmailMultiAlternatives(subject, body, bcc=recipients).send()
+    except Exception as error:
+        log.error("bot grant notice not sent: %s", failure_summary(error))
 
 
 @require_GET
