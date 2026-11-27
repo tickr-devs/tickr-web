@@ -21,6 +21,8 @@ ENTRANCE = [
 ]
 SIGNED_IN = [
     "/app",
+    "/app/bot",
+    "/app/apps",
     "/account/2fa/",
     "/account/sessions/",
     "/account/logout/",

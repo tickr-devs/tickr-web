@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-27 19:15+0000\n"
+"POT-Creation-Date: 2026-11-27 19:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
-#: tickrweb/admin.py:23 tickrweb/templates/cabinet/index.html:28
+#: tickrweb/admin.py:23 tickrweb/templates/cabinet/index.html:29
 msgid "Account"
 msgstr "Cuenta"
 
@@ -41,7 +41,7 @@ msgstr[0] "Se omitió %d: aún sin confirmar o ya tiene cuenta."
 msgstr[1] "Se omitieron %d: aún sin confirmar o ya tienen cuenta."
 msgstr[2] "Se omitieron %d: aún sin confirmar o ya tienen cuenta."
 
-#: tickrweb/admin.py:66 tickrweb/views.py:106
+#: tickrweb/admin.py:66 tickrweb/views.py:120
 #, python-format
 msgid "%d invitation could not be sent; no account was created."
 msgid_plural "%d invitations could not be sent; no accounts were created."
@@ -127,13 +127,13 @@ msgstr "o"
 #: tickrweb/templates/account/password_reset.html:11
 #: tickrweb/templates/account/request_login_code.html:11
 #: tickrweb/templates/cabinet/early_access.html:12
-#: tickrweb/templates/cabinet/index.html:30
+#: tickrweb/templates/cabinet/index.html:31
 #: tickrweb/templates/cabinet/people.html:9
 msgid "Email"
 msgstr "Correo electrónico"
 
 #: tickrweb/templates/account/login.html:19
-#: tickrweb/templates/cabinet/index.html:23
+#: tickrweb/templates/cabinet/index.html:24
 #: tickrweb/templates/mfa/index.html:15 tickrweb/templates/mfa/index.html:16
 msgid "Password"
 msgstr "Contraseña"
@@ -153,7 +153,7 @@ msgid "Forgot password?"
 msgstr "¿Olvidó su contraseña?"
 
 #: tickrweb/templates/account/logout.html:4
-#: tickrweb/templates/account/logout.html:7 tickrweb/templates/app/nav.html:11
+#: tickrweb/templates/account/logout.html:7 tickrweb/templates/app/nav.html:13
 #: tickrweb/templates/usersessions/usersession_list.html:14
 msgid "Sign out"
 msgstr "Cerrar sesión"
@@ -241,10 +241,10 @@ msgid "Send Code"
 msgstr "Enviar código"
 
 #: tickrweb/templates/admin_refused.html:4
-#: tickrweb/templates/admin_refused.html:7 tickrweb/templates/app/nav.html:6
-#: tickrweb/templates/app/nav.html:10
+#: tickrweb/templates/admin_refused.html:7 tickrweb/templates/app/nav.html:8
+#: tickrweb/templates/app/nav.html:12
 #: tickrweb/templates/cabinet/admin_refused.html:3
-#: tickrweb/templates/cabinet/index.html:31
+#: tickrweb/templates/cabinet/index.html:32
 #: tickrweb/templates/cabinet/people.html:13
 msgid "Admin"
 msgstr "Administración"
@@ -279,7 +279,7 @@ msgstr "Privacidad"
 msgid "Terms"
 msgstr "Términos"
 
-#: tickrweb/templates/app/dev.html:1
+#: tickrweb/templates/app/dev.html:1 tickrweb/templates/app/nav.html:3
 msgid "In development"
 msgstr "En desarrollo"
 
@@ -289,38 +289,52 @@ msgstr "En desarrollo"
 msgid "Language"
 msgstr "Idioma"
 
-#: tickrweb/templates/app/nav.html:3
+#: tickrweb/templates/app/nav.html:3 tickrweb/templates/cabinet/bot.html:4
+#: tickrweb/templates/cabinet/bot.html:6
+#: tickrweb/templates/cabinet/index.html:11
+#: tickrweb/templates/cabinet/index.html:19
+msgid "Bot"
+msgstr "Bot"
+
+#: tickrweb/templates/app/nav.html:4 tickrweb/templates/cabinet/apps.html:4
+#: tickrweb/templates/cabinet/apps.html:6
+#: tickrweb/templates/cabinet/index.html:37
+#: tickrweb/templates/cabinet/index.html:40
+msgid "Apps"
+msgstr "Apps"
+
+#: tickrweb/templates/app/nav.html:5
 #: tickrweb/templates/cabinet/admin_refused.html:8
-#: tickrweb/templates/cabinet/index.html:20
-#: tickrweb/templates/cabinet/index.html:26 tickrweb/templates/mfa/index.html:4
+#: tickrweb/templates/cabinet/index.html:21
+#: tickrweb/templates/cabinet/index.html:27 tickrweb/templates/mfa/index.html:4
 #: tickrweb/templates/mfa/index.html:6
 msgid "Security"
 msgstr "Seguridad"
 
-#: tickrweb/templates/app/nav.html:4 tickrweb/templates/cabinet/index.html:34
+#: tickrweb/templates/app/nav.html:6 tickrweb/templates/cabinet/index.html:35
 #: tickrweb/templates/usersessions/usersession_list.html:4
 #: tickrweb/templates/usersessions/usersession_list.html:6
 msgid "Devices"
 msgstr "Dispositivos"
 
-#: tickrweb/templates/app/nav.html:7
+#: tickrweb/templates/app/nav.html:9
 #: tickrweb/templates/cabinet/early_access.html:4
 #: tickrweb/templates/cabinet/early_access.html:6
-#: tickrweb/templates/cabinet/index.html:37
-#: tickrweb/templates/cabinet/index.html:39
+#: tickrweb/templates/cabinet/index.html:43
+#: tickrweb/templates/cabinet/index.html:45
 #: tickrweb/templates/waitlist/result.html:4
 #: tickrweb/templates/waitlist/result.html:6
 msgid "Early access"
 msgstr "Acceso anticipado"
 
-#: tickrweb/templates/app/nav.html:8 tickrweb/templates/cabinet/index.html:41
-#: tickrweb/templates/cabinet/index.html:43
+#: tickrweb/templates/app/nav.html:10 tickrweb/templates/cabinet/index.html:47
+#: tickrweb/templates/cabinet/index.html:49
 #: tickrweb/templates/cabinet/people.html:4
 #: tickrweb/templates/cabinet/people.html:6
 msgid "People"
 msgstr "Personas"
 
-#: tickrweb/templates/app/nav.html:10 tickrweb/templates/cabinet/index.html:31
+#: tickrweb/templates/app/nav.html:12 tickrweb/templates/cabinet/index.html:32
 #: tickrweb/templates/cabinet/people.html:13
 msgid "Member"
 msgstr "Miembro"
@@ -350,6 +364,101 @@ msgstr ""
 msgid "This section is for tickr.bot admins."
 msgstr "Esta sección es para los administradores de tickr.bot."
 
+#: tickrweb/templates/cabinet/apps.html:8
+#: tickrweb/templates/cabinet/index.html:38
+msgid "Tickr for Mac"
+msgstr "Tickr para Mac"
+
+#: tickrweb/templates/cabinet/apps.html:8
+msgid "Requires macOS 26."
+msgstr "Requiere macOS 26."
+
+#: tickrweb/templates/cabinet/apps.html:8
+#: tickrweb/templates/cabinet/apps.html:9
+#: tickrweb/templates/cabinet/index.html:38
+#: tickrweb/templates/cabinet/index.html:39
+msgid "Private testing"
+msgstr "Pruebas privadas"
+
+#: tickrweb/templates/cabinet/apps.html:9
+#: tickrweb/templates/cabinet/index.html:39
+msgid "Tickr for iPhone and iPad"
+msgstr "Tickr para iPhone y iPad"
+
+#: tickrweb/templates/cabinet/apps.html:9
+msgid "Requires iOS 26 or iPadOS 26."
+msgstr "Requiere iOS 26 o iPadOS 26."
+
+#: tickrweb/templates/cabinet/apps.html:11
+msgid "Signed in to the apps"
+msgstr "Sesiones en las apps"
+
+#: tickrweb/templates/cabinet/apps.html:16
+msgid ""
+"Each Mac, iPhone and iPad signed in to your bot will show here, with Sign "
+"out."
+msgstr ""
+"Cada Mac, iPhone e iPad con sesión en su bot aparecerá aquí, con Cerrar "
+"sesión."
+
+#: tickrweb/templates/cabinet/bot.html:7
+msgid "Live status from your bot, read only."
+msgstr "Estado en vivo de su bot, solo lectura."
+
+#: tickrweb/templates/cabinet/bot.html:9
+#: tickrweb/templates/cabinet/early_access.html:12
+#: tickrweb/templates/cabinet/index.html:13
+#: tickrweb/templates/mfa/index.html:22
+msgid "Status"
+msgstr "Estado"
+
+#: tickrweb/templates/cabinet/bot.html:10
+msgid "Day result"
+msgstr "Resultado del día"
+
+#: tickrweb/templates/cabinet/bot.html:11
+msgid "Trades"
+msgstr "Operaciones"
+
+#: tickrweb/templates/cabinet/bot.html:12
+#: tickrweb/templates/cabinet/index.html:15
+msgid "Positions"
+msgstr "Posiciones"
+
+#: tickrweb/templates/cabinet/bot.html:13
+msgid "Symbol"
+msgstr "Símbolo"
+
+#: tickrweb/templates/cabinet/bot.html:13
+msgid "Shares"
+msgstr "Acciones"
+
+#: tickrweb/templates/cabinet/bot.html:13
+msgid "Broker stop"
+msgstr "Stop en el bróker"
+
+#: tickrweb/templates/cabinet/bot.html:13
+msgid "Result"
+msgstr "Resultado"
+
+#: tickrweb/templates/cabinet/bot.html:15
+msgid "Journal"
+msgstr "Diario"
+
+#: tickrweb/templates/cabinet/bot.html:18
+#: tickrweb/templates/cabinet/index.html:18
+msgid ""
+"Your bot’s status, today’s result and positions will show here once the bot "
+"reports to tickr.bot. Control stays in the apps."
+msgstr ""
+"El estado de su bot, el resultado de hoy y las posiciones aparecerán aquí "
+"cuando el bot informe a tickr.bot. El control sigue en las apps."
+
+#: tickrweb/templates/cabinet/bot.html:19
+msgid "Pause, stop and emergency stop stay in the Mac and iPhone apps."
+msgstr ""
+"Pausar, detener y la parada de emergencia siguen en las apps de Mac y iPhone."
+
 #: tickrweb/templates/cabinet/early_access.html:7
 msgid ""
 "People who asked for early access on the site. Invite confirmed addresses: "
@@ -366,12 +475,6 @@ msgstr "Invitar"
 #: tickrweb/templates/cabinet/early_access.html:18
 msgid "Signed up"
 msgstr "Registro"
-
-#: tickrweb/templates/cabinet/early_access.html:12
-#: tickrweb/templates/cabinet/index.html:13
-#: tickrweb/templates/mfa/index.html:22
-msgid "Status"
-msgstr "Estado"
 
 #: tickrweb/templates/cabinet/early_access.html:15
 #, python-format
@@ -418,87 +521,71 @@ msgstr ""
 msgid "Add passkey"
 msgstr "Añadir llave de acceso"
 
-#: tickrweb/templates/cabinet/index.html:11
-msgid "Bot"
-msgstr "Bot"
-
 #: tickrweb/templates/cabinet/index.html:14
 msgid "Today"
 msgstr "Hoy"
-
-#: tickrweb/templates/cabinet/index.html:15
-msgid "Positions"
-msgstr "Posiciones"
 
 #: tickrweb/templates/cabinet/index.html:16
 msgid "Last journal line"
 msgstr "Última línea del registro"
 
-#: tickrweb/templates/cabinet/index.html:18
-msgid ""
-"Your bot’s status, today’s result and positions will show here once the bot "
-"reports to tickr.bot. Control stays in the apps."
-msgstr ""
-"El estado de su bot, el resultado de hoy y las posiciones aparecerán aquí "
-"cuando el bot informe a tickr.bot. El control sigue en las apps."
-
-#: tickrweb/templates/cabinet/index.html:22
+#: tickrweb/templates/cabinet/index.html:23
 #: tickrweb/templates/cabinet/people.html:9
 #: tickrweb/templates/cabinet/people.html:14
 #: tickrweb/templates/mfa/index.html:10
 msgid "Passkeys"
 msgstr "Llaves de acceso"
 
-#: tickrweb/templates/cabinet/index.html:22
+#: tickrweb/templates/cabinet/index.html:23
 #: tickrweb/templates/mfa/index.html:11
 msgid "None yet"
 msgstr "Ninguna todavía"
 
-#: tickrweb/templates/cabinet/index.html:23
+#: tickrweb/templates/cabinet/index.html:24
 #: tickrweb/templates/mfa/index.html:16
 msgid "Set"
 msgstr "Configurada"
 
-#: tickrweb/templates/cabinet/index.html:23
+#: tickrweb/templates/cabinet/index.html:24
 msgid "Not set"
 msgstr "Sin configurar"
 
-#: tickrweb/templates/cabinet/index.html:24
+#: tickrweb/templates/cabinet/index.html:25
 #: tickrweb/templates/mfa/index.html:21
 msgid "Authenticator app"
 msgstr "App de autenticación"
 
-#: tickrweb/templates/cabinet/index.html:24
+#: tickrweb/templates/cabinet/index.html:25
 #: tickrweb/templates/mfa/index.html:22
 msgid "On"
 msgstr "Activada"
 
-#: tickrweb/templates/cabinet/index.html:24
+#: tickrweb/templates/cabinet/index.html:25
 #: tickrweb/templates/mfa/index.html:22
 msgid "Off"
 msgstr "Desactivada"
 
-#: tickrweb/templates/cabinet/index.html:31
+#: tickrweb/templates/cabinet/index.html:32
 #: tickrweb/templates/cabinet/people.html:9
 msgid "Role"
 msgstr "Rol"
 
-#: tickrweb/templates/cabinet/index.html:32
+#: tickrweb/templates/cabinet/index.html:33
 #: tickrweb/templates/cabinet/people.html:9
 #: tickrweb/templates/cabinet/people.html:15
 msgid "Last sign-in"
 msgstr "Último inicio de sesión"
 
-#: tickrweb/templates/cabinet/index.html:32
+#: tickrweb/templates/cabinet/index.html:33
 #: tickrweb/templates/cabinet/people.html:15
 msgid "Never"
 msgstr "Nunca"
 
-#: tickrweb/templates/cabinet/index.html:38
+#: tickrweb/templates/cabinet/index.html:44
 msgid "Confirmed, not invited yet"
 msgstr "Confirmados, aún sin invitar"
 
-#: tickrweb/templates/cabinet/index.html:42
+#: tickrweb/templates/cabinet/index.html:48
 msgid "Accounts"
 msgstr "Cuentas"
 
@@ -516,7 +603,7 @@ msgstr ""
 msgid "you"
 msgstr "usted"
 
-#: tickrweb/templates/cabinet/people.html:17 tickrweb/views.py:159
+#: tickrweb/templates/cabinet/people.html:17 tickrweb/views.py:173
 msgid "tickr.bot needs at least one admin."
 msgstr "tickr.bot necesita al menos un administrador."
 
@@ -732,7 +819,7 @@ msgstr "%(browser)s en %(system)s"
 msgid "Unknown browser"
 msgstr "Navegador desconocido"
 
-#: tickrweb/views.py:100
+#: tickrweb/views.py:114
 #, python-format
 msgid "Invited %d person."
 msgid_plural "Invited %d people."
@@ -740,7 +827,7 @@ msgstr[0] "Se invitó a %d persona."
 msgstr[1] "Se invitó a %d personas."
 msgstr[2] "Se invitó a %d personas."
 
-#: tickrweb/views.py:164
+#: tickrweb/views.py:178
 #, python-format
 msgid ""
 "%(email)s needs a passkey or an authenticator app before becoming an admin."
@@ -748,16 +835,16 @@ msgstr ""
 "%(email)s necesita una llave de acceso o una app de autenticación antes de "
 "ser administrador."
 
-#: tickrweb/views.py:169
+#: tickrweb/views.py:183
 msgid "The role changed, but the notice email could not be sent."
 msgstr "El rol cambió, pero no se pudo enviar el correo de aviso."
 
-#: tickrweb/views.py:172
+#: tickrweb/views.py:186
 #, python-format
 msgid "%(email)s is now an admin."
 msgstr "%(email)s ahora es administrador."
 
-#: tickrweb/views.py:172
+#: tickrweb/views.py:186
 #, python-format
 msgid "%(email)s is no longer an admin."
 msgstr "%(email)s ya no es administrador."

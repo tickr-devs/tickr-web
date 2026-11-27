@@ -3,7 +3,13 @@
 from .roles import admin_session, is_admin
 
 # (url prefix, label key) of the side navigation; admin items only for an admin.
-_MEMBER = [("/app", "overview"), ("/account/2fa/", "security"), ("/account/sessions/", "devices")]
+_MEMBER = [
+    ("/app", "overview"),
+    ("/app/bot", "bot"),
+    ("/app/apps", "apps"),
+    ("/account/2fa/", "security"),
+    ("/account/sessions/", "devices"),
+]
 _ADMIN = [("/app/early-access", "early_access"), ("/app/people", "people")]
 
 

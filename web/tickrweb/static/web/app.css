@@ -166,6 +166,9 @@ input[type=checkbox]{width:18px;height:18px;margin:0;accent-color:var(--prim);ve
   .tb tr:first-child{border-top:0}
   .tb td{display:block;padding:0!important;border:0;text-align:left!important}
   .tb td.full{flex-basis:100%}
+  .tb.keep thead{display:table-header-group}
+  .tb.keep tr{display:table-row}
+  .tb.keep td{display:table-cell;padding:8px 6px!important}
   .tb td[data-l]::before{content:attr(data-l) " ";color:var(--dim);font:500 12px var(--text)}
 }
 
@@ -240,3 +243,10 @@ input[type=checkbox]{width:18px;height:18px;margin:0;accent-color:var(--prim);ve
 .form .helptext{display:block;margin-top:4px;font:400 13px var(--text);color:var(--dim);text-transform:none;letter-spacing:0}
 ul.errorlist{margin:6px 0 0;padding:0;list-style:none;font-size:13px;color:var(--pink2)}
 .cdl{stroke:var(--line2)}.cdl .lv{stroke:var(--teal);opacity:.7}
+
+/* Bot and Apps pages */
+.num.big{font-size:28px;font-weight:700}
+.lrow.app{border:0;padding:4px 0}
+.lrow.app .it{width:48px;height:48px;border-radius:14px}
+.lrow.app .it svg{width:24px;height:24px}
+.lrow.app b{font-size:16px}

@@ -1,0 +1,21 @@
+{% extends "app/shell.html" %}
+{% load i18n %}
+{# Bot (SiteCabinet, "bot"): in development. Ghost cards show what will be here, with no numbers. #}
+{% block head_title %}{% translate "Bot" %}{% endblock %}
+{% block content %}
+<div class="ph"><h1 class="h1">{% translate "Bot" %}</h1>{% include "app/dev.html" %}</div>
+<p class="lede">{% translate "Live status from your bot, read only." %}</p>
+<div class="grid3" aria-hidden="true">
+<section class="card"><div class="ch">{% translate "Status" as t %}{% include "app/label.html" with text=t %}</div><div class="ghost"><span class="pill off" style="align-self:flex-start"><span class="dot"></span><span class="sk" style="width:60px"></span></span><span class="sk" style="width:140px"></span><span class="sk" style="width:100px"></span></div></section>
+<section class="card"><div class="ch">{% translate "Day result" as t %}{% include "app/label.html" with text=t %}</div><div class="ghost"><span class="num big dim">$ —</span><span class="sk" style="width:120px"></span></div></section>
+<section class="card"><div class="ch">{% translate "Trades" as t %}{% include "app/label.html" with text=t %}</div><div class="ghost"><span class="num big dim">—</span><span class="sk" style="width:90px"></span></div></section>
+<section class="card span2"><div class="ch">{% translate "Positions" as t %}{% include "app/label.html" with text=t %}<span class="note">— / —</span></div><div class="ghost"><table class="tb keep">
+<thead><tr><th>{% translate "Symbol" %}</th><th>{% translate "Shares" %}</th><th>{% translate "Broker stop" %}</th><th>{% translate "Result" %}</th></tr></thead>
+<tbody>{% for i in "12" %}<tr><td><span class="sk" style="width:44px"></span></td><td><span class="sk" style="width:30px"></span></td><td><span class="sk" style="width:50px"></span></td><td><span class="sk" style="width:50px"></span></td></tr>{% endfor %}</tbody></table></div></section>
+<section class="card"><div class="ch">{% translate "Journal" as t %}{% include "app/label.html" with text=t %}</div><div class="ghost"><span class="sk" style="width:170px;max-width:100%"></span><span class="sk" style="width:140px"></span><span class="sk" style="width:160px;max-width:100%"></span><span class="sk" style="width:120px"></span></div></section>
+</div>
+<section class="card">
+<p class="devnote">{% include "icons/clock.svg" %}<span>{% translate "Your bot’s status, today’s result and positions will show here once the bot reports to tickr.bot. Control stays in the apps." %}</span></p>
+<p class="devnote">{% include "icons/apps.svg" %}<span>{% translate "Pause, stop and emergency stop stay in the Mac and iPhone apps." %}</span></p>
+</section>
+{% endblock %}

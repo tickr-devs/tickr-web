@@ -16,6 +16,7 @@
 <div><dt>{% translate "Last journal line" %}</dt><dd><span class="sk" style="width:180px;max-width:40vw"></span></dd></div>
 </dl></div>
 <p class="devnote">{% include "icons/clock.svg" %}<span>{% translate "Your bot’s status, today’s result and positions will show here once the bot reports to tickr.bot. Control stays in the apps." %}</span></p>
+{% url 'bot' as href %}{% translate "Bot" as label %}{% include "app/foot.html" with href=href label=label count=None %}
 </section>
 <section class="card"><div class="ch">{% translate "Security" as t %}{% include "app/label.html" with text=t %}</div>
 <dl class="kv">
@@ -32,6 +33,11 @@
 <div><dt>{% translate "Last sign-in" %}</dt><dd class="num">{% if user.last_login %}{{ user.last_login|date:"M j, H:i" }} ET{% else %}{% translate "Never" %}{% endif %}</dd></div>
 </dl>
 {% url 'usersessions_list' as href %}{% translate "Devices" as label %}{% include "app/foot.html" with href=href label=label count=device_count %}
+</section>
+<section class="card"><div class="ch">{% translate "Apps" as t %}{% include "app/label.html" with text=t %}</div>
+<div class="lrow"><span class="it" style="--itc:var(--blue)">{% include "icons/laptop.svg" %}</span><span class="sp">{% translate "Tickr for Mac" %}</span><span class="badge amber">{% translate "Private testing" %}</span></div>
+<div class="lrow"><span class="it" style="--itc:var(--violet)">{% include "icons/phone.svg" %}</span><span class="sp">{% translate "Tickr for iPhone and iPad" %}</span><span class="badge amber">{% translate "Private testing" %}</span></div>
+{% url 'apps' as href %}{% translate "Apps" as label %}{% include "app/foot.html" with href=href label=label count=None %}
 </section>
 {% if nav_admin %}
 <section class="card"><div class="ch">{% translate "Early access" as t %}{% include "app/label.html" with text=t %}</div>

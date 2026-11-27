@@ -62,6 +62,20 @@ def cabinet(request):
     return render(request, "cabinet/index.html", context)
 
 
+@login_required
+@require_GET
+def bot(request):
+    """The bot's live status, read only. In development: the bot does not report here yet."""
+    return render(request, "cabinet/bot.html")
+
+
+@login_required
+@require_GET
+def apps(request):
+    """The Mac and iPhone/iPad apps (private testing) and, later, the apps signed in to the bot."""
+    return render(request, "cabinet/apps.html")
+
+
 def admin_only(view):
     """An admin section: an admin in a session signed in with a passkey or authenticator app."""
 
