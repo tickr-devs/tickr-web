@@ -15,5 +15,7 @@ if [ -r /run/secrets/db_password ]; then
   TICKR_WEB_DB_PASSWORD=$(cat /run/secrets/db_password)
   export TICKR_WEB_DB_PASSWORD
 fi
+# The grant signing key for the apps' sign-in: made once, kept in its volume (tickrweb/grant_key.py).
+(cd /app && /venv/bin/python -m tickrweb.grant_key "$TICKR_WEB_GRANT_KEY_FILE")
 /venv/bin/python /app/manage.py migrate --noinput
 exec "$@"

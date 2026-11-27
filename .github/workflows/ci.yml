@@ -1,0 +1,79 @@
+name: ci
+# The web app's tests and image build. Both jobs are required checks, so they run on every pull
+# request, in the merge queue and on main (no path filters: a skipped required check never reports).
+on:
+  pull_request:
+  # The merge queue: the required checks run again on the queued change on top of the newest main
+  # (and of the changes queued ahead of it), so two separately green pull requests cannot break main.
+  merge_group:
+  push:
+    branches: [main]
+# One run per pull request: a new push cancels the run still going for the previous one. Runs on
+# main are never cancelled (a later merge used to cancel the earlier commit's run, so a commit that
+# broke main went unnoticed): each merged commit gets its own run, in its own group.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+# The workflow only reads the repository: its token can change nothing.
+permissions:
+  contents: read
+jobs:
+  web-tests:
+    # The tickr.bot web app (web/, docs in web/README.md): its own uv project and lock, tested
+    # against a real Postgres like the one on its server.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: ci-only
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    defaults:
+      run:
+        working-directory: web
+    env:
+      TICKR_WEB_DB_NAME: tickrweb
+      TICKR_WEB_DB_USER: postgres
+      TICKR_WEB_DB_PASSWORD: ci-only
+      TICKR_WEB_DB_HOST: 127.0.0.1
+      TICKR_WEB_DB_PORT: "5432"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          version: "0.11.32"
+          python-version: "3.12"
+          enable-cache: true
+      - run: uv sync --frozen
+      - run: uv run --no-sync ruff check .
+      - run: uv run --no-sync python manage.py makemigrations --check --dry-run --settings tickrweb.settings_test
+      - run: uv run --no-sync pytest -q
+  web-image:
+    # Builds the web app's image and checks its server files (web/deploy; the server side lives in
+    # tickr-infra); never pushes or applies anything.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - run: docker build -t tickr-web:latest web
+      - name: The app reads a mode-600 secrets file owned by the server account's uid
+        run: |
+          uid=$(sed -n 's/^USER \([0-9]*\):.*/\1/p' web/Dockerfile)
+          dir=$(mktemp -d)
+          printf "TICKR_WEB_HOST='x'\n" > "$dir/env"
+          sudo chown "$uid:$uid" "$dir/env"
+          sudo chmod 600 "$dir/env"
+          docker run --rm -v "$dir/env:/run/tickr-web/env:ro" --entrypoint sh tickr-web:latest \
+            -c 'test -r /run/tickr-web/env'
+      - run: docker compose -f web/deploy/compose.yaml config -q
+        env:
+          TICKR_WEB_HOST: tickr.bot
+          TICKR_WEB_ENV_FILE_HOST: /srv/tickr-web/etc/env
+          TICKR_WEB_DB_PASSWORD_FILE_HOST: /srv/tickr-web/etc/db_password
+          TICKR_WEB_SITE_DIR: /srv/tickr-web/site
+      - run: >-
+          docker run --rm -e TICKR_WEB_HOST=tickr.bot -v "$PWD/web/deploy/Caddyfile:/etc/caddy/Caddyfile:ro"
+          caddy:2.10 caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile

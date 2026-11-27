@@ -1,6 +1,8 @@
 """The cabinet's admin sections: who opens them, roles, the last admin, inviting from the list."""
 
 import pytest
+from allauth.account.models import EmailAddress
+from allauth.mfa.models import Authenticator
 from django.contrib.auth import get_user_model
 from django.core import mail
 from django.core.management import call_command
@@ -17,6 +19,11 @@ STRONG = {"method": "mfa", "type": "webauthn"}
 def _account(email, *flags):
     call_command("invite", email, *flags)
     return get_user_model().objects.get(email=email)
+
+
+def _with_passkey(user):
+    Authenticator.objects.create(user=user, type=Authenticator.Type.WEBAUTHN, data={})
+    return user
 
 
 def _client(user, record=STRONG):
@@ -70,7 +77,7 @@ def test_a_member_cannot_change_roles():
 
 def test_an_admin_makes_another_admin_and_every_admin_is_told(django_capture_on_commit_callbacks):
     owner = _account("owner@example.com", "--superuser")
-    member = _account("member@example.com")
+    member = _with_passkey(_account("member@example.com"))
     mail.outbox.clear()
     with django_capture_on_commit_callbacks(execute=True):
         response = _role(_client(owner), member, "admin")
@@ -91,6 +98,42 @@ def test_an_admin_removes_another_admin_and_both_are_told(django_capture_on_comm
     second.refresh_from_db()
     assert not second.is_staff and not second.is_superuser
     assert set(mail.outbox[0].bcc) == {"owner@example.com", "second@example.com"}
+
+
+@pytest.mark.parametrize("factor", [None, Authenticator.Type.RECOVERY_CODES])
+def test_only_an_account_with_a_passkey_or_authenticator_can_be_made_admin(factor):
+    owner = _account("owner@example.com", "--superuser")
+    member = _account("member@example.com")
+    if factor:
+        Authenticator.objects.create(user=member, type=factor, data={})
+    response = _role(_client(owner), member, "admin")
+    assert "needs a passkey or an authenticator app" in response.text
+    member.refresh_from_db()
+    assert not member.is_superuser
+
+
+def test_an_authenticator_app_is_enough_to_be_made_admin():
+    owner = _account("owner@example.com", "--superuser")
+    member = _account("member@example.com")
+    Authenticator.objects.create(user=member, type=Authenticator.Type.TOTP, data={})
+    _role(_client(owner), member, "admin")
+    member.refresh_from_db()
+    assert member.is_superuser
+
+
+@pytest.mark.django_db(transaction=True)  # real commits: the notice runs before the view answers
+def test_a_failed_notice_keeps_the_change_and_says_so(monkeypatch):
+    def refuse(*args):
+        raise OSError("mail refused")
+
+    monkeypatch.setattr("tickrweb.roles._notify", refuse)
+    owner = _account("owner@example.com", "--superuser")
+    member = _with_passkey(_account("member@example.com"))
+    response = _role(_client(owner), member, "admin")
+    assert response.status_code == 200
+    assert "the notice email could not be sent" in response.text
+    member.refresh_from_db()
+    assert member.is_superuser
 
 
 def test_the_last_admin_cannot_be_removed():
@@ -151,6 +194,7 @@ def test_early_access_invites_only_confirmed_addresses_without_an_account():
 
 def test_early_access_lists_each_state():
     owner = _account("owner@example.com", "--superuser")
+    EmailAddress.objects.filter(user=owner).update(email="Owner@example.com")
     _subscriber("new@example.com")
     _subscriber("waiting@example.com", confirmed=False)
     _subscriber("owner@example.com")

@@ -1,0 +1,67 @@
+name: ci-alert
+# Tells the owner when a run on main fails. Pushes to main, the nightly and weekly runs and manual
+# runs on main have no pull request to show their result on, so without this a red main or a failed
+# nightly goes unseen. When such a run fails or times out, one issue per workflow is opened and
+# assigned to CI_ALERT_ASSIGNEE (a comment is added while it is still open); the next run of that workflow
+# on main that passes closes it. Pull request runs are never reported here: their checks show on
+# the pull request.
+on:
+  workflow_run:
+    workflows: [ci, release]
+    types: [completed]
+# One report at a time per workflow, so two runs finishing together cannot open two issues.
+concurrency:
+  group: ci-alert-${{ github.event.workflow_run.name }}
+  cancel-in-progress: false
+# Issues only: this workflow checks out no code and can change nothing in the repository.
+permissions:
+  issues: write
+jobs:
+  ci-alert-issue:
+    if: >-
+      ${{ github.event.workflow_run.head_branch == 'main'
+      && github.event.workflow_run.event != 'pull_request'
+      && contains(fromJSON('["failure", "timed_out", "startup_failure", "success"]'),
+      github.event.workflow_run.conclusion) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      # The person the issue is assigned to: the repository variable CI_ALERT_ASSIGNEE (a GitHub
+      # login). Not the repository owner: that is the organization tickr-devs, and an issue cannot
+      # be assigned to an organization, so `gh issue create` would fail and no issue would open.
+      # Unset, the issue opens unassigned (the owner still sees it in the repository's issues).
+      ASSIGNEE: ${{ vars.CI_ALERT_ASSIGNEE }}
+      WORKFLOW: ${{ github.event.workflow_run.name }}
+      CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+      TRIGGER: ${{ github.event.workflow_run.event }}
+      COMMIT: ${{ github.event.workflow_run.head_sha }}
+      RUN_URL: ${{ github.event.workflow_run.html_url }}
+    steps:
+      - name: Open, update or close the workflow's issue
+        run: |
+          export TITLE="CI failed on main: $WORKFLOW"
+          # The open issue with exactly this title, if any (listed, not searched: the search index lags).
+          number=$(gh issue list --state open --limit 200 --json number,title \
+            --jq 'map(select(.title == env.TITLE)) | first | .number // empty')
+          if [ "$CONCLUSION" = "success" ]; then
+            if [ -n "$number" ]; then
+              gh issue close "$number" --comment "Passing again on main: $RUN_URL (commit $COMMIT)."
+            fi
+            exit 0
+          fi
+          body="\`$WORKFLOW\` ended with \`$CONCLUSION\` on main (trigger: \`$TRIGGER\`, commit $COMMIT).
+
+          Run: $RUN_URL
+
+          Opened by .github/workflows/ci-alert.yml; closed by the next passing run of this workflow on main."
+          if [ -n "$number" ]; then
+            gh issue comment "$number" --body "$body"
+          else
+            if [ -n "$ASSIGNEE" ]; then
+              gh issue create --title "$TITLE" --body "$body" --assignee "$ASSIGNEE"
+            else
+              gh issue create --title "$TITLE" --body "$body"
+            fi
+          fi

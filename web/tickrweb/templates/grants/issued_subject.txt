@@ -1,0 +1,1 @@
+{% autoescape off %}tickr.bot: {{ email }} signed in to the bot from {{ app }}{% endautoescape %}

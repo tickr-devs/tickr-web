@@ -1,15 +1,21 @@
 #!/bin/sh
 # Ship a release of the tickr.bot web server, from the Mac (owner):
-#   ops/aws/web/ship.sh [SITE_DIR]
+#   web/deploy/ship.sh [SITE_DIR]
 # Packs web/ at the current commit (a clean tree only), uploads it, and with SITE_DIR also the
 # built public site (e.g. a copy of site-v2/out). Then runs tickr-web-deploy on the server over
-# SSM and prints its output. Needs: aws CLI signed in (profile from AWS_PROFILE), terraform state
-# of this folder (for the instance id and bucket).
+# SSM and prints its output. Needs: aws CLI signed in (profile from AWS_PROFILE) and a clone of
+# tickr-infra whose ops/aws/web holds the web server's terraform state (instance id and bucket):
+# next to this repo by default (../tickr-infra), or TICKR_INFRA_DIR.
 set -eu
 # No pager: AWS CLI v2 otherwise shows the final result in `less`, which waits for a key press.
 export AWS_PAGER=""
 here=$(cd "$(dirname "$0")" && pwd)
 repo=$(git -C "$here" rev-parse --show-toplevel)
+infra="${TICKR_INFRA_DIR:-$repo/../tickr-infra}/ops/aws/web"
+if [ ! -d "$infra" ]; then
+  echo "No tickr-infra clone at $infra: clone tickr-devs/tickr-infra next to this repo or set TICKR_INFRA_DIR." >&2
+  exit 1
+fi
 if ! git -C "$repo" diff --quiet HEAD -- web; then
   echo "web/ has uncommitted changes: commit them first." >&2
   exit 1
@@ -20,8 +26,8 @@ if ! git -C "$repo" merge-base --is-ancestor HEAD origin/main; then
   echo "HEAD is not on origin/main: ship only merged commits (git switch main && git pull)." >&2
   exit 1
 fi
-instance=$(terraform -chdir="$here" output -raw instance_id)
-bucket=$(terraform -chdir="$here" output -raw bucket)
+instance=$(terraform -chdir="$infra" output -raw instance_id)
+bucket=$(terraform -chdir="$infra" output -raw bucket)
 commit=$(git -C "$repo" rev-parse --short HEAD)
 stamp=$(date -u +%Y%m%dT%H%M%SZ)
 app_key="web-$stamp-$commit.tgz"

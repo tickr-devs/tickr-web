@@ -9,6 +9,7 @@ never a value. The web app runs on its own server, never beside the trading bot.
 import os
 from pathlib import Path
 
+from botocore.config import Config as _BotoConfig
 from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.mfa",
     "allauth.usersessions",
+    "allauth.headless",  # the apps' native sign-in screens use its JSON API, see tickrweb/grants.py
     "tickrweb",
 ]
 
@@ -116,7 +118,11 @@ AUTH_PASSWORD_VALIDATORS = [
         "OPTIONS": {"min_length": 15},
     },
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    # Not in a known breach (Have I Been Pwned, only a 5-character hash prefix is sent).
+    {"NAME": "tickrweb.passwords.BreachedPasswordValidator"},
 ]
+# Seconds to wait for the breached-password service before accepting the password anyway.
+PASSWORD_BREACH_CHECK_SECONDS = 3
 
 # --- Sessions and cookies ---
 # "__Host-" cookies are accepted by browsers only over HTTPS, for this host, on path "/".
@@ -184,6 +190,12 @@ ACCOUNT_RATE_LIMITS = {
 ACCOUNT_LOGIN_BY_CODE_TIMEOUT = 900
 # Wrong tries before an emailed sign-in code is void.
 ACCOUNT_LOGIN_BY_CODE_MAX_ATTEMPTS = 3
+# Emailed sign-in codes only: 6 digits, no dash (the approved app mockup draws six digit cells).
+# One code allows 3 tries (1 in 1,000,000 each); with 3 codes per 5 minutes per address
+# (request_login_code above) that is at most 9 guesses per 5 minutes per account. Acceptable only
+# because an emailed code alone never opens the admin sections or a bot grant (passkey or
+# authenticator required); keep it that way. Other by-code flows keep allauth's longer format.
+ACCOUNT_LOGIN_BY_CODE_FORMAT = {"numeric": True, "length": 6, "dashed": False}
 
 MFA_SUPPORTED_TYPES = ["webauthn", "totp", "recovery_codes"]
 MFA_PASSKEY_LOGIN_ENABLED = True
@@ -191,13 +203,39 @@ MFA_PASSKEY_LOGIN_ENABLED = True
 MFA_WEBAUTHN_ALLOW_INSECURE_ORIGIN = DEBUG
 USERSESSIONS_TRACK_ACTIVITY = True
 
+# --- The apps sign in natively (allauth headless, "app" client) and get a bot grant ---
+HEADLESS_CLIENTS = ("app",)
+# The site's own pages stay; headless only adds the JSON API under /api/auth/app/v1/.
+HEADLESS_ONLY = False
+# RSA private key (PEM) that signs the bot grants. Made on the server at first start
+# (deploy/entrypoint.sh, tickrweb/grant_key.py), kept in a volume, never copied anywhere; the bot
+# pins its public key.
+with open(_required("TICKR_WEB_GRANT_KEY_FILE"), encoding="ascii") as _key:
+    BOT_GRANT_PRIVATE_KEY = _key.read()
+# The bot API, the only audience a grant is for (the bot's remote_signin_audience).
+BOT_API_AUDIENCE = "https://api.tickr.bot"
+# Seconds a bot grant is valid: the app redeems it at the bot right away.
+BOT_GRANT_SECONDS = 60
+# Apple team id that signs the apps (public: it is in every signed app). tickr.bot names it in
+# /.well-known/apple-app-site-association so the apps can use passkeys for tickr.bot.
+APPLE_TEAM_ID = "2C66ZTA2N4"
+# The apps' bundle ids (apps/ TICKR_BUNDLE_ID_PREFIX + ".ios" / ".mac").
+APPLE_APP_BUNDLE_IDS = ["bot.tickr.ios", "bot.tickr.mac"]
+
 # --- Email: Amazon SES API with the server's instance role (no stored mail password) ---
 DEFAULT_FROM_EMAIL = _required("TICKR_WEB_FROM_EMAIL")
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
+# SES calls give up quickly so a mail outage never holds a request: seconds to connect,
+# seconds to wait for an answer, and tries per call (django-ses makes two calls per email,
+# so the worst case is 2 x 2 x (2 + 4) = 24 s, well under a bot grant's 60 s).
+AWS_SES_CONFIG = _BotoConfig(
+    connect_timeout=2, read_timeout=4, retries={"total_max_attempts": 2, "mode": "standard"}
+)
 if _optional("TICKR_WEB_SES_REGION"):
     EMAIL_BACKEND = "django_ses.SESBackend"
     USE_SES_V2 = True
     AWS_SES_REGION_NAME = _required("TICKR_WEB_SES_REGION")
+
     AWS_SES_REGION_ENDPOINT = f"email.{AWS_SES_REGION_NAME}.amazonaws.com"
 elif DEBUG:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

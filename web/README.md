@@ -15,6 +15,7 @@ keys. It imports nothing from `src/tickr`.
 | `/app` | The cabinet (signed in only): Overview, Security, Devices |
 | `/app/early-access`, `/app/people` | Admin sections of the cabinet (admins only) |
 | `/app/admin/` | Django admin: a hidden fallback, not linked anywhere; to be removed |
+| `/api/auth/app/v1/…`, `/api/app/…`, `/.well-known/apple-app-site-association` | The apps' native sign-in (below) |
 | `/api/…` | JSON endpoints; `/api/healthz` answers `ok` |
 
 Public pages must not use `/login`, `/account`, `/app`, `/api` or `/static`.
@@ -39,13 +40,33 @@ account, or is not confirmed, is skipped; if the email fails, no account is left
 An admin is an account with `is_staff` and `is_superuser`; everyone else is a member. Admins see
 two more sections in the same cabinet, **Early access** and **People**, and they open only in a
 session signed in with a passkey or an authenticator app (members and other sessions get 403).
-On **People** an admin makes another account an admin or removes the role (`tickrweb/roles.py`).
+On **People** an admin makes another account an admin or removes the role (`tickrweb/roles.py`);
+only an account that already has a passkey or an authenticator app can be made admin.
 The last admin cannot be removed, and every change is emailed to all admins and the person.
 
 The first admin, who has nobody to invite them, is made with
 `python manage.py invite you@example.com --superuser`, which creates an account with a verified
 address and no password and sends no email. Its owner signs in at `/login` with an emailed code,
 then adds a passkey under Security. Django's own admin login form is never served.
+
+## The apps' sign-in
+
+The Mac and iPhone apps sign in with their own screens through allauth's headless JSON API for the
+"app" client (`/api/auth/app/v1/…`, session in the `X-Session-Token` header): passkey, email +
+password, or a code by email, then an authenticator code or a passkey when the account asks for a
+second step. Then `POST /api/app/bot-grant` (`tickrweb/grants.py`) gives a 60-second RS256 JWT,
+the bot grant (`iss` https://tickr.bot, `aud` [https://api.tickr.bot], `sub` = account id,
+`client_id` tickr-ios or tickr-mac, `jti`), which the app hands to the bot once. Only an admin
+whose session was signed in with a passkey or an authenticator app gets one. The bot checks it
+offline with the public key from `/api/app/grant-key.pem`, pinned in its config; tickr.bot never
+calls the bot. `/.well-known/apple-app-site-association` names the apps (team id in settings) so
+they can use passkeys for tickr.bot.
+
+The signing key is made by the app container at its first start (`deploy/entrypoint.sh`,
+`tickrweb/grant_key.py`) in the `grant-key` volume and never leaves the server. It is not in the
+database backups: a rebuilt server (or a lost `grant-key` volume) makes a new key at the next
+start, and the bot then refuses every app sign-in until its pinned PEM is replaced with the new
+`/api/app/grant-key.pem`. Every grant is emailed to all admins.
 
 ## Configuration
 

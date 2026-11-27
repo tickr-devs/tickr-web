@@ -1,5 +1,5 @@
 # tickr.bot web server (its own machine, never the bot's): Postgres, the Django app, Caddy.
-# Paths on the host come from /srv/tickr-web/etc/compose.env (written by ops/aws/web/user-data.sh; see ops/aws/web/README.md).
+# Paths on the host come from /srv/tickr-web/etc/compose.env (written by ops/aws/web/user-data.sh in tickr-infra; see its ops/aws/web/README.md).
 name: tickr-web
 services:
   db:
@@ -35,9 +35,13 @@ services:
       TICKR_WEB_DB_USER: tickrweb
       TICKR_WEB_DB_HOST: db
       TICKR_WEB_DB_PORT: "5432"
+      TICKR_WEB_GRANT_KEY_FILE: /keys/grant.pem
     secrets: [db_password]
     volumes:
       - ${TICKR_WEB_ENV_FILE_HOST:?}:/run/tickr-web/env:ro
+      # The apps' grant signing key, made at first start and kept here (never in backups: a
+      # rebuilt server makes a new key, and the bot then needs the new public key).
+      - grant-key:/keys
     networks: [backend, front]
     read_only: true
     tmpfs: [/tmp]
@@ -80,6 +84,7 @@ networks:
 
 volumes:
   pgdata: {}
+  grant-key: {}
   static: {}
   caddy-data: {}
   caddy-config: {}

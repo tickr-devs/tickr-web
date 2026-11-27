@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+# Runtime data, secrets and tokens never enter the repository.
+.env
+.env.*
+*.sqlite3
+*.sqlite3-*
