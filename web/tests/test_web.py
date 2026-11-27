@@ -126,7 +126,7 @@ def test_invited_owner_signs_in_with_an_emailed_code(client):
     response = client.post(reverse("account_request_login_code"), {"email": "owner@example.com"})
     assert response.status_code == 302
     assert len(mail.outbox) == 1
-    code = re.search(r"^([A-Z0-9]{4}-[A-Z0-9]{4})$", mail.outbox[0].body, re.MULTILINE).group(1)
+    code = re.search(r"^(\d{6})$", mail.outbox[0].body, re.MULTILINE).group(1)
     response = client.post(reverse("account_confirm_login_code"), {"code": code})
     assert response.status_code == 302
     assert client.get("/app").status_code == 200

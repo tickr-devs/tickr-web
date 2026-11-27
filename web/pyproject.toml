@@ -5,10 +5,12 @@ description = "tickr.bot web app: sign-in, cabinet and waitlist (Django + Postgr
 requires-python = ">=3.12,<3.13"
 dependencies = [
   "django[argon2]>=5.2,<6",
-  "django-allauth[mfa]>=65.10",
+  "django-allauth[mfa]>=65.23,<66",
   "psycopg[binary]>=3.2",
   "gunicorn>=23",
   "django-ses>=4.4",
+  # Signs the bot grants the apps get after signing in (tickrweb/grants.py).
+  "pyjwt[crypto]>=2.10",
 ]
 
 [dependency-groups]

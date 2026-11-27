@@ -19,7 +19,15 @@ from django.views.decorators.http import require_GET, require_http_methods, requ
 from .invites import invite
 from .mail import failure_summary
 from .models import Subscriber
-from .roles import LastAdmin, admin_session, admins, is_admin, set_admin
+from .roles import (
+    STRONG_FACTORS,
+    LastAdmin,
+    NoStrongFactor,
+    admin_session,
+    admins,
+    is_admin,
+    set_admin,
+)
 
 log = logging.getLogger(__name__)
 
@@ -78,7 +86,7 @@ def early_access(request):
         )
         sent = failed = 0
         for subscriber in chosen:
-            if subscriber.email in registered:
+            if subscriber.email.lower() in registered:
                 continue
             try:
                 invite(subscriber.email, subscriber.lang)
@@ -104,7 +112,13 @@ def early_access(request):
         return redirect("early_access")
     rows = []
     for s in Subscriber.objects.order_by("-confirmed_at", "-signed_up_at"):
-        state = "member" if s.email in registered else "confirmed" if s.confirmed_at else "waiting"
+        state = (
+            "member"
+            if s.email.lower() in registered
+            else "confirmed"
+            if s.confirmed_at
+            else "waiting"
+        )
         rows.append({"s": s, "state": state})
     invitable = sum(r["state"] == "confirmed" for r in rows)
     return render(request, "cabinet/early_access.html", {"rows": rows, "invitable": invitable})
@@ -119,7 +133,8 @@ def people(request):
         .annotate(
             passkeys=Count(
                 "authenticator", filter=Q(authenticator__type=Authenticator.Type.WEBAUTHN)
-            )
+            ),
+            strong=Count("authenticator", filter=Q(authenticator__type__in=STRONG_FACTORS)),
         )
         .order_by("-is_superuser", "email")
     )
@@ -139,11 +154,20 @@ def set_role(request, pk):
         return HttpResponse(status=400)
     make_admin = role == "admin"
     try:
-        changed = set_admin(target, make_admin, by=request.user)
+        outcome = set_admin(target, make_admin, by=request.user)
     except LastAdmin:
         messages.error(request, _("tickr.bot needs at least one admin."))
         return redirect("people")
-    if changed:
+    except NoStrongFactor:
+        messages.error(
+            request,
+            _("%(email)s needs a passkey or an authenticator app before becoming an admin.")
+            % {"email": target.email},
+        )
+        return redirect("people")
+    if outcome.changed and not outcome.notified:
+        messages.warning(request, _("The role changed, but the notice email could not be sent."))
+    if outcome.changed:
         text = (
             _("%(email)s is now an admin.") if make_admin else _("%(email)s is no longer an admin.")
         )

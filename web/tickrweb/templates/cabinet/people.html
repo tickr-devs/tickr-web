@@ -14,7 +14,8 @@
 <td class="dim">{% if p.last_login %}{{ p.last_login|date:"M j, H:i" }} ET{% else %}{% translate "Never" %}{% endif %}</td>
 <td><form method="post" action="{% url 'set_role' p.pk %}" class="inline">{% csrf_token %}
 {% if p.is_staff and p.is_superuser %}<input type="hidden" name="role" value="member"><button class="btn sec" type="submit"{% if admin_count == 1 %} disabled title="{% translate 'tickr.bot needs at least one admin.' %}"{% endif %}>{% translate "Remove admin" %}</button>
-{% else %}<input type="hidden" name="role" value="admin"><button class="btn sec" type="submit">{% translate "Make admin" %}</button>{% endif %}
+{% elif p.strong %}<input type="hidden" name="role" value="admin"><button class="btn sec" type="submit">{% translate "Make admin" %}</button>
+{% else %}<span class="dim">{% translate "Can be made admin after adding a passkey or an authenticator app" %}</span>{% endif %}
 </form></td>
 </tr>{% endfor %}
 </tbody></table></div></section>
