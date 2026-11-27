@@ -15,12 +15,13 @@
     try { localStorage.setItem('tk-lang', a.dataset.lang); } catch (e) { /* storage may be blocked */ }
   }));
 
-  // Menu on narrow screens: grows from its button, closes on Escape, a tap outside or a link.
+  // Menu on narrow screens: a sheet over the whole page below the header; grows from its button, closes on Escape, a tap outside or a link.
   const header = document.querySelector('.site-h');
   const menuB = document.querySelector('.menu-b');
   if (header && menuB) {
     const setOpen = (open) => {
       header.classList.toggle('open', open);
+      document.documentElement.classList.toggle('menu-open', open); // the open menu covers the page, so the page stays put under it
       menuB.setAttribute('aria-expanded', open ? 'true' : 'false');
     };
     menuB.addEventListener('click', () => setOpen(!header.classList.contains('open')));
