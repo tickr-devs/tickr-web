@@ -190,6 +190,9 @@ ACCOUNT_RATE_LIMITS = {
 ACCOUNT_LOGIN_BY_CODE_TIMEOUT = 900
 # Wrong tries before an emailed sign-in code is void.
 ACCOUNT_LOGIN_BY_CODE_MAX_ATTEMPTS = 3
+# Emailed codes: 6 digits, no dash (the approved app mockup draws six digit cells). With 3 tries
+# per code and the request limits above, a guess succeeds 3 times in a million.
+ALLAUTH_USER_CODE_FORMAT = {"numeric": True, "length": 6, "dashed": False}
 
 MFA_SUPPORTED_TYPES = ["webauthn", "totp", "recovery_codes"]
 MFA_PASSKEY_LOGIN_ENABLED = True
