@@ -1,2 +1,2 @@
-{# Card-footer row, the one "details / show all" control: label, optional count pill, chevron. #}
-<a class="foot" href="{{ href }}"><span>{{ label }}</span>{% if count is not None %}<b class="pill">{{ count }}</b>{% endif %}{% include "app/chev.html" %}</a>
+{# Card-footer row, the one "details / show all" control: label, optional count pill, blue chevron. #}
+<a class="cfoot" href="{{ href }}"><span class="sp">{{ label }}</span>{% if count is not None %}<span class="cn">{{ count }}</span>{% endif %}<span class="cc">{% include "icons/chev.svg" %}</span></a>

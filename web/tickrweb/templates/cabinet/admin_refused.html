@@ -2,9 +2,9 @@
 {% load i18n %}
 {% block head_title %}{% translate "Admin" %}{% endblock %}
 {% block content %}
-<h1>{% translate "Admin only" %}</h1>
+<div class="ph"><h1 class="h1">{% translate "Admin only" %}</h1></div>
 <section class="card">
-<div class="body"><p>{% if nav_admin %}{% translate "Admin sections open only in a session signed in with a passkey or an authenticator app. Sign out, then sign in with your passkey." %}{% else %}{% translate "This section is for tickr.bot admins." %}{% endif %}</p></div>
+<div class="ban warning"><span class="gi">{% include "icons/lock.svg" %}</span><span class="bt"><span>{% if nav_admin %}{% translate "Admin sections open only in a session signed in with a passkey or an authenticator app. Sign out, then sign in with your passkey." %}{% else %}{% translate "This section is for tickr.bot admins." %}{% endif %}</span></span></div>
 {% url 'mfa_index' as href %}{% translate "Security" as label %}{% include "app/foot.html" with href=href label=label count=None %}
 </section>
 {% endblock %}

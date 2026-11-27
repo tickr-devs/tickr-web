@@ -1,0 +1,8 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n %}
+{# Sign out of this browser (asked only when the sign-out link is opened directly). #}
+{% block head_title %}{% translate "Sign out" %}{% endblock head_title %}
+{% block content %}
+<div class="head"><h1 class="h1">{% translate "Sign out of tickr.bot in this browser?" %}</h1><p class="lede">{% translate "Other devices stay signed in." %}</p></div>
+<form method="post" action="{% url 'account_logout' %}">{% csrf_token %}{{ redirect_field }}<button type="submit" class="bp tall" style="width:100%">{% translate "Sign out" %}</button></form>
+{% endblock content %}

@@ -109,7 +109,7 @@ def test_per_ip_limit(client, settings):
 def test_spanish_confirmation(client):
     _join(client, lang="es")
     assert Subscriber.objects.get().lang == "es"
-    assert mail.outbox[0].subject == "Confirma tu lugar en la lista de tickr.bot"
+    assert mail.outbox[0].subject == "Confirme su lugar en la lista de tickr.bot"
 
 
 def test_prune_deletes_only_expired_unconfirmed(settings):

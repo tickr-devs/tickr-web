@@ -1,0 +1,16 @@
+{% extends "usersessions/base_manage.html" %}
+{% load i18n humanize devices %}
+{# Devices (SiteCabinet, "devices"): the browsers signed in to tickr.bot. #}
+{% block head_title %}{% translate "Devices" %}{% endblock head_title %}
+{% block content %}
+<div class="ph"><h1 class="h1">{% translate "Devices" %}</h1></div>
+<p class="lede">{% translate "Browsers signed in to tickr.bot." %}</p>
+<section class="card">
+<div class="ch">{% translate "Browsers" as t %}{% include "app/label.html" with text=t %}<span class="note">{{ session_count }}</span></div>
+{% for session in sessions %}
+{% with system=session.user_agent|device_system %}<div class="lrow"><span class="it" style="--itc:var(--blue)">{% if system == "iPhone" or system == "Android" %}{% include "icons/phone.svg" %}{% else %}{% include "icons/laptop.svg" %}{% endif %}</span><span class="sp">{{ session.user_agent|device_name }}<small>{% if session.is_current %}{% translate "now" %}{% elif show_last_seen_at and session.last_seen_at %}{{ session.last_seen_at|naturaltime }}{% else %}{{ session.created_at|naturaltime }}{% endif %} · {{ session.ip }}</small></span>{% if session.is_current %}<span class="badge teal">{% translate "This browser" %}</span>{% endif %}</div>{% endwith %}
+{% endfor %}
+{% if session_count > 1 %}{% url 'usersessions_list' as action_url %}{% else %}{% url 'account_logout' as action_url %}{% endif %}
+<form method="post" action="{{ action_url }}" style="display:contents">{% csrf_token %}<button type="submit" class="cfoot"><span class="sp">{% if session_count > 1 %}{% translate "Sign out other browsers" %}{% else %}{% translate "Sign out" %}{% endif %}</span><span class="cc">{% include "icons/out.svg" %}</span></button></form>
+</section>
+{% endblock content %}

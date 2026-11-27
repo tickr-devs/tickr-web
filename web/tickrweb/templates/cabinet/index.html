@@ -1,41 +1,47 @@
 {% extends "app/shell.html" %}
 {% load i18n %}
+{# Overview (SiteCabinet, "overview"). What is not built yet is marked In development, never shown as broken. #}
 {% block head_title %}{% translate "Overview" %}{% endblock %}
 {% block content %}
-<h1>{% translate "Overview" %}</h1>
-<div class="cards">
-<section class="card"><header><h2>{% translate "Bot" %}</h2></header>
-<div class="empty"><strong>{% translate "Not connected yet" %}</strong>{% translate "Your bot's status, open positions and today's result will show here once it reports to tickr.bot." %}</div>
+<div class="ph"><h1 class="h1">{% translate "Overview" %}</h1></div>
+{% if not passkey_count %}
+<div class="ban warning mid"><span class="gi">{% include "icons/key.svg" %}</span><span class="bt"><b>{% translate "Add a passkey." %}</b><span>{% translate "Sign in with Face ID or Touch ID. The admin sections and the apps need it." %}</span></span><a class="bp sm" href="{% url 'mfa_add_webauthn' %}">{% translate "Add passkey" %}</a></div>
+{% endif %}
+<div class="grid2">
+<section class="card span2"><div class="ch">{% translate "Bot" as t %}{% include "app/label.html" with text=t %}{% include "app/dev.html" %}</div>
+<div class="ghost" aria-hidden="true"><dl class="kv">
+<div><dt>{% translate "Status" %}</dt><dd><span class="pill off"><span class="dot"></span><span class="sk" style="width:56px"></span></span></dd></div>
+<div><dt>{% translate "Today" %}</dt><dd><span class="sk" style="width:80px"></span></dd></div>
+<div><dt>{% translate "Positions" %}</dt><dd class="num">— / —</dd></div>
+<div><dt>{% translate "Last journal line" %}</dt><dd><span class="sk" style="width:180px;max-width:40vw"></span></dd></div>
+</dl></div>
+<p class="devnote">{% include "icons/clock.svg" %}<span>{% translate "Your bot’s status, today’s result and positions will show here once the bot reports to tickr.bot. Control stays in the apps." %}</span></p>
 </section>
-<div class="cols">
-<section class="card"><header><h2>{% translate "Security" %}</h2></header>
-<dl class="rows">
-<div><dt>{% translate "Passkeys" %}</dt><dd>{% if passkey_count %}<span class="num">{{ passkey_count }}</span>{% else %}<span class="st warn"><i></i>{% translate "None yet" %}</span>{% endif %}</dd></div>
+<section class="card"><div class="ch">{% translate "Security" as t %}{% include "app/label.html" with text=t %}</div>
+<dl class="kv">
+<div><dt>{% translate "Passkeys" %}</dt><dd>{% if passkey_count %}<span class="num">{{ passkey_count }}</span>{% else %}<span style="color:var(--amber2)">{% translate "None yet" %}</span>{% endif %}</dd></div>
 <div><dt>{% translate "Password" %}</dt><dd>{% if user.has_usable_password %}{% translate "Set" %}{% else %}<span class="dim">{% translate "Not set" %}</span>{% endif %}</dd></div>
 <div><dt>{% translate "Authenticator app" %}</dt><dd>{% if has_totp %}{% translate "On" %}{% else %}<span class="dim">{% translate "Off" %}</span>{% endif %}</dd></div>
 </dl>
 {% url 'mfa_index' as href %}{% translate "Security" as label %}{% include "app/foot.html" with href=href label=label count=None %}
 </section>
-<section class="card"><header><h2>{% translate "Account" %}</h2></header>
-<dl class="rows">
+<section class="card"><div class="ch">{% translate "Account" as t %}{% include "app/label.html" with text=t %}</div>
+<dl class="kv">
 <div><dt>{% translate "Email" %}</dt><dd>{{ user.email }}</dd></div>
 <div><dt>{% translate "Role" %}</dt><dd>{% if nav_admin %}{% translate "Admin" %}{% else %}{% translate "Member" %}{% endif %}</dd></div>
-<div><dt>{% translate "Signed in" %}</dt><dd>{{ user.last_login|date:"M j, H:i" }} ET</dd></div>
+<div><dt>{% translate "Last sign-in" %}</dt><dd class="num">{% if user.last_login %}{{ user.last_login|date:"M j, H:i" }} ET{% else %}{% translate "Never" %}{% endif %}</dd></div>
 </dl>
-{% url 'usersessions_list' as href %}{% translate "Signed-in devices" as label %}{% include "app/foot.html" with href=href label=label count=device_count %}
+{% url 'usersessions_list' as href %}{% translate "Devices" as label %}{% include "app/foot.html" with href=href label=label count=device_count %}
 </section>
-</div>
 {% if nav_admin %}
-<div class="cols">
-<section class="card"><header><h2>{% translate "Early access" %}</h2></header>
-<dl class="rows"><div><dt>{% translate "Confirmed, not invited yet" %}</dt><dd class="num">{{ waiting_count }}</dd></div></dl>
+<section class="card"><div class="ch">{% translate "Early access" as t %}{% include "app/label.html" with text=t %}</div>
+<dl class="kv"><div><dt>{% translate "Confirmed, not invited yet" %}</dt><dd class="num">{{ waiting_count }}</dd></div></dl>
 {% url 'early_access' as href %}{% translate "Early access" as label %}{% include "app/foot.html" with href=href label=label count=waiting_count %}
 </section>
-<section class="card"><header><h2>{% translate "People" %}</h2></header>
-<dl class="rows"><div><dt>{% translate "Accounts" %}</dt><dd class="num">{{ people_count }}</dd></div></dl>
+<section class="card"><div class="ch">{% translate "People" as t %}{% include "app/label.html" with text=t %}</div>
+<dl class="kv"><div><dt>{% translate "Accounts" %}</dt><dd class="num">{{ people_count }}</dd></div></dl>
 {% url 'people' as href %}{% translate "People" as label %}{% include "app/foot.html" with href=href label=label count=people_count %}
 </section>
-</div>
 {% endif %}
 </div>
 {% endblock %}

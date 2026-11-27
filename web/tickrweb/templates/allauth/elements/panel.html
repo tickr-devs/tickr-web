@@ -1,4 +1,4 @@
-{% load allauth %}<section class="card"><header><h2>{% slot title %}{% endslot %}</h2></header>
-<div class="body">{% slot body %}{% endslot %}</div>
+{% load allauth %}<section class="card"><div class="sh"><span class="tick"></span><h2 class="lbl">{% slot title %}{% endslot %}</h2></div>
+<div>{% slot body %}{% endslot %}</div>
 {% if slots.actions %}<div class="actions">{% for action in slots.actions %}{{ action }}{% endfor %}</div>{% endif %}
 </section>

@@ -1,21 +1,22 @@
 {% extends "app/shell.html" %}
 {% load i18n %}
+{# Admin › People (SiteCabinet, "people"). #}
 {% block head_title %}{% translate "People" %}{% endblock %}
 {% block content %}
-<h1>{% translate "People" %}</h1>
+<div class="ph"><h1 class="h1">{% translate "People" %}</h1></div>
 <p class="lede">{% translate "Everyone with an account. Admins see Early access and People and can change roles; they open these sections only when signed in with a passkey or an authenticator app." %}</p>
-<section class="card"><div class="scroll"><table class="table">
-<thead><tr><th>{% translate "Email" %}</th><th>{% translate "Role" %}</th><th>{% translate "Passkeys" %}</th><th>{% translate "Last sign-in" %}</th><th></th></tr></thead>
+<section class="card"><div class="scroll"><table class="tb">
+<thead><tr><th>{% translate "Email" %}</th><th>{% translate "Role" %}</th><th>{% translate "Passkeys" %}</th><th>{% translate "Last sign-in" %}</th><th><span class="sr">{% translate "Role" %}</span></th></tr></thead>
 <tbody>
 {% for p in people %}<tr>
-<td>{{ p.email }}{% if p == user %} <span class="dim">({% translate "you" %})</span>{% endif %}</td>
-<td>{% if p.is_staff and p.is_superuser %}{% translate "Admin" %}{% else %}{% translate "Member" %}{% endif %}</td>
-<td class="num">{{ p.passkeys }}</td>
-<td class="dim">{% if p.last_login %}{{ p.last_login|date:"M j, H:i" }} ET{% else %}{% translate "Never" %}{% endif %}</td>
-<td><form method="post" action="{% url 'set_role' p.pk %}" class="inline">{% csrf_token %}
-{% if p.is_staff and p.is_superuser %}<input type="hidden" name="role" value="member"><button class="btn sec" type="submit"{% if admin_count == 1 %} disabled title="{% translate 'tickr.bot needs at least one admin.' %}"{% endif %}>{% translate "Remove admin" %}</button>
-{% elif p.strong %}<input type="hidden" name="role" value="admin"><button class="btn sec" type="submit">{% translate "Make admin" %}</button>
-{% else %}<span class="dim">{% translate "Can be made admin after adding a passkey or an authenticator app" %}</span>{% endif %}
+<td class="full">{{ p.email }}{% if p == user %} <span class="note">· {% translate "you" %}</span>{% endif %}</td>
+<td>{% if p.is_staff and p.is_superuser %}<span class="badge teal">{% translate "Admin" %}</span>{% else %}<span class="badge">{% translate "Member" %}</span>{% endif %}</td>
+<td class="num" data-l="{% translate 'Passkeys' %}">{{ p.passkeys }}</td>
+<td class="num dim" data-l="{% translate 'Last sign-in' %}">{% if p.last_login %}{{ p.last_login|date:"M j, H:i" }} ET{% else %}{% translate "Never" %}{% endif %}</td>
+<td class="full"><form method="post" action="{% url 'set_role' p.pk %}" class="inline">{% csrf_token %}
+{% if p.is_staff and p.is_superuser %}<input type="hidden" name="role" value="member"><button class="bs sm" type="submit"{% if admin_count == 1 %} disabled title="{% translate 'tickr.bot needs at least one admin.' %}"{% endif %}>{% translate "Remove admin" %}</button>
+{% elif p.strong %}<input type="hidden" name="role" value="admin"><button class="bs sm" type="submit">{% translate "Make admin" %}</button>
+{% else %}<span class="note">{% translate "Can be made admin after adding a passkey or an authenticator app" %}</span>{% endif %}
 </form></td>
 </tr>{% endfor %}
 </tbody></table></div></section>

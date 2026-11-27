@@ -1,25 +1,28 @@
 {% extends "account/base_entrance.html" %}
 {% load i18n allauth %}
-{# allauth's sign-in page without the sign-up line (accounts are invite-only), passkey first. #}
-{% block head_title %}{% trans "Sign In" %}{% endblock head_title %}
+{# Sign-in (mockup board SiteSignIn): passkey first, then email and password, then a code or a reset.
+   No sign-up line: accounts are by invite. Wording is the apps' sign-in. #}
+{% block head_title %}{% translate "Sign in" %}{% endblock head_title %}
 {% block content %}
-<h1>{% trans "Sign In" %}</h1>
+<div class="head"><h1 class="h1">{% translate "Sign in to tickr.bot" %}</h1><p class="lede">{% translate "Accounts are by invite. Use the email from your invite." %}</p></div>
+{% if form.non_field_errors %}<div class="ban error" role="alert"><span class="gi">{% include "icons/alert.svg" %}</span><span class="bt">{% for e in form.non_field_errors %}<b>{{ e }}</b>{% endfor %}<span>{% translate "Check both and try again, or email yourself a code." %}</span></span></div>{% endif %}
+<section class="card fcard" aria-labelledby="si-l">
+<div class="sh"><span class="tick"></span><h2 class="lbl" id="si-l">{% translate "Sign in" %}</h2></div>
 {% if PASSKEY_LOGIN_ENABLED %}
-<div class="alt">
-<button type="submit" form="mfa_login" id="passkey_login" class="primary">{% trans "Sign in with a passkey" %}</button>
-</div>
-<hr>
+<button type="submit" form="mfa_login" id="passkey_login" class="bp tall"><span class="kg">{% include "icons/key.svg" %}</span>{% translate "Sign in with passkey" %}</button>
+<div class="or">{% translate "or" %}</div>
 {% endif %}
 {% url 'account_login' as login_url %}
-<form method="post" action="{{ login_url }}">
+<form method="post" action="{{ login_url }}" class="fstack">
 {% csrf_token %}
-{% element fields form=form unlabeled=True %}{% endelement %}
+<div><div class="frow"><span class="it" style="--itc:var(--tile-blue)">{% include "icons/mail.svg" %}</span><label class="sr" for="{{ form.login.id_for_label }}">{% translate "Email" %}</label><input type="email" name="login" id="{{ form.login.id_for_label }}" value="{{ form.login.value|default_if_none:'' }}" placeholder="{% translate 'Email' %}" autocomplete="username webauthn" required{% if form.login.errors %} aria-invalid="true"{% endif %}></div>{% if form.login.errors %}<ul class="ferr">{% for e in form.login.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}</div>
+<div><div class="frow"><span class="it">{% include "icons/lock.svg" %}</span><label class="sr" for="{{ form.password.id_for_label }}">{% translate "Password" %}</label><input type="password" name="password" id="{{ form.password.id_for_label }}" placeholder="{% translate 'Password' %}" autocomplete="current-password" required{% if form.password.errors %} aria-invalid="true"{% endif %}></div>{% if form.password.errors %}<ul class="ferr">{% for e in form.password.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}</div>
 {{ redirect_field }}
-<button type="submit">{% trans "Sign In" %}</button>
+<button type="submit" class="bs wide"><span class="it soft" style="width:24px;height:24px">{% include "icons/arrow.svg" %}</span>{% translate "Sign In" %}</button>
 </form>
-{% if LOGIN_BY_CODE_ENABLED %}
-<p class="alt"><a class="ghost" href="{{ request_login_code_url }}">{% trans "Send me a sign-in code" %}</a></p>
-{% endif %}
+{% if LOGIN_BY_CODE_ENABLED %}<a class="rw" href="{{ request_login_code_url }}"><span class="it" style="--itc:var(--tile-cyan)">{% include "icons/code.svg" %}</span><span class="sp">{% translate "Email me a sign-in code" %}</span><span class="cc">{% include "icons/chev.svg" %}</span></a>{% endif %}
+<a class="rw" href="{% url 'account_reset_password' %}"><span class="it" style="--itc:var(--tile-orange)">{% include "icons/reset.svg" %}</span><span class="sp">{% translate "Forgot password?" %}</span><span class="cc">{% include "icons/chev.svg" %}</span></a>
+</section>
 {% endblock content %}
 {% block extra_body %}
 {{ block.super }}
