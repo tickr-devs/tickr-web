@@ -15,7 +15,7 @@ from allauth.mfa.totp.internal.auth import (
 from django.contrib.auth import get_user_model
 from django.core import mail
 from django.core.management import call_command
-from django.test import Client
+from django.test import Client, override_settings
 from django.utils import timezone, translation
 
 from tickrweb.models import Subscriber
@@ -174,3 +174,19 @@ def test_authenticator_sign_in_through_the_pages():
     action, fields = _form_with(response, "code")
     code = format_hotp_value(hotp_value(secret, int(time.time()) // 30))
     _sign_in_lands_in_the_cabinet(client, client.post(action, {**fields, "code": code}))
+
+
+MANIFEST = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"},
+}
+
+
+@pytest.mark.parametrize("path", ENTRANCE + SIGNED_IN)
+def test_pages_render_with_the_production_static_storage(path, tmp_path):
+    """Hashed static names as in production: a name missing from the manifest would be a 500."""
+    with override_settings(STATIC_ROOT=tmp_path, STORAGES=MANIFEST):
+        call_command("collectstatic", interactive=False, verbosity=0)
+        client = _owner_client("en") if path in SIGNED_IN else Client()
+        html = client.get(path).content.decode()
+    assert re.search(r'href="/static/web/app\.[0-9a-f]{12}\.css"', html), path
