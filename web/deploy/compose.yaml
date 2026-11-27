@@ -35,9 +35,13 @@ services:
       TICKR_WEB_DB_USER: tickrweb
       TICKR_WEB_DB_HOST: db
       TICKR_WEB_DB_PORT: "5432"
+      TICKR_WEB_OIDC_KEY_FILE: /keys/oidc.pem
     secrets: [db_password]
     volumes:
       - ${TICKR_WEB_ENV_FILE_HOST:?}:/run/tickr-web/env:ro
+      # The apps' grant signing key, made at first start and kept here (never in backups: a
+      # rebuilt server makes a new key, and the bot then needs the new public key).
+      - oidc-key:/keys
     networks: [backend, front]
     read_only: true
     tmpfs: [/tmp]
@@ -80,6 +84,7 @@ networks:
 
 volumes:
   pgdata: {}
+  oidc-key: {}
   static: {}
   caddy-data: {}
   caddy-config: {}

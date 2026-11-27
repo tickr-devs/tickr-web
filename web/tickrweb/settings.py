@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.mfa",
     "allauth.usersessions",
+    "allauth.idp.oidc",  # the apps sign in here (OAuth 2.0 for native apps), see tickrweb/oidc.py
     "tickrweb",
 ]
 
@@ -190,6 +191,22 @@ MFA_PASSKEY_LOGIN_ENABLED = True
 # Passkeys on localhost only while developing (WebAuthn needs HTTPS elsewhere).
 MFA_WEBAUTHN_ALLOW_INSECURE_ORIGIN = DEBUG
 USERSESSIONS_TRACK_ACTIVITY = True
+
+# --- The apps sign in here: OpenID provider (allauth.idp.oidc), see tickrweb/oidc.py ---
+IDP_OIDC_ADAPTER = "tickrweb.oidc.Adapter"
+# RSA private key (PEM) that signs the bot grants. Made on the server at first start
+# (deploy/entrypoint.sh), kept in a volume, never copied anywhere; the bot pins its public key.
+with open(_required("TICKR_WEB_OIDC_KEY_FILE"), encoding="ascii") as _key:
+    IDP_OIDC_PRIVATE_KEY = _key.read()
+# The grant the app hands to the bot is a signed JWT access token (verified offline by the bot).
+IDP_OIDC_ACCESS_TOKEN_FORMAT = "jwt"
+# Seconds a bot grant is valid: the app redeems it at the bot right away.
+IDP_OIDC_ACCESS_TOKEN_EXPIRES_IN = 60
+# Seconds an authorization code is valid (single use).
+IDP_OIDC_AUTHORIZATION_CODE_EXPIRES_IN = 60
+# Seconds a refresh token is valid. allauth always issues one, but the app clients may not use
+# the refresh_token grant (migration 0002), so it is useless; keep it short-lived anyway.
+IDP_OIDC_REFRESH_TOKEN_EXPIRES_IN = 60
 
 # --- Email: Amazon SES API with the server's instance role (no stored mail password) ---
 DEFAULT_FROM_EMAIL = _required("TICKR_WEB_FROM_EMAIL")

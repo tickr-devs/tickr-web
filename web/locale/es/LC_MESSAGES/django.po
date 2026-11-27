@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-26 16:41-0500\n"
+"POT-Creation-Date: 2026-11-27 10:34-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,6 +50,12 @@ msgid_plural "%d invitations could not be sent; no accounts were created."
 msgstr[0] "No se pudo enviar %d invitación; no se creó ninguna cuenta."
 msgstr[1] "No se pudieron enviar %d invitaciones; no se crearon cuentas."
 msgstr[2] "No se pudieron enviar %d invitaciones; no se crearon cuentas."
+
+#
+#: tickrweb/oidc.py:31
+#
+msgid "Use your tickr.bot bot from this app"
+msgstr "Usar tu bot de tickr.bot desde esta app"
 
 #: tickrweb/templates/account/login.html:4
 #: tickrweb/templates/account/login.html:6
@@ -326,10 +332,12 @@ msgstr "Quitar administrador"
 msgid "Make admin"
 msgstr "Hacer administrador"
 
-#: tickrweb/templates/cabinet/people.html:18
 #
+#: tickrweb/templates/cabinet/people.html:18
 msgid "Can be made admin after adding a passkey or an authenticator app"
-msgstr "Podrá ser administrador después de añadir una llave de acceso o una app de autenticación"
+msgstr ""
+"Podrá ser administrador después de añadir una llave de acceso o una app de "
+"autenticación"
 
 #: tickrweb/templates/invites/body.txt:1
 #: tickrweb/templates/waitlist/confirm_body.txt:1
@@ -498,8 +506,11 @@ msgstr[2] "Se invitó a %d personas."
 
 #: tickrweb/views.py:164
 #, python-format
-msgid "%(email)s needs a passkey or an authenticator app before becoming an admin."
-msgstr "%(email)s necesita una llave de acceso o una app de autenticación antes de ser administrador."
+msgid ""
+"%(email)s needs a passkey or an authenticator app before becoming an admin."
+msgstr ""
+"%(email)s necesita una llave de acceso o una app de autenticación antes de "
+"ser administrador."
 
 #: tickrweb/views.py:169
 msgid "The role changed, but the notice email could not be sent."

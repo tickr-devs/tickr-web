@@ -4,14 +4,29 @@ The database variables are not set here: CI's Postgres service and a developer's
 provide TICKR_WEB_DB_NAME, TICKR_WEB_DB_USER, TICKR_WEB_DB_HOST and TICKR_WEB_DB_PORT.
 """
 
+import atexit
 import os
+import tempfile
+
+
+def _make_test_key() -> str:
+    from tickrweb.oidc_key import new_private_key_pem
+
+    handle, path = tempfile.mkstemp(prefix="tickrweb-test-oidc-", suffix=".pem")
+    with os.fdopen(handle, "w", encoding="ascii") as out:
+        out.write(new_private_key_pem())
+    atexit.register(os.remove, path)
+    return path
+
 
 os.environ["TICKR_WEB_HOST"] = "testserver"
 os.environ["TICKR_WEB_SECRET_KEY"] = "test-only-not-a-secret"
 os.environ["TICKR_WEB_FROM_EMAIL"] = "tickr.bot <hello@example.com>"
 os.environ["TICKR_WEB_DEBUG"] = "1"
+# A fresh signing key per test run (tickrweb/oidc_key.py makes the server's the same way).
+os.environ["TICKR_WEB_OIDC_KEY_FILE"] = _make_test_key()
 
-from .settings import *  # noqa: F403
+from .settings import *  # noqa: E402, F403 (the variables above must be set first)
 
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 # Fast hashing in tests only.

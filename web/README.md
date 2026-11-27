@@ -15,6 +15,7 @@ keys. It imports nothing from `src/tickr`.
 | `/app` | The cabinet (signed in only): Overview, Security, Devices |
 | `/app/early-access`, `/app/people` | Admin sections of the cabinet (admins only) |
 | `/app/admin/` | Django admin: a hidden fallback, not linked anywhere; to be removed |
+| `/identity/o/…`, `/.well-known/openid-configuration`, `/.well-known/jwks.json` | The apps' sign-in (OpenID provider, below) |
 | `/api/…` | JSON endpoints; `/api/healthz` answers `ok` |
 
 Public pages must not use `/login`, `/account`, `/app`, `/api` or `/static`.
@@ -47,6 +48,21 @@ The first admin, who has nobody to invite them, is made with
 `python manage.py invite you@example.com --superuser`, which creates an account with a verified
 address and no password and sends no email. Its owner signs in at `/login` with an emailed code,
 then adds a passkey under Security. Django's own admin login form is never served.
+
+## The apps' sign-in
+
+The Mac and iPhone apps sign in here instead of pairing (`tickrweb/oidc.py`, allauth's OpenID
+provider). They are public clients `tickr-ios` and `tickr-mac` (migration `0002_app_clients`):
+authorization code with PKCE S256, redirect `tickr://signin`, scope `bot`, sending
+`resource=https://bot.tickr.bot`. The token endpoint answers with a 60-second RS256 JWT, the bot
+grant (`iss` https://tickr.bot, `aud` https://bot.tickr.bot, `sub` = account id, `client_id`,
+`jti`), which the app hands to the bot once. The bot checks it offline with the public key from
+`/.well-known/jwks.json`, pinned in its config; tickr.bot never calls the bot. Only an admin in a
+passkey or authenticator session gets a code.
+
+The signing key is made by the app container at its first start (`deploy/entrypoint.sh`,
+`tickrweb/oidc_key.py`) in the `oidc-key` volume and never leaves the server. It is not in the
+database backups: a rebuilt server makes a new key, and the bot then needs the new public key.
 
 ## Configuration
 

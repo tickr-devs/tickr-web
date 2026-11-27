@@ -1,11 +1,12 @@
 """URLs. Public marketing pages are static files served by Caddy; Django owns only
-/login, /account/, /app and /api/ (see web/README.md)."""
+/login, /account/, /app, /api/, /identity/ and the two OpenID /.well-known/ files
+(see web/README.md)."""
 
 from allauth.account.views import login
 from django.contrib import admin
 from django.urls import include, path
 
-from . import views, waitlist
+from . import oidc, views, waitlist
 
 urlpatterns = [
     path("account/", include("allauth.urls")),
@@ -20,4 +21,7 @@ urlpatterns = [
     path("api/waitlist", waitlist.join, name="waitlist_join"),
     path("api/waitlist/confirm", waitlist.confirm, name="waitlist_confirm"),
     path("api/waitlist/unsubscribe", waitlist.unsubscribe, name="waitlist_unsubscribe"),
+    # The apps' sign-in (tickrweb/oidc.py). The gated authorize view comes before allauth's own.
+    path("identity/o/authorize", oidc.authorize, name="oidc_authorize"),
+    path("", include("allauth.idp.urls")),
 ]
