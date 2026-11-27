@@ -9,6 +9,7 @@ never a value. The web app runs on its own server, never beside the trading bot.
 import os
 from pathlib import Path
 
+from botocore.config import Config as _BotoConfig
 from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -218,10 +219,17 @@ APPLE_APP_BUNDLE_IDS = ["bot.tickr.ios", "bot.tickr.mac"]
 # --- Email: Amazon SES API with the server's instance role (no stored mail password) ---
 DEFAULT_FROM_EMAIL = _required("TICKR_WEB_FROM_EMAIL")
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
+# SES calls give up quickly so a mail outage never holds a request: seconds to connect,
+# seconds to wait for an answer, and tries per call (django-ses makes two calls per email,
+# so the worst case is 2 x 2 x (2 + 4) = 24 s, well under a bot grant's 60 s).
+AWS_SES_CONFIG = _BotoConfig(
+    connect_timeout=2, read_timeout=4, retries={"total_max_attempts": 2, "mode": "standard"}
+)
 if _optional("TICKR_WEB_SES_REGION"):
     EMAIL_BACKEND = "django_ses.SESBackend"
     USE_SES_V2 = True
     AWS_SES_REGION_NAME = _required("TICKR_WEB_SES_REGION")
+
     AWS_SES_REGION_ENDPOINT = f"email.{AWS_SES_REGION_NAME}.amazonaws.com"
 elif DEBUG:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

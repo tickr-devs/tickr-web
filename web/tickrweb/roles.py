@@ -85,6 +85,9 @@ def set_admin(target, make_admin: bool, *, by) -> Outcome:
                 log.error("role change notice not sent: %s", failure_summary(error))
                 outcome.notified = False
 
+        # Runs when the outermost transaction commits. ATOMIC_REQUESTS is off (settings.py), so
+        # that is the end of this block and outcome.notified is set before set_admin returns.
+        # Turning ATOMIC_REQUESTS on would defer it past the view and lose the warning.
         transaction.on_commit(notify)
     return outcome
 

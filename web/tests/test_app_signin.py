@@ -205,3 +205,24 @@ def test_the_signing_key_is_made_once_and_only_readable_by_its_owner(tmp_path):
     assert path.stat().st_mode & 0o777 == 0o600
     assert ensure(str(path)) is False
     assert path.read_text() == first
+
+
+def test_a_crash_mid_write_leaves_no_key_behind(tmp_path, monkeypatch):
+    from tickrweb import grant_key
+
+    def crash():
+        raise OSError("disk full")
+
+    monkeypatch.setattr(grant_key, "new_private_key_pem", crash)
+    path = tmp_path / "grant.pem"
+    with pytest.raises(OSError):
+        grant_key.ensure(str(path))
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_ses_calls_give_up_before_a_grant_expires():
+    config = settings.AWS_SES_CONFIG
+    attempts = config.retries["total_max_attempts"]
+    calls_per_email = 2  # django-ses v2: get_account, then send_email
+    worst = calls_per_email * attempts * (config.connect_timeout + config.read_timeout)
+    assert worst < settings.BOT_GRANT_SECONDS

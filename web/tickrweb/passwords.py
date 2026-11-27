@@ -35,14 +35,14 @@ def times_breached(password: str) -> int | None:
     try:
         with urllib.request.urlopen(request, timeout=settings.PASSWORD_BREACH_CHECK_SECONDS) as r:
             body = r.read().decode("ascii")
-    except Exception as error:  # an outage must not lock people out; see the module docstring
+        for line in body.splitlines():
+            candidate, _sep, count = line.partition(":")
+            if candidate.strip() == suffix:
+                return int(count)
+        return 0
+    except Exception as error:  # an outage or a garbled answer must not lock people out
         log.warning("breached-password check unavailable: %s", type(error).__name__)
         return None
-    for line in body.splitlines():
-        candidate, _sep, count = line.partition(":")
-        if candidate.strip() == suffix:
-            return int(count)
-    return 0
 
 
 class BreachedPasswordValidator:

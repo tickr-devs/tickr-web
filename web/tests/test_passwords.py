@@ -57,3 +57,9 @@ def test_an_outage_accepts_the_password_and_logs_no_password(monkeypatch, caplog
     passwords.BreachedPasswordValidator().validate(PASSWORD)
     assert "breached-password check unavailable: OSError" in caplog.text
     assert PASSWORD not in caplog.text
+
+
+def test_a_garbled_answer_accepts_the_password(monkeypatch, caplog):
+    _service(monkeypatch, f"{DIGEST[5:]}:many\r\n", [])
+    passwords.BreachedPasswordValidator().validate(PASSWORD)
+    assert "breached-password check unavailable: ValueError" in caplog.text
