@@ -46,47 +46,12 @@ def test_cabinet_needs_sign_in(client):
     assert response["Location"].startswith("/login?next=/app")
 
 
-def test_admin_uses_the_site_sign_in(client):
-    response = client.get("/app/admin/", follow=True)
-    assert response.request["PATH_INFO"] == "/login"
-
-
-def test_admin_never_serves_its_own_password_form(client):
-    _sign_in_with(client, _invite("member@example.com"), {"method": "password"})
-    response = client.get("/app/admin/login/")
-    assert response.status_code == 403
-    assert b'name="password"' not in response.content
-    response = client.post(
-        "/app/admin/login/", {"username": "owner@example.com", "password": "guess"}
-    )
-    assert response.status_code == 403
-
-
-@pytest.mark.parametrize(
-    "record",
-    [
-        {"method": "code"},
-        {"method": "password"},
-        {"method": "mfa", "type": "recovery_codes"},
-    ],
-)
-def test_admin_refuses_staff_without_a_passkey_or_authenticator(client, record):
-    _sign_in_with(client, _invite("owner@example.com", "--superuser"), record)
-    assert client.get("/app/admin/").status_code == 302
-    assert client.get("/app/admin/login/").status_code == 403
-
-
-@pytest.mark.parametrize("factor", ["webauthn", "totp"])
-def test_admin_opens_for_staff_signed_in_with_a_strong_factor(client, factor):
+@pytest.mark.parametrize("path", ["/app/admin/", "/app/admin/login/"])
+def test_there_is_no_django_admin(client, path):
     _sign_in_with(
-        client, _invite("owner@example.com", "--staff"), {"method": "mfa", "type": factor}
+        client, _invite("owner@example.com", "--superuser"), {"method": "mfa", "type": "webauthn"}
     )
-    assert client.get("/app/admin/").status_code == 200
-
-
-def test_admin_refuses_a_strong_factor_without_staff(client):
-    _sign_in_with(client, _invite("member@example.com"), {"method": "mfa", "type": "webauthn"})
-    assert client.get("/app/admin/login/").status_code == 403
+    assert client.get(path).status_code == 404
 
 
 def test_staff_and_superuser_are_separate_flags():

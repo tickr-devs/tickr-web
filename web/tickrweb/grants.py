@@ -38,9 +38,8 @@ from django.utils import timezone, translation
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
 
-from .admin_site import signed_in_with_a_strong_factor
 from .mail import failure_summary
-from .roles import admins, is_admin
+from .roles import admins, is_admin, signed_in_with_a_strong_factor
 
 log = logging.getLogger(__name__)
 
