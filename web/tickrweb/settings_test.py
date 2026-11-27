@@ -31,3 +31,8 @@ from .settings import *  # noqa: E402, F403 (the variables above must be set fir
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 # Fast hashing in tests only.
 PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
+# Tests run without collectstatic, so plain names (the hashed names need its manifest).
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+}

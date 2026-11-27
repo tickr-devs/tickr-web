@@ -156,6 +156,11 @@ TIME_ZONE = "America/New_York"
 STATIC_URL = "/static/"
 # Folder `collectstatic` fills; Caddy serves it at /static/.
 STATIC_ROOT = BASE_DIR / "staticfiles"
+# Hashed file names (app.3f2a….css): each deploy changes the URL, so browsers drop old styles.
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"},
+}
 
 # --- Sign-in (django-allauth) ---
 LOGIN_URL = "/login"
