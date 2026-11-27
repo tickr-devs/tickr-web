@@ -1,12 +1,11 @@
 """URLs. Public marketing pages are static files served by Caddy; Django owns only
-/login, /account/, /app, /api/, /identity/ and the two OpenID /.well-known/ files
-(see web/README.md)."""
+/login, /account/, /app, /api/ and /.well-known/apple-app-site-association (see web/README.md)."""
 
 from allauth.account.views import login
 from django.contrib import admin
 from django.urls import include, path
 
-from . import oidc, views, waitlist
+from . import grants, views, waitlist
 
 urlpatterns = [
     path("account/", include("allauth.urls")),
@@ -21,7 +20,13 @@ urlpatterns = [
     path("api/waitlist", waitlist.join, name="waitlist_join"),
     path("api/waitlist/confirm", waitlist.confirm, name="waitlist_confirm"),
     path("api/waitlist/unsubscribe", waitlist.unsubscribe, name="waitlist_unsubscribe"),
-    # The apps' sign-in (tickrweb/oidc.py). The gated authorize view comes before allauth's own.
-    path("identity/o/authorize", oidc.authorize, name="oidc_authorize"),
-    path("", include("allauth.idp.urls")),
+    # The apps' native sign-in (tickrweb/grants.py): allauth's headless API, then a bot grant.
+    path("api/auth/", include("allauth.headless.urls")),
+    path("api/app/bot-grant", grants.bot_grant, name="bot_grant"),
+    path("api/app/grant-key.pem", grants.grant_key, name="grant_key"),
+    path(
+        ".well-known/apple-app-site-association",
+        grants.apple_app_site_association,
+        name="apple_app_site_association",
+    ),
 ]

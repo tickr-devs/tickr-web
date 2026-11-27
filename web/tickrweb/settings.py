@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.mfa",
     "allauth.usersessions",
-    "allauth.idp.oidc",  # the apps sign in here (OAuth 2.0 for native apps), see tickrweb/oidc.py
+    "allauth.headless",  # the apps' native sign-in screens use its JSON API, see tickrweb/grants.py
     "tickrweb",
 ]
 
@@ -192,24 +192,24 @@ MFA_PASSKEY_LOGIN_ENABLED = True
 MFA_WEBAUTHN_ALLOW_INSECURE_ORIGIN = DEBUG
 USERSESSIONS_TRACK_ACTIVITY = True
 
-# --- The apps sign in here: OpenID provider (allauth.idp.oidc), see tickrweb/oidc.py ---
-IDP_OIDC_ADAPTER = "tickrweb.oidc.Adapter"
-# The bot API, the only resource a grant may be for: the apps send it as `resource` and it becomes
-# the grant's `aud`, which the bot checks (its remote_signin_audience).
-BOT_API_AUDIENCE = "https://api.tickr.bot"
+# --- The apps sign in natively (allauth headless, "app" client) and get a bot grant ---
+HEADLESS_CLIENTS = ("app",)
+# The site's own pages stay; headless only adds the JSON API under /api/auth/app/v1/.
+HEADLESS_ONLY = False
 # RSA private key (PEM) that signs the bot grants. Made on the server at first start
-# (deploy/entrypoint.sh), kept in a volume, never copied anywhere; the bot pins its public key.
-with open(_required("TICKR_WEB_OIDC_KEY_FILE"), encoding="ascii") as _key:
-    IDP_OIDC_PRIVATE_KEY = _key.read()
-# The grant the app hands to the bot is a signed JWT access token (verified offline by the bot).
-IDP_OIDC_ACCESS_TOKEN_FORMAT = "jwt"
+# (deploy/entrypoint.sh, tickrweb/grant_key.py), kept in a volume, never copied anywhere; the bot
+# pins its public key.
+with open(_required("TICKR_WEB_GRANT_KEY_FILE"), encoding="ascii") as _key:
+    BOT_GRANT_PRIVATE_KEY = _key.read()
+# The bot API, the only audience a grant is for (the bot's remote_signin_audience).
+BOT_API_AUDIENCE = "https://api.tickr.bot"
 # Seconds a bot grant is valid: the app redeems it at the bot right away.
-IDP_OIDC_ACCESS_TOKEN_EXPIRES_IN = 60
-# Seconds an authorization code is valid (single use).
-IDP_OIDC_AUTHORIZATION_CODE_EXPIRES_IN = 60
-# Seconds a refresh token is valid. allauth always issues one, but the app clients may not use
-# the refresh_token grant (migration 0002), so it is useless; keep it short-lived anyway.
-IDP_OIDC_REFRESH_TOKEN_EXPIRES_IN = 60
+BOT_GRANT_SECONDS = 60
+# Apple team id that signs the apps (public: it is in every signed app). With it, tickr.bot serves
+# /.well-known/apple-app-site-association so the apps can use passkeys for tickr.bot.
+APPLE_TEAM_ID = _optional("TICKR_WEB_APPLE_TEAM_ID")
+# The apps' bundle ids (apps/ TICKR_BUNDLE_ID_PREFIX + ".ios" / ".mac").
+APPLE_APP_BUNDLE_IDS = ["bot.tickr.ios", "bot.tickr.mac"]
 
 # --- Email: Amazon SES API with the server's instance role (no stored mail password) ---
 DEFAULT_FROM_EMAIL = _required("TICKR_WEB_FROM_EMAIL")

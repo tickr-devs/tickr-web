@@ -1,6 +1,6 @@
 """The RSA key that signs bot grants: made once on the server, never leaves it.
 
-`python -m tickrweb.oidc_key PATH` writes a new key to PATH (mode 600) only if PATH does not exist,
+`python -m tickrweb.grant_key PATH` writes a new key to PATH (mode 600) only if PATH does not exist,
 so a restart or a deploy keeps the key the bot has pinned. Prints nothing about the key.
 """
 
@@ -37,6 +37,6 @@ def ensure(path: str) -> bool:
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        sys.exit("usage: python -m tickrweb.oidc_key PATH")
+        sys.exit("usage: python -m tickrweb.grant_key PATH")
     if ensure(sys.argv[1]):
         print("tickrweb: made a new grant signing key")

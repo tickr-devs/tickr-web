@@ -15,7 +15,7 @@ keys. It imports nothing from `src/tickr`.
 | `/app` | The cabinet (signed in only): Overview, Security, Devices |
 | `/app/early-access`, `/app/people` | Admin sections of the cabinet (admins only) |
 | `/app/admin/` | Django admin: a hidden fallback, not linked anywhere; to be removed |
-| `/identity/o/…`, `/.well-known/openid-configuration`, `/.well-known/jwks.json` | The apps' sign-in (OpenID provider, below) |
+| `/api/auth/app/v1/…`, `/api/app/…`, `/.well-known/apple-app-site-association` | The apps' native sign-in (below) |
 | `/api/…` | JSON endpoints; `/api/healthz` answers `ok` |
 
 Public pages must not use `/login`, `/account`, `/app`, `/api` or `/static`.
@@ -51,17 +51,19 @@ then adds a passkey under Security. Django's own admin login form is never serve
 
 ## The apps' sign-in
 
-The Mac and iPhone apps sign in here instead of pairing (`tickrweb/oidc.py`, allauth's OpenID
-provider). They are public clients `tickr-ios` and `tickr-mac` (migration `0002_app_clients`):
-authorization code with PKCE S256, redirect `tickr://signin`, scope `bot`, sending
-`resource=https://api.tickr.bot`. The token endpoint answers with a 60-second RS256 JWT, the bot
-grant (`iss` https://tickr.bot, `aud` https://api.tickr.bot, `sub` = account id, `client_id`,
-`jti`), which the app hands to the bot once. The bot checks it offline with the public key from
-`/.well-known/jwks.json`, pinned in its config; tickr.bot never calls the bot. Only an admin in a
-passkey or authenticator session gets a code.
+The Mac and iPhone apps sign in with their own screens through allauth's headless JSON API for the
+"app" client (`/api/auth/app/v1/…`, session in the `X-Session-Token` header): passkey, email +
+password, or a code by email, then an authenticator code or a passkey when the account asks for a
+second step. Then `POST /api/app/bot-grant` (`tickrweb/grants.py`) gives a 60-second RS256 JWT,
+the bot grant (`iss` https://tickr.bot, `aud` [https://api.tickr.bot], `sub` = account id,
+`client_id` tickr-ios or tickr-mac, `jti`), which the app hands to the bot once. Only an admin
+whose session was signed in with a passkey or an authenticator app gets one. The bot checks it
+offline with the public key from `/api/app/grant-key.pem`, pinned in its config; tickr.bot never
+calls the bot. With `TICKR_WEB_APPLE_TEAM_ID` set on the server, tickr.bot serves
+`/.well-known/apple-app-site-association` so the apps can use passkeys for tickr.bot.
 
 The signing key is made by the app container at its first start (`deploy/entrypoint.sh`,
-`tickrweb/oidc_key.py`) in the `oidc-key` volume and never leaves the server. It is not in the
+`tickrweb/grant_key.py`) in the `grant-key` volume and never leaves the server. It is not in the
 database backups: a rebuilt server makes a new key, and the bot then needs the new public key.
 
 ## Configuration

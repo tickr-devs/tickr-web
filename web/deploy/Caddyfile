@@ -1,5 +1,5 @@
 # tickr.bot: one site. Static marketing pages from /srv/site, the Django app behind /login,
-# /account, /app, /api, /identity (the apps' sign-in) and the two OpenID /.well-known/ files,
+# /account, /app, /api, and the apps' passkey file /.well-known/apple-app-site-association,
 # Django's collected static files at /static. Caddy gets and renews the
 # HTTPS certificate itself (Let's Encrypt) once DNS points at this server.
 {$TICKR_WEB_HOST} {
@@ -12,7 +12,7 @@
 		-Server
 	}
 
-	@app path /login /login/* /account /account/* /app /app/* /api /api/* /identity/* /.well-known/openid-configuration /.well-known/jwks.json
+	@app path /login /login/* /account /account/* /app /app/* /api /api/* /.well-known/apple-app-site-association
 	handle @app {
 		reverse_proxy app:8000 {
 			# The visitor's address, for the waitlist's per-IP limit (never stored).
