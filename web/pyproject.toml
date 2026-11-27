@@ -23,5 +23,9 @@ python_files = ["test_*.py"]
 testpaths = ["tests"]
 
 [tool.ruff]
-# The repository's rules, so `ruff check .` at the root and here agree.
-extend = "../pyproject.toml"
+# The same rules tickr-bot uses (copied at the split; there is no root pyproject here any more).
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
