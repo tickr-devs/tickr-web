@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-27 11:57-0500\n"
+"POT-Creation-Date: 2026-11-27 11:59-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,6 +50,14 @@ msgid_plural "%d invitations could not be sent; no accounts were created."
 msgstr[0] "No se pudo enviar %d invitación; no se creó ninguna cuenta."
 msgstr[1] "No se pudieron enviar %d invitaciones; no se crearon cuentas."
 msgstr[2] "No se pudieron enviar %d invitaciones; no se crearon cuentas."
+
+#: tickrweb/passwords.py:52
+msgid "This password is in a list of leaked passwords. Choose another one."
+msgstr "Esta contraseña aparece en una lista de contraseñas filtradas. Elige otra."
+
+#: tickrweb/passwords.py:57
+msgid "Your password can't be one that appeared in a data breach."
+msgstr "Tu contraseña no puede ser una que haya aparecido en una filtración de datos."
 
 #: tickrweb/templates/account/login.html:4
 #: tickrweb/templates/account/login.html:6

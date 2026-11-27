@@ -117,7 +117,11 @@ AUTH_PASSWORD_VALIDATORS = [
         "OPTIONS": {"min_length": 15},
     },
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    # Not in a known breach (Have I Been Pwned, only a 5-character hash prefix is sent).
+    {"NAME": "tickrweb.passwords.BreachedPasswordValidator"},
 ]
+# Seconds to wait for the breached-password service before accepting the password anyway.
+PASSWORD_BREACH_CHECK_SECONDS = 3
 
 # --- Sessions and cookies ---
 # "__Host-" cookies are accepted by browsers only over HTTPS, for this host, on path "/".
