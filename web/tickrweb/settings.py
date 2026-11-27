@@ -63,6 +63,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
     "allauth.usersessions.middleware.UserSessionsMiddleware",
+    # Retry-After on the apps' rate-limited password sign-in (tickrweb/retry_after.py).
+    "tickrweb.retry_after.LoginRetryAfterMiddleware",
 ]
 
 ROOT_URLCONF = "tickrweb.urls"
