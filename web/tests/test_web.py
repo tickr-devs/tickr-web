@@ -205,3 +205,11 @@ def test_admin_sections_show_in_the_cabinet_only_for_admins(client):
     page = owner.get("/app").text
     assert "/app/people" in page and "/app/early-access" in page
     assert "/app/admin/" not in page
+
+
+def test_a_wrong_emailed_code_marks_the_field_for_the_shake(client):
+    _invite()
+    client.post(reverse("account_request_login_code"), {"email": "owner@example.com"})
+    response = client.post(reverse("account_confirm_login_code"), {"code": "000000"})
+    assert response.status_code == 200
+    assert 'class="code"' in response.text and 'aria-invalid="true" value="000000"' in response.text

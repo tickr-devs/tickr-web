@@ -1,93 +1,64 @@
-// tickr.bot site: language switch, menu, early-access forms (post to /api/waitlist) and gentle reveal.
-// English lives in the HTML. Spanish comes from this file (shared parts) and window.TK_ES (the page).
+// tickr.bot site: language links, menu, early-access forms (post to /api/waitlist) and the reveal.
+// Each page is built in English and in Spanish (web/site/build.py); this file only remembers the
+// chosen language and speaks the page's language in the messages it shows.
 (function () {
-  const COMMON_ES = window.TK_COMMON_ES || {};
-  const ES = Object.assign({}, COMMON_ES, window.TK_ES || {});
+  const root = document.documentElement;
+  const lang = root.lang === 'es' ? 'es' : 'en';
   const MSG = {
-    en: { sending: 'Sending', invalid: 'That email address does not look right. Please check it.', rate: 'Too many attempts. Please try again in an hour.', error: 'Something went wrong on our side. Please try again later.' },
-    es: { sending: 'Enviando', invalid: 'Ese correo no parece correcto. Revíselo, por favor.', rate: 'Demasiados intentos. Inténtelo de nuevo en una hora.', error: 'Algo falló de nuestro lado. Inténtelo de nuevo más tarde.' }
-  };
-  const CONFIRM_EN = 'Almost done. Check your email and confirm your address.';
-  const ATTRS = { 'data-i18n-aria': 'aria-label', 'data-i18n-ph': 'placeholder', 'data-i18n-alt': 'alt' };
-  const original = new Map();
-  const forms = Array.from(document.querySelectorAll('form.signup'));
-  let lang = 'en';
+    en: { sending: 'Sending', invalid: 'That email address does not look right. Please check it.', rate: 'Too many attempts. Please try again in an hour.', error: 'Something went wrong on our side. Please try again later.', confirm: 'Almost done. Check your email and confirm your address.' },
+    es: { sending: 'Enviando', invalid: 'Ese correo no parece correcto. Revíselo, por favor.', rate: 'Demasiados intentos. Inténtelo de nuevo en una hora.', error: 'Algo falló de nuestro lado. Inténtelo de nuevo más tarde.', confirm: 'Casi listo. Revise su correo y confirme su dirección.' }
+  }[lang];
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function store(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* storage may be blocked */ } }
-  function read(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  // Language links: remember the choice, so the next visit opens in it.
+  document.querySelectorAll('a[data-lang]').forEach(a => a.addEventListener('click', () => {
+    try { localStorage.setItem('tk-lang', a.dataset.lang); } catch (e) { /* storage may be blocked */ }
+  }));
 
-  function setLang(next) {
-    lang = next === 'es' ? 'es' : 'en';
-    document.documentElement.lang = lang;
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      if (!original.has(el)) original.set(el, el.innerHTML);
-      const v = lang === 'es' ? ES[el.dataset.i18n] : undefined;
-      el.innerHTML = v !== undefined ? v : original.get(el);
-    });
-    Object.entries(ATTRS).forEach(([data, attr]) => {
-      document.querySelectorAll('[' + data + ']').forEach(el => {
-        const key = '__' + attr;
-        if (!el[key]) el[key] = el.getAttribute(attr) || '';
-        const v = lang === 'es' ? ES[el.getAttribute(data)] : undefined;
-        el.setAttribute(attr, v !== undefined ? v : el[key]);
-      });
-    });
-    if (ES.__title && lang === 'es') document.title = ES.__title;
-    else if (document.documentElement.dataset.title) document.title = document.documentElement.dataset.title;
-    document.querySelectorAll('button[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang ? 'true' : 'false'));
-    forms.forEach(f => {
-      f.elements.namedItem('lang').value = lang;
-      if (f.dataset.status && f.dataset.status !== 'ok' && f.dataset.status !== 'confirm') showStatus(f, f.dataset.status);
-    });
-    store('tk-lang', lang);
-  }
-  document.querySelectorAll('[data-i18n]').forEach(el => original.set(el, el.innerHTML));
-  document.documentElement.dataset.title = document.title;
-  document.querySelectorAll('button[data-lang]').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
-  const saved = read('tk-lang');
-  const initial = saved || ((navigator.language || '').toLowerCase().startsWith('es') ? 'es' : 'en');
-  if (initial === 'es') setLang('es');
-
-  // Menu on narrow screens.
+  // Menu on narrow screens: grows from its button, closes on Escape, a tap outside or a link.
   const header = document.querySelector('.site-h');
   const menuB = document.querySelector('.menu-b');
   if (header && menuB) {
-    menuB.addEventListener('click', () => {
-      const open = header.classList.toggle('open');
+    const setOpen = (open) => {
+      header.classList.toggle('open', open);
       menuB.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
+    };
+    menuB.addEventListener('click', () => setOpen(!header.classList.contains('open')));
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && header.classList.contains('open')) { header.classList.remove('open'); menuB.setAttribute('aria-expanded', 'false'); menuB.focus(); }
+      if (e.key === 'Escape' && header.classList.contains('open')) { setOpen(false); menuB.focus(); }
     });
+    document.addEventListener('pointerdown', e => {
+      if (header.classList.contains('open') && !header.contains(e.target)) setOpen(false);
+    });
+    header.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', () => setOpen(false)));
   }
 
-  // Early-access forms: success replaces the field with a quiet confirmation; no second send is offered.
+  // Early-access forms: one send at a time; success replaces the field with a quiet confirmation.
   function showStatus(form, status) {
     if (!['ok', 'confirm', 'invalid', 'rate', 'error', 'sending'].includes(status)) status = 'error';
-    form.dataset.status = status;
     const msg = form.querySelector('.msg');
     if (status === 'ok' || status === 'confirm') {
       form.classList.add('is-done');
       msg.dataset.state = '';
       const done = form.querySelector('.done');
-      const text = form.querySelector('.done-text');
-      text.dataset.i18n = status;
-      if (status === 'confirm') original.set(text, CONFIRM_EN);
-      text.innerHTML = lang === 'es' ? ES[status] : original.get(text);
+      if (status === 'confirm') form.querySelector('.done-text').textContent = MSG.confirm;
       done.hidden = false;
       done.focus({ preventScroll: true });
       return;
     }
     msg.dataset.state = status;
-    msg.textContent = MSG[lang][status];
+    msg.textContent = MSG[status];
   }
-  forms.forEach(form => {
+  document.querySelectorAll('form.signup').forEach(form => {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (form.dataset.busy) return;
       const input = form.elements.namedItem('email');
       if (!input.value.trim() || !input.checkValidity()) { showStatus(form, 'invalid'); input.focus(); return; }
       const button = form.querySelector('button[type=submit]');
+      form.dataset.busy = '1';
       button.disabled = true;
+      button.setAttribute('aria-busy', 'true');
       showStatus(form, 'sending');
       try {
         const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
@@ -96,23 +67,32 @@
       } catch (err) {
         showStatus(form, 'error');
       } finally {
+        delete form.dataset.busy;
         button.disabled = false;
+        button.removeAttribute('aria-busy');
       }
     });
   });
   const fromServer = new URLSearchParams(location.search).get('signup');
-  if (fromServer && forms.length) showStatus(forms[0], fromServer);
+  const first = document.querySelector('form.signup');
+  if (fromServer && first) showStatus(first, fromServer);
 
-  // Reveal: elements marked data-reveal fade up once when they enter the view.
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Reveal (home and Apps only): blocks below the first screen fade up once as they come into view.
+  // Blocks that enter together follow each other by STAGGER_MS. CSS hides them only under .js.
+  const STAGGER_MS = 50;
   const items = document.querySelectorAll('[data-reveal]');
   if (reduce || !('IntersectionObserver' in window)) {
     items.forEach(el => el.classList.add('in'));
   } else {
-    const io = new IntersectionObserver(entries => entries.forEach(en => {
-      if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
-    }), { threshold: 0.12 });
+    const io = new IntersectionObserver(entries => {
+      let n = 0;
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        en.target.style.transitionDelay = (n++ * STAGGER_MS) + 'ms';
+        en.target.classList.add('in');
+        io.unobserve(en.target);
+      });
+    }, { threshold: 0.12 });
     items.forEach(el => io.observe(el));
   }
-  window.tkReduceMotion = reduce;
 })();

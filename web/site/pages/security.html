@@ -1,16 +1,16 @@
 {"slug":"security","title":"Security · tickr.bot","desc":"Where your broker key lives, who can read it, how your account is protected and what the bot never does."}
 <section class="wrap phero">
-<p class="label" data-reveal data-i18n="label">Security</p>
-<h1 data-reveal><span data-i18n="h1a">Your key goes in once.</span><br><span class="g" data-i18n="h1b">Only your bot can read it.</span></h1>
-<p class="lede" data-reveal data-i18n="lede">tickr.bot trades through an access key from your own brokerage account. Everything about the design starts from one question: what if someone tried to misuse that key?</p>
+<p class="label" data-i18n="label">Security</p>
+<h1><span data-i18n="h1a">Your key goes in once.</span><br><span class="g" data-i18n="h1b">Only your bot can read it.</span></h1>
+<p class="lede" data-i18n="lede">tickr.bot trades through an access key from your own brokerage account. Everything about the design starts from one question: what if someone tried to misuse that key?</p>
 </section>
 
 <section class="wrap sec" aria-labelledby="h-key">
 <div class="sh">
-<p class="label" data-reveal data-i18n="k1">The key</p>
-<div><h2 id="h-key" data-reveal data-i18n="h2a">Stored encrypted, apart from everything else.</h2></div>
+<p class="label" data-i18n="k1">The key</p>
+<div><h2 id="h-key" data-i18n="h2a">Stored encrypted, apart from everything else.</h2></div>
 </div>
-<div class="path" data-reveal>
+<div class="path">
 <div><span class="k" data-i18n="p1k">01 · You</span><b data-i18n="p1b">Paste the key once</b><p data-i18n="p1p">On the website, over an encrypted connection. It is checked and never shown again.</p></div>
 <div class="lock"><span class="k" data-i18n="p2k">02 · Vault</span><b data-i18n="p2b">Encrypted, kept apart</b><p data-i18n="p2p">In a separate vault, not in the database with your account.</p></div>
 <div><span class="k" data-i18n="p3k">03 · Your bot</span><b data-i18n="p3b">The only reader</b><p data-i18n="p3p">Your bot runs in its own isolated space and is the only thing that can open your key.</p></div>
@@ -20,76 +20,48 @@
 
 <section class="wrap sec" aria-labelledby="h-acct">
 <div class="sh">
-<p class="label" data-reveal data-i18n="k2">Your account</p>
-<div><h2 id="h-acct" data-reveal data-i18n="h2b">Nothing to steal, a lot to get through.</h2></div>
+<p class="label" data-i18n="k2">Your account</p>
+<div><h2 id="h-acct" data-i18n="h2b">Nothing to steal, a lot to get through.</h2></div>
 </div>
 <div class="cols">
-<div data-reveal><span class="k" data-i18n="a1k">Sign-in</span><b data-i18n="a1b">No password</b><p data-i18n="a1p">A one-time code by email, or Sign in with Apple or Google. Nothing to guess or reuse.</p></div>
-<div data-reveal><span class="k" data-i18n="a2k">Second step</span><b data-i18n="a2b">Passkey or code</b><p data-i18n="a2p">Face ID, Touch ID or an authenticator code. Always available, required for live trading.</p></div>
-<div data-reveal><span class="k" data-i18n="a3k">Devices</span><b data-i18n="a3b">Sign out everywhere</b><p data-i18n="a3p">See every signed-in device. Lost your phone? Remove it and it sees nothing more.</p></div>
+<div><span class="k" data-i18n="a1k">Sign-in</span><b data-i18n="a1b">No password</b><p data-i18n="a1p">A one-time code by email, or Sign in with Apple or Google. Nothing to guess or reuse.</p></div>
+<div><span class="k" data-i18n="a2k">Second step</span><b data-i18n="a2b">Passkey or code</b><p data-i18n="a2p">Face ID, Touch ID or an authenticator code. Always available, required for live trading.</p></div>
+<div><span class="k" data-i18n="a3k">Devices</span><b data-i18n="a3b">Sign out everywhere</b><p data-i18n="a3p">See every signed-in device. Lost your phone? Remove it and it sees nothing more.</p></div>
 </div>
 <div class="cols">
-<div data-reveal><span class="k" data-i18n="a4k">Apps</span><b data-i18n="a4b">No broker key on your phone</b><p data-i18n="a4p">The apps keep only a session token in the system keychain. They talk to your bot, never to your broker.</p></div>
-<div data-reveal><span class="k" data-i18n="a5k">Protective settings</span><b data-i18n="a5b">Three locks to loosen</b><p data-i18n="a5p">Face ID, a wait until the next session, and an email to you. Tightening is instant.</p></div>
-<div data-reveal><span class="k" data-i18n="a6k">Your own trading</span><b data-i18n="a6b">Yours stays yours</b><p data-i18n="a6p">Trade by hand on the same account if you like. The bot asks "was it you?" only when something touches its own positions or stops.</p></div>
+<div><span class="k" data-i18n="a4k">Apps</span><b data-i18n="a4b">No broker key on your phone</b><p data-i18n="a4p">The apps keep only a session token in the system keychain. They talk to your bot, never to your broker.</p></div>
+<div><span class="k" data-i18n="a5k">Protective settings</span><b data-i18n="a5b">Three locks to loosen</b><p data-i18n="a5p">Face ID, a wait until the next session, and an email to you. Tightening is instant.</p></div>
+<div><span class="k" data-i18n="a6k">Your own trading</span><b data-i18n="a6b">Yours stays yours</b><p data-i18n="a6p">Trade by hand on the same account if you like. The bot asks "was it you?" only when something touches its own positions or stops.</p></div>
 </div>
 </section>
 
 <section class="wrap sec" aria-labelledby="h-never">
 <div class="sh">
-<p class="label" data-reveal data-i18n="k3">Never</p>
-<div><h2 id="h-never" data-reveal data-i18n="h2c">What the bot never does.</h2></div>
+<p class="label" data-i18n="k3">Never</p>
+<div><h2 id="h-never" data-i18n="h2c">What the bot never does.</h2></div>
 </div>
 <ol class="rules">
-<li data-reveal><span class="num">01</span><div><h3 data-i18n="n1h">Moves money.</h3><p data-i18n="n1p">It places and cancels stock orders. Deposits, withdrawals and transfers are not something it can ask your broker for.</p></div></li>
-<li data-reveal><span class="num">02</span><div><h3 data-i18n="n2h">Holds a position without a stop.</h3><p data-i18n="n2p">The stop is at your broker. If the bot, our servers or your phone go quiet, it is still there.</p></div></li>
-<li data-reveal><span class="num">03</span><div><h3 data-i18n="n3h">Sends an order twice.</h3><p data-i18n="n3p">Every order is written down before it leaves. An unclear answer means asking the broker, not sending again.</p></div></li>
-<li data-reveal><span class="num">04</span><div><h3 data-i18n="n4h">Keeps trading on a mismatch.</h3><p data-i18n="n4p">If your broker's records and the bot's disagree, new entries stop until they match, and you are told.</p></div></li>
-<li data-reveal><span class="num">05</span><div><h3 data-i18n="n5h">Holds overnight.</h3><p data-i18n="n5p">Every position is closed by the end of your last session.</p></div></li>
+<li><span class="num">01</span><div><h3 data-i18n="n1h">Moves money.</h3><p data-i18n="n1p">It places and cancels stock orders. Deposits, withdrawals and transfers are not something it can ask your broker for.</p></div></li>
+<li><span class="num">02</span><div><h3 data-i18n="n2h">Holds a position without a stop.</h3><p data-i18n="n2p">The stop is at your broker. If the bot, our servers or your phone go quiet, it is still there.</p></div></li>
+<li><span class="num">03</span><div><h3 data-i18n="n3h">Sends an order twice.</h3><p data-i18n="n3p">Every order is written down before it leaves. An unclear answer means asking the broker, not sending again.</p></div></li>
+<li><span class="num">04</span><div><h3 data-i18n="n4h">Keeps trading on a mismatch.</h3><p data-i18n="n4p">If your broker's records and the bot's disagree, new entries stop until they match, and you are told.</p></div></li>
+<li><span class="num">05</span><div><h3 data-i18n="n5h">Holds overnight.</h3><p data-i18n="n5p">Every position is closed by the end of your last session.</p></div></li>
 </ol>
 </section>
 
 <section class="wrap sec" aria-labelledby="h-you">
 <div class="sh">
-<p class="label" data-reveal data-i18n="k4">On your side</p>
-<div><h2 id="h-you" data-reveal data-i18n="h2d">Two things that make a key safer.</h2></div>
+<p class="label" data-i18n="k4">On your side</p>
+<div><h2 id="h-you" data-i18n="h2d">Two things that make a key safer.</h2></div>
 </div>
 <div class="cols c2">
-<div data-reveal><b data-i18n="y1b">Limit the key to our servers</b><p data-i18n="y1p">When you create the key, your broker lets you list the addresses that may use it. We show you ours. A copied key then does not work anywhere else.</p></div>
-<div data-reveal><b data-i18n="y2b">Turn it off in one place</b><p data-i18n="y2p">If anything ever looks wrong, revoke the key at your broker. The bot stops trading at once, and the stops already at your broker stay in place.</p></div>
+<div><b data-i18n="y1b">Limit the key to our servers</b><p data-i18n="y1p">When you create the key, your broker lets you list the addresses that may use it. We show you ours. A copied key then does not work anywhere else.</p></div>
+<div><b data-i18n="y2b">Turn it off in one place</b><p data-i18n="y2p">If anything ever looks wrong, revoke the key at your broker. The bot stops trading at once, and the stops already at your broker stay in place.</p></div>
 </div>
 <p class="cap" data-i18n="rep">Found a security problem? Write to hello@tickr.bot.</p>
 </section>
 
 <section class="wrap end" aria-labelledby="h-end">
-<h2 id="h-end" data-reveal data-i18n="h2e">Questions about security?</h2>
-<a class="go" href="{{u:faq}}" data-reveal data-i18n="endCta">Read the FAQ ›</a>
+<h2 id="h-end" data-i18n="h2e">Questions about security?</h2>
+<a class="go" href="{{u:faq}}" data-i18n="endCta">Read the FAQ ›</a>
 </section>
-<script>window.TK_ES = {
-__title: 'Seguridad · tickr.bot',
-label: 'Seguridad', h1a: 'Su clave entra una vez.', h1b: 'Solo su bot puede leerla.',
-lede: 'tickr.bot opera con una clave de acceso de su propia cuenta de bróker. Todo el diseño parte de una pregunta: ¿y si alguien intentara usar mal esa clave?',
-k1: 'La clave', h2a: 'Cifrada y separada de todo lo demás.',
-p1k: '01 · Usted', p1b: 'Pega la clave una vez', p1p: 'En el sitio web, por una conexión cifrada. Se comprueba y no se vuelve a mostrar.',
-p2k: '02 · Bóveda', p2b: 'Cifrada y aparte', p2p: 'En una bóveda separada, no en la base de datos con su cuenta.',
-p3k: '03 · Su bot', p3b: 'El único que la lee', p3p: 'Su bot funciona en su propio espacio aislado y es lo único que puede abrir su clave.',
-p4k: '04 · Todos los demás', p4b: 'Sin acceso', p4p: 'Ni el sitio web, ni las apps, ni los bots de otros usuarios, ni nuestro equipo.',
-k2: 'Su cuenta', h2b: 'Nada que robar y mucho que superar.',
-a1k: 'Acceso', a1b: 'Sin contraseña', a1p: 'Un código de un solo uso por correo, o Iniciar sesión con Apple o Google. Nada que adivinar ni reutilizar.',
-a2k: 'Segundo paso', a2b: 'Passkey o código', a2p: 'Face ID, Touch ID o un código de autenticador. Siempre disponible, obligatorio para el trading real.',
-a3k: 'Dispositivos', a3b: 'Cerrar sesión en todas partes', a3p: 'Vea cada dispositivo con sesión abierta. ¿Perdió el teléfono? Quítelo y ya no ve nada.',
-a4k: 'Apps', a4b: 'Ninguna clave del bróker en su teléfono', a4p: 'Las apps solo guardan un token de sesión en el llavero del sistema. Hablan con su bot, nunca con su bróker.',
-a5k: 'Ajustes de protección', a5b: 'Tres cerrojos para aflojar', a5p: 'Face ID, esperar a la siguiente sesión y un correo para usted. Endurecerlos es inmediato.',
-a6k: 'Su propio trading', a6b: 'Lo suyo sigue siendo suyo', a6p: 'Opere a mano en la misma cuenta si quiere. El bot pregunta «¿fue usted?» solo cuando algo toca sus propias posiciones o stops.',
-k3: 'Nunca', h2c: 'Lo que el bot nunca hace.',
-n1h: 'Mover dinero.', n1p: 'Coloca y cancela órdenes de acciones. Depósitos, retiros y transferencias no son algo que pueda pedirle a su bróker.',
-n2h: 'Mantener una posición sin stop.', n2p: 'El stop está en su bróker. Si el bot, nuestros servidores o su teléfono se quedan en silencio, sigue ahí.',
-n3h: 'Enviar una orden dos veces.', n3p: 'Cada orden se anota antes de salir. Una respuesta poco clara significa preguntar al bróker, no volver a enviar.',
-n4h: 'Seguir operando con registros distintos.', n4p: 'Si los registros de su bróker y los del bot no coinciden, se detienen las nuevas entradas hasta que coincidan, y se le avisa.',
-n5h: 'Mantener posiciones de noche.', n5p: 'Cada posición se cierra antes del final de su última sesión.',
-k4: 'De su lado', h2d: 'Dos cosas que hacen más segura una clave.',
-y1b: 'Limite la clave a nuestros servidores', y1p: 'Al crear la clave, su bróker le permite indicar desde qué direcciones se puede usar. Le mostramos las nuestras. Así, una clave copiada no sirve en ningún otro lugar.',
-y2b: 'Desactívela en un solo lugar', y2p: 'Si algo no le cuadra, revoque la clave en su bróker. El bot deja de operar al instante y los stops que ya están en su bróker siguen ahí.',
-rep: '¿Encontró un problema de seguridad? Escriba a hello@tickr.bot.',
-h2e: '¿Preguntas sobre seguridad?', endCta: 'Leer las preguntas frecuentes ›'
-};</script>

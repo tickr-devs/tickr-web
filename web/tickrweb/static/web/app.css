@@ -25,10 +25,9 @@
   color-scheme:light;
 }}
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;min-height:100vh;background:var(--bg);color:var(--tx);font:400 15px/1.5 var(--text);-webkit-font-smoothing:antialiased}
+html{-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100vh;min-height:100dvh;background:var(--bg);color:var(--tx);font:400 15px/1.5 var(--text);-webkit-font-smoothing:antialiased}
 a{color:var(--blue2);text-decoration:none}
-a:hover{color:var(--tx)}
 :focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:8px}
 code{font:500 .92em var(--mono)}
 h1,h2,h3,p{margin:0}
@@ -61,11 +60,9 @@ h1,h2,h3,p{margin:0}
 .kv dt{color:var(--tx2)}
 .kv dd{margin:0;text-align:right;min-width:0;overflow-wrap:anywhere}
 .cfoot{display:flex;align-items:center;gap:8px;min-height:44px;margin:auto -16px -14px;padding:6px 12px 6px 16px;border:0;border-top:1px solid var(--line);background:transparent;color:var(--tx);font:600 14px/1.25 var(--text);text-align:left;cursor:pointer;width:calc(100% + 32px)}
-.cfoot:hover{background:color-mix(in srgb,var(--blue) 6%,transparent);color:var(--tx)}
 .cfoot .sp{flex-grow:1;min-width:0}
 .cfoot .cn{font:600 11px/1 var(--mono);color:var(--mut);background:var(--deep);border:1px solid var(--line);border-radius:99px;padding:3px 8px}
 .cfoot:disabled{cursor:default;color:var(--dim)}
-.cfoot:disabled:hover{background:transparent}
 .cc{display:grid;place-items:center;flex-shrink:0;width:22px;height:22px;border-radius:99px;background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue2)}
 .cc svg{width:12px;height:12px}
 .lrow{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
@@ -78,7 +75,6 @@ h1,h2,h3,p{margin:0}
 .it svg{width:15px;height:15px}
 .it.soft{color:var(--mut);background:color-mix(in srgb,var(--dim) 14%,transparent)}
 .rw{display:flex;align-items:center;gap:12px;width:100%;min-height:48px;padding:6px 0;border:0;border-top:1px solid var(--line);background:transparent;color:var(--tx);font:500 14px/1.3 var(--text);text-align:left;cursor:pointer}
-.rw:hover{color:var(--tx)}
 .rw .sp{flex-grow:1;min-width:0}
 
 /* Fields */
@@ -98,12 +94,10 @@ input[type=checkbox]{width:18px;height:18px;margin:0;accent-color:var(--prim);ve
 /* Buttons: primary = the Controls primary command (teal; #0B766F in light) */
 .bp,.bs{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:0 18px;border-radius:12px;font:600 15px/1 var(--text);cursor:pointer;white-space:normal;text-align:center}
 .bp{border:0;background:var(--prim);color:var(--onprim);box-shadow:0 2px 10px color-mix(in srgb,var(--teal) 30%,transparent)}
-.bp:hover{color:var(--onprim);filter:brightness(1.06)}
 .bp .kg{display:grid;place-items:center;width:24px;height:24px;border-radius:7px;background:rgba(255,255,255,.22)}
 .bp .kg svg{width:14px;height:14px}
 .bp.tall{min-height:48px}
 .bs{border:1px solid var(--line2);background:var(--card);color:var(--tx);font-size:14px}
-.bs:hover{border-color:var(--dim);color:var(--tx)}
 .bs svg{width:15px;height:15px;color:var(--mut)}
 .bp>svg{width:16px;height:16px;flex:none}
 .bs.dest{color:var(--red2);border-color:color-mix(in srgb,var(--red) 40%,transparent);background:color-mix(in srgb,var(--red) 8%,var(--card))}
@@ -111,12 +105,10 @@ input[type=checkbox]{width:18px;height:18px;margin:0;accent-color:var(--prim);ve
 .bs.wide{justify-content:flex-start;padding:0 12px}
 .bp:disabled,.bs:disabled{opacity:.4;box-shadow:none;cursor:default;filter:none}
 .lk{display:inline-flex;align-items:center;min-height:44px;padding:0;border:0;background:transparent;color:var(--blue2);font:600 14px/1.3 var(--text);cursor:pointer}
-.lk:hover{color:var(--tx)}
 .inline{display:inline;margin:0}
 .actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 /* the custom back capsule (never a default Back) */
 .bk{display:inline-flex;align-items:center;gap:4px;height:36px;padding:0 14px 0 10px;border-radius:99px;border:1px solid var(--line2);background:color-mix(in srgb,var(--card) 85%,transparent);box-shadow:0 4px 14px rgba(20,30,80,.12);color:var(--tx);font:500 15px/1 var(--text);cursor:pointer}
-.bk:hover{color:var(--tx);border-color:var(--dim)}
 .bk svg{width:17px;height:17px}
 
 /* Badges and the in-development mark */
@@ -173,7 +165,7 @@ input[type=checkbox]{width:18px;height:18px;margin:0;accent-color:var(--prim);ve
 }
 
 /* Entrance pages (sign-in, codes, reset): brand panel + form column, as the Mac sign-in */
-.si{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);min-height:100vh}
+.si{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);min-height:100vh;min-height:100dvh}
 .side{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;border-right:1px solid var(--line);background:radial-gradient(90% 60% at 50% 38%,rgba(45,212,191,.08),transparent 70%),radial-gradient(120% 80% at 50% 0%,color-mix(in srgb,#141A33 70%,transparent),transparent 75%),var(--deep)}
 @media (prefers-color-scheme:light){.side{background:radial-gradient(90% 60% at 50% 38%,rgba(20,184,166,.10),transparent 70%),var(--deep)}}
 .side .wm svg{height:40px}
@@ -200,13 +192,12 @@ input[type=checkbox]{width:18px;height:18px;margin:0;accent-color:var(--prim);ve
 }
 
 /* Signed-in shell: side bar + content (the side bar stays in the window and keeps the account chip at its bottom); on a phone a top bar with the menu (a <details>, no script) */
-.shell{display:flex;min-height:100vh}
+.shell{display:flex;min-height:100vh;min-height:100dvh}
 .sbar{flex:0 0 248px;position:sticky;top:0;align-self:flex-start;height:100vh;height:100dvh;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:2px;padding:14px 12px;border-right:1px solid var(--line);background:var(--side)}
 .sbar>.wm{padding:2px 8px 12px}
 .sbar>.me{position:sticky;bottom:0;box-shadow:0 -12px 12px var(--side)}
 .navi{display:flex;align-items:center;gap:10px;min-height:40px;padding:0 12px;border-radius:10px;color:var(--mut);font:500 14px/1.2 var(--text)}
 .navi svg{width:17px;height:17px;flex-shrink:0}
-.navi:hover{background:var(--sel);color:var(--tx)}
 .navi[aria-current=page]{background:var(--sel);color:var(--tx);font-weight:600}
 .navi .n{margin-left:auto;font:600 11px var(--mono);color:var(--dim)}
 .navi .dv{margin-left:auto;width:8px;height:8px;border-radius:2px;border:1px dashed var(--violet)}
@@ -251,3 +242,63 @@ ul.errorlist{margin:6px 0 0;padding:0;list-style:none;font-size:13px;color:var(-
 .lrow.app .it{width:48px;height:48px;border-radius:14px}
 .lrow.app .it svg{width:24px;height:24px}
 .lrow.app b{font-size:16px}
+
+/* Hover only for a pointer that hovers: on a phone a tap would leave it stuck on. */
+@media (hover:hover) and (pointer:fine){
+a:hover{color:var(--tx)}
+.cfoot:hover{background:color-mix(in srgb,var(--blue) 6%,transparent);color:var(--tx)}
+.cfoot:disabled:hover{background:transparent}
+.rw:hover{color:var(--tx)}
+.bp:hover{color:var(--onprim);filter:brightness(1.06)}
+.bs:hover{border-color:var(--dim);color:var(--tx)}
+.lk:hover{color:var(--tx)}
+.bk:hover{color:var(--tx);border-color:var(--dim)}
+.navi:hover{background:var(--sel);color:var(--tx)}
+}
+
+/* Press feedback: controls answer the press at once (scale .97, 160 ms strong ease-out); colours fade in 150 ms. */
+a,.bp,.bs,.lk,.bk,.cfoot,.rw,.navi,.seg button,.seg a{transition:color .15s ease,background-color .15s ease,border-color .15s ease,filter .15s ease,transform .16s cubic-bezier(.23,1,.32,1)}
+.bp:active:not(:disabled),.bs:active:not(:disabled),.bk:active,.seg button:active,.seg a:active{transform:scale(.97)}
+.rw:active,.navi:active,.cfoot:active:not(:disabled){background:var(--sel)}
+/* A sent form (app.js): its button shows the spinner and takes no more presses. */
+[aria-busy=true]{cursor:progress;pointer-events:none}
+.bp[aria-busy=true]>svg:first-child{display:none}
+[aria-busy=true]::before{content:"";flex:none;width:15px;height:15px;border-radius:99px;border:2px solid color-mix(in srgb,currentColor 30%,transparent);border-top-color:currentColor;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Early access: a tap on the row ticks it; our round check instead of the browser's box. */
+.pick tr.tap{cursor:pointer}
+.pick tr.on{background:color-mix(in srgb,var(--teal) 7%,transparent)}
+@media (max-width:860px){.pick tr{padding:12px 8px;border-radius:10px}}
+.pick input[type=checkbox]{appearance:none;-webkit-appearance:none;display:grid;place-items:center;width:22px;height:22px;border-radius:99px;border:1.5px solid var(--line2);background:transparent;cursor:pointer;transition:background-color .15s ease,border-color .15s ease}
+.pick input[type=checkbox]:checked{border-color:var(--prim);background:var(--prim) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2305070F' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center/14px no-repeat}
+@media (prefers-color-scheme:light){.pick input[type=checkbox]:checked{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E")}}
+
+/* Phone menu: grows from its button in 180 ms and shrinks back on close (app.js). */
+@media (max-width:860px){
+  .msheet{transform-origin:calc(100% - 22px) -8px}
+  .mtop details[open] .msheet{animation:sheet-in .18s cubic-bezier(.23,1,.32,1)}
+  .mtop details.closing .msheet{animation:sheet-out .18s cubic-bezier(.23,1,.32,1) forwards}
+}
+@keyframes sheet-in{from{opacity:0;transform:scale(.97)}}
+@keyframes sheet-out{to{opacity:0;transform:scale(.97)}}
+
+/* A wrong code: the field shakes once, like a wrong password on a Mac or an iPhone. */
+input.code[aria-invalid=true]{animation:shake .3s cubic-bezier(.36,.07,.19,.97);background:color-mix(in srgb,var(--pink) 8%,var(--deep))}
+@keyframes shake{20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(4px)}}
+
+/* Wide tables: no scroll bar (app.js on); a fade at the edge where more of the table is. */
+.js .scroll{scrollbar-width:none}
+.js .scroll::-webkit-scrollbar{display:none}
+.scroll.more-r{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
+.scroll.more-l{-webkit-mask-image:linear-gradient(90deg,transparent,#000 28px);mask-image:linear-gradient(90deg,transparent,#000 28px)}
+.scroll.more-l.more-r{-webkit-mask-image:linear-gradient(90deg,transparent,#000 28px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,transparent,#000 28px,#000 calc(100% - 28px),transparent)}
+
+/* Reduce Motion: no shake, no scaling; colours still change. */
+@media (prefers-reduced-motion:reduce){
+  input.code[aria-invalid=true]{animation:none}
+  .mtop details[open] .msheet,.mtop details.closing .msheet{animation-name:fade}
+  .bp:active,.bs:active,.bk:active,.seg button:active,.seg a:active{transform:none}
+  [aria-busy=true]::before{animation-duration:2.4s}
+}
+@keyframes fade{from{opacity:0}}
