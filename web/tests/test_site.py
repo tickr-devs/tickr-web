@@ -32,3 +32,9 @@ def test_home_has_two_early_access_forms_posting_to_the_waitlist():
     html = (_build() / "index.html").read_text()
     assert html.count('action="/api/waitlist"') == 2
     assert 'id="signup"' in html and 'id="signup2"' in html
+
+
+def test_assets_carry_their_content_hash():
+    html = (_build() / "index.html").read_text()
+    assert re.search(r'href="/assets/site\.css\?v=[0-9a-f]{10}"', html)
+    assert re.search(r'src="/assets/site\.js\?v=[0-9a-f]{10}"', html)

@@ -10,6 +10,7 @@ followed by the page body. Spanish strings for the page go in <script>window.TK_
 inside the body.
 """
 
+import hashlib
 import json
 import pathlib
 import re
@@ -112,7 +113,10 @@ def url(slug, mode, depth):
 
 
 def asset(name, mode, depth):
-    return f"/assets/{name}" if mode == "site" else "../" * depth + f"assets/{name}"
+    # ?v= is the file's content hash: a deploy changes the URL, so no browser keeps an old copy.
+    v = hashlib.sha256((ROOT / "assets" / name).read_bytes()).hexdigest()[:10]
+    path = f"/assets/{name}" if mode == "site" else "../" * depth + f"assets/{name}"
+    return f"{path}?v={v}"
 
 
 def header(cur, mode, depth):
