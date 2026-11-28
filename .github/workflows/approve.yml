@@ -16,4 +16,6 @@ jobs:
       && github.event.comment.user.id == 5245855
       && contains(github.event.comment.body, '/approve ') }}
     uses: tickr-devs/tickr-infra/.github/workflows/reviewer-approve.yml@main
-    secrets: inherit
+    # Only the App key; the called workflow sees no other secret of this repository.
+    secrets:
+      TICKR_REVIEWER_KEY: ${{ secrets.TICKR_REVIEWER_KEY }}
