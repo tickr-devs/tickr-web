@@ -1,4 +1,4 @@
-# tickr-web: .github/dependabot.yml (owner yes 2026-11-27 16:58Z: automatic allauth/Django updates).
+# tickr-web: .github/dependabot.yml (automatic allauth/Django updates).
 # Security updates are separate (repo Settings > Code security: Dependabot security updates ON);
 # this file adds a weekly version bump PR for the web app and the workflow actions.
 version: 2

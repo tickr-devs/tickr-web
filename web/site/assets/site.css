@@ -1,6 +1,6 @@
 /* tickr.bot site: one stylesheet for every page. Dark and light follow the system; tokens first. */
 :root{
-  /* App tokens (approved mockup page "Сайт tickr.bot", board SiteLanding); old names map onto them. */
+  /* App tokens (approved mockup page "tickr.bot site", board SiteLanding); old names map onto them. */
   --bg:#05070F; --card:#0E1326; --deep:#0A0F20; --line:#1E2644; --line2:#2A3459; --sel:#172046;
   --tx:#E7EAF6; --tx2:#C9CFE6; --mut:#A9B2D3; --dim:#8F99BC;
   --teal:#2DD4BF; --teal2:#5EEAD4; --green:#34D399; --green2:#6EE7B7; --pink:#F472B6; --pink2:#F9A8D4;

@@ -1,0 +1,63 @@
+"""No chat in the repository: tracked text never quotes a conversation or cites who decided.
+
+Code, config, comments, tests, scripts and docs say what the code does and why in technical
+terms. They never hold a quote of a chat (in any language), an approval or decision attributed
+to a person with its date ("owner 2026-11-20", "the owner asked"), a thread or message id, or a
+reviewer's letter or name (claude-NNN, codex-NNN, Codex, Fable). A decision log records the
+decision itself in neutral words. Run from the repository root; prints file:line: rule and exits
+1 on any hit.
+"""
+
+from __future__ import annotations
+
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+RULES = {
+    "owner-dated": re.compile(r"\bowner\b[^.\n]{0,25}\b20\d\d-\d\d-\d\d\b", re.IGNORECASE),
+    "dated-owner": re.compile(r"\b20\d\d-\d\d-\d\d\b[^.\n|]{0,8}\bowner\b", re.IGNORECASE),
+    "owner-said": re.compile(
+        r"\bowner(?:'s|\u2019s)? (?:asked|chose|said|says|wrote|approved|decided|confirmed|"
+        r"answered|ruling|report|recording|pick|choice)\b", re.IGNORECASE),
+    "owner-approved": re.compile(r"\bowner-(?:approved|requested)\b", re.IGNORECASE),
+    "thread-id": re.compile(r"\bcmsg_[0-9A-Za-z]"),
+    "letter": re.compile(r"\b(?:claude|codex)-\d{2,}\b", re.IGNORECASE),
+    "reviewer": re.compile(r"\b(?:Codex|Fable)\b"),
+    "cyrillic": re.compile(r"[\u0400-\u04ff]"),
+}
+# Agent rules name the review process itself; this file names the rules it checks.
+EXEMPT = {"CLAUDE.md", "AGENTS.md", ".github/scripts/check_no_chat.py"}
+# Vendored design skills, kept as their authors wrote them.
+SKIP = re.compile(r"^(?:\.claude/skills/)")
+# Files that need one rule off, each with its reason.
+ALLOWED: dict[str, tuple[set[str], str]] = {}
+
+
+def tracked(root: Path) -> list[str]:
+    out = subprocess.run(["git", "ls-files", "-z"], cwd=root, check=True, capture_output=True)
+    return [name for name in out.stdout.decode().split("\0") if name]
+
+
+def problems(root: Path) -> list[str]:
+    found = []
+    for name in tracked(root):
+        if name in EXEMPT or SKIP.search(name):
+            continue
+        try:
+            text = (root / name).read_text(encoding="utf-8")
+        except (UnicodeDecodeError, IsADirectoryError, FileNotFoundError):
+            continue
+        off = ALLOWED.get(name, (set(), ""))[0]
+        for number, line in enumerate(text.splitlines(), 1):
+            for rule, pattern in RULES.items():
+                if rule not in off and pattern.search(line):
+                    found.append(f"{name}:{number}: {rule}")
+    return found
+
+
+if __name__ == "__main__":
+    hits = problems(Path.cwd())
+    print("\n".join(hits) or "no chat quotes")
+    sys.exit(1 if hits else 0)
