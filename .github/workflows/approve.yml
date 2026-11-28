@@ -1,0 +1,21 @@
+name: approve
+# Calls tickr-infra's reviewer-approve on each new pull request comment: when the owner's account
+# writes "/approve <head sha>" (the Reviewer's verdict), the tickr-reviewer App approves that exact
+# commit. All checks and the App credentials live in the called workflow; read it there.
+on:
+  issue_comment:
+    types: [created]
+# Reads the pull request's head only; the approval itself uses the App's own token.
+permissions:
+  pull-requests: read
+jobs:
+  pr-approve:
+    # Cheap pre-filter so ordinary comments start no job: the owner's user id and the command.
+    if: >-
+      ${{ github.event.issue.pull_request
+      && github.event.comment.user.id == 5245855
+      && contains(github.event.comment.body, '/approve ') }}
+    uses: tickr-devs/tickr-infra/.github/workflows/reviewer-approve.yml@main
+    # Only the App key; the called workflow sees no other secret of this repository.
+    secrets:
+      TICKR_REVIEWER_KEY: ${{ secrets.TICKR_REVIEWER_KEY }}
