@@ -1,7 +1,7 @@
 # tickr.bot web app
 
 Django + Postgres app behind the public site. It runs on its **own server**, never beside the
-trading bot (owner decision 2026-11-25): a break-in through the website must not reach the broker
+trading bot: a break-in through the website must not reach the broker
 keys. It imports nothing from `src/tickr`.
 
 ## What lives where on tickr.bot

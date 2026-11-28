@@ -17,6 +17,7 @@ including this app's server in `ops/aws/web`), `tickr-ios` (Apple apps).
    times (the privacy page says so); a new stored field needs the owner's yes and a privacy page edit.
 5. **The image user's uid equals `service_uid` in tickr-infra `ops/aws/web/variables.tf`.**
    tickr-infra's CI checks it against this repo's `web/Dockerfile`; change both together.
+6. **No chat in the repository.** Code, config, comments, tests, scripts and docs never quote a chat or a person (in any language), never attribute a choice to someone with a date ("owner 2026-11-20", "the owner asked", "owner-approved"), and never name a thread, message id or reviewer letter (cmsg_…, claude-NNN, codex-NNN, "Codex said", "Fable on #N"). A comment says what the code does and why in technical terms; a decision log states the decision itself in neutral words. `.github/scripts/check_no_chat.py` enforces this in CI.
 
 ## How we work
 

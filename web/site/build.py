@@ -3,7 +3,7 @@
     python3 web/site/build.py            -> web/site/out/site/ (pretty links, for web/deploy/ship.sh)
     python3 web/site/build.py preview    -> web/site/out/preview/ (relative links, opens from disk)
 
-Design: the approved mockup page "Сайт tickr.bot", board SiteLanding (app tokens, system fonts).
+Design: the approved mockup page "tickr.bot site", board SiteLanding (app tokens, system fonts).
 The wordmark is read from the Django templates, so the site and the app share one source.
 Each page file starts with a JSON line: {"slug": "...", "title": "...", "desc": "...", "nav": "..."}
 followed by the page body. Its Spanish is pages/<name>.es.json (keys of the page's data-i18n
@@ -43,7 +43,7 @@ def _svg(name):
 
 
 WORDMARK = _svg("brand.svg")
-# The brand inside pages is the wordmark, never the app-icon tile (owner 2026-11-28, mockup p-logo B).
+# The brand inside pages is the wordmark, never the app-icon tile (mockup p-logo B).
 CTA_MARK = f'<span class="cmark">{WORDMARK}</span>'
 
 FAVICON = (
