@@ -1,1 +1,1 @@
-{% load i18n %}{% autoescape off %}{% blocktranslate %}Your sign-in code: {{ code }}{% endblocktranslate %}{% endautoescape %}
+{% load i18n %}{# Never the code itself: subjects show on locked screens and in notifications. #}{% translate "Your sign-in code" %}

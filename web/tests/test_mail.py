@@ -51,7 +51,8 @@ def test_sign_in_code_email(client):
     client.post(reverse("account_request_login_code"), {"email": "owner@example.com"})
     [message] = mail.outbox
     code = re.search(r"^(\d{6})$", message.body, re.MULTILINE).group(1)
-    assert message.subject == f"Your sign-in code: {code}"
+    assert message.subject == "Your sign-in code"  # the code never shows on a locked screen
+    assert code not in message.subject
     html = _html(message)
     _check_design(html)
     assert code in html and "key-light.png" in html
@@ -67,7 +68,7 @@ def test_sign_in_code_email_in_spanish(client):
         HTTP_ACCEPT_LANGUAGE="es",
     )
     [message] = mail.outbox
-    assert message.subject.startswith("Su código para entrar: ")
+    assert message.subject == "Su código para entrar"
     assert 'lang="es"' in _html(message) and "Escríbalo" in message.body
 
 
