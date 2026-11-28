@@ -4,7 +4,7 @@
     python3 web/site/build.py preview    -> web/site/out/preview/ (relative links, opens from disk)
 
 Design: the approved mockup page "Сайт tickr.bot", board SiteLanding (app tokens, system fonts).
-The wordmark and app tile are read from the Django templates, so the site and the app share one source.
+The wordmark is read from the Django templates, so the site and the app share one source.
 Each page file starts with a JSON line: {"slug": "...", "title": "...", "desc": "...", "nav": "..."}
 followed by the page body. Its Spanish is pages/<name>.es.json (keys of the page's data-i18n
 attributes; "__title" is the tab title). Every page is built twice: English at /<slug>/ and Spanish at
@@ -43,7 +43,8 @@ def _svg(name):
 
 
 WORDMARK = _svg("brand.svg")
-TILE = _svg("app/tile.html").replace("{{ size }}", "72")
+# The brand inside pages is the wordmark, never the app-icon tile (owner 2026-11-28, mockup p-logo B).
+CTA_MARK = f'<span class="cmark">{WORDMARK}</span>'
 
 FAVICON = (
     "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Crect width=%2724%27 height=%2724%27 rx=%275%27 fill=%27%23070A16%27/%3E"
@@ -321,7 +322,7 @@ def page_html(name, meta, body, mode, depth, lang):
     body = (
         body.replace("{{form}}", form(1, lang))
         .replace("{{form2}}", form(2, lang))
-        .replace("{{tile}}", TILE)
+        .replace("{{mark}}", CTA_MARK)
     )
     body = re.sub(r"\{\{a:([a-z.-]+)\}\}", lambda m, d=depth: asset(m.group(1), mode, d), body)
     robots = '\n<meta name="robots" content="noindex">' if meta.get("noindex") else ""
