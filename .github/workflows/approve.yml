@@ -9,7 +9,7 @@ on:
 permissions:
   pull-requests: read
 jobs:
-  approve:
+  pr-approve:
     # Cheap pre-filter so ordinary comments start no job: the owner's user id and the command.
     if: >-
       ${{ github.event.issue.pull_request
