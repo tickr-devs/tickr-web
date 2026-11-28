@@ -20,7 +20,8 @@ RULES = {
     "dated-owner": re.compile(r"\b20\d\d-\d\d-\d\d\b[^.\n|]{0,8}\bowner\b", re.IGNORECASE),
     "owner-said": re.compile(
         r"\bowner(?:'s|\u2019s)? (?:asked|chose|said|says|wrote|approved|decided|confirmed|"
-        r"answered|ruling|report|recording|pick|choice)\b", re.IGNORECASE),
+        r"answered|ruling|reports?|recording|screenshots?|live check|idea|wish|goal|wants|"
+        r"pick|choice)\b", re.IGNORECASE),
     "owner-approved": re.compile(r"\bowner-(?:approved|requested)\b", re.IGNORECASE),
     "thread-id": re.compile(r"\bcmsg_[0-9A-Za-z]"),
     "letter": re.compile(r"\b(?:claude|codex)-\d{2,}\b", re.IGNORECASE),
