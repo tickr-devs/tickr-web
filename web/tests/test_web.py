@@ -6,6 +6,7 @@ import pytest
 from allauth.account.models import EmailAddress
 from django.contrib.auth import get_user_model
 from django.core import mail
+from django.core.cache import cache
 from django.core.management import CommandError, call_command
 from django.test import Client
 from django.urls import reverse
@@ -213,3 +214,28 @@ def test_a_wrong_emailed_code_marks_the_field_for_the_shake(client):
     response = client.post(reverse("account_confirm_login_code"), {"code": "000000"})
     assert response.status_code == 200
     assert 'class="code"' in response.text and 'aria-invalid="true" value="000000"' in response.text
+
+
+@pytest.mark.parametrize("form", ["account_request_login_code", "account_reset_password"])
+def test_code_and_reset_forms_email_no_one_for_an_address_without_account(client, form):
+    _invite()
+    response = client.post(reverse(form), {"email": "stranger@example.com"})
+    assert response.status_code == 302
+    assert mail.outbox == []
+
+
+@pytest.mark.parametrize("form", ["account_request_login_code", "account_reset_password"])
+def test_a_failed_send_answers_like_a_sent_one(client, monkeypatch, caplog, form):
+    cache.clear()  # earlier tests' code and reset requests count against the same limits
+    _invite()
+    sent = client.post(reverse(form), {"email": "owner@example.com"})
+
+    def refuse(*args, **kwargs):
+        raise ConnectionError("mail service down")
+
+    monkeypatch.setattr("django.core.mail.EmailMessage.send", refuse)
+    failed = Client().post(reverse(form), {"email": "owner@example.com"})
+    assert failed.status_code == sent.status_code == 302
+    assert failed["Location"] == sent["Location"]
+    assert "not sent: ConnectionError" in caplog.text
+    assert "owner@example.com" not in caplog.text

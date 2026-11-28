@@ -173,6 +173,10 @@ ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*"]
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGIN_BY_CODE_ENABLED = True
+# No email to an address that has no account (allauth would send "no account here, sign up"
+# from the code and reset forms). Sign-up is by invitation, so that mail only reaches strangers
+# whose address someone typed; the forms answer the same either way.
+ACCOUNT_EMAIL_UNKNOWN_ACCOUNTS = False
 ACCOUNT_EMAIL_SUBJECT_PREFIX = "tickr.bot · "
 ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = False
 ACCOUNT_SESSION_REMEMBER = True
