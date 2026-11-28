@@ -35,6 +35,10 @@ SKIP = re.compile(r"^(?:\.claude/skills/)")
 # Files that need one rule off, each with its reason.
 ALLOWED: dict[str, tuple[set[str], str]] = {}
 
+# Rules also checked across a line break, with the next line's comment marker removed.
+WRAPPED = ("owner-dated", "dated-owner")
+CONTINUATION = re.compile(r"^\s*(?:#+|/{2,}|--|\*|;+)?\s*")
+
 
 def tracked(root: Path) -> list[str]:
     out = subprocess.run(["git", "ls-files", "-z"], cwd=root, check=True, capture_output=True)
@@ -51,10 +55,17 @@ def problems(root: Path) -> list[str]:
         except (UnicodeDecodeError, IsADirectoryError, FileNotFoundError):
             continue
         off = ALLOWED.get(name, (set(), ""))[0]
-        for number, line in enumerate(text.splitlines(), 1):
-            for rule, pattern in RULES.items():
-                if rule not in off and pattern.search(line):
-                    found.append(f"{name}:{number}: {rule}")
+        lines = text.splitlines()
+        for number, line in enumerate(lines, 1):
+            hit = [rule for rule, rx in RULES.items() if rule not in off and rx.search(line)]
+            found += [f"{name}:{number}: {rule}" for rule in hit]
+            if hit or number == len(lines):
+                continue
+            # An attribution wrapped onto the next comment line ("(owner,\n# 2026-11-28)").
+            joined = line + " " + CONTINUATION.sub("", lines[number])
+            for rule in WRAPPED:
+                if rule not in off and RULES[rule].search(joined):
+                    found.append(f"{name}:{number}: {rule} (wrapped)")
     return found
 
 
