@@ -403,9 +403,10 @@ button[aria-busy=true]::before{content:"";width:14px;height:14px;margin-right:8p
 .cc svg{width:13px;height:13px}
 .lcta{flex-direction:row;align-items:center;gap:28px;padding:28px}
 .lcta h2{margin:0 0 6px;font-size:26px}
+.cmark{display:flex;flex:0 0 auto}.cmark svg{display:block;height:36px;width:auto}
 .lcta .jw{flex:0 1 460px;min-width:0}
 .lcta .signup{max-width:none}
 .lsec.lend{padding-bottom:96px}
 @media (max-width:1000px){.lhero{grid-template-columns:minmax(0,1fr);gap:36px;padding-top:40px}.lg4{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:760px){.lg4,.lg3,.lg2{grid-template-columns:minmax(0,1fr)}.lsec{padding-top:48px;margin-top:48px}.lcta{flex-direction:column;align-items:stretch;padding:20px}.lcta .jw{flex:none}.lcta .tile{width:56px;height:56px}}
+@media (max-width:760px){.lg4,.lg3,.lg2{grid-template-columns:minmax(0,1fr)}.lsec{padding-top:48px;margin-top:48px}.lcta{flex-direction:column;align-items:stretch;padding:20px}.lcta .jw{flex:none}.lcta .cmark svg{height:28px}}
 @media (max-width:760px){.lcard.app{flex-wrap:wrap}.lcard.app .grow{flex-basis:180px}}

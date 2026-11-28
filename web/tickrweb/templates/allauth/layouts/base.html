@@ -4,12 +4,12 @@
    form column, the web sibling of the apps' sign-in (mockup board SiteSignIn). #}
 {% block body %}
 <div class="si">
-<aside class="side" aria-hidden="true">{% include "app/tile.html" with size=112 %}<span class="wm">{% include "brand.svg" %}</span>
+<aside class="side" aria-hidden="true"><span class="wm">{% include "brand.svg" %}</span>
 <svg class="cdl" viewBox="0 0 420 200" preserveAspectRatio="xMidYMax meet" fill="none" stroke-width="1.4"><path class="lv" d="M0 150H420" stroke-dasharray="5 4"/><path d="M30 120v50M54 100v60M78 90v50M102 96v36M126 70v58M150 76v42M174 60v50M198 64v36M222 48v48M246 56v34M270 40v44M294 50v42M318 36v40M342 44v36M366 30v40M390 38v34"/><path d="M25 130h10v28H25zM49 112h10v30H49zM73 100h10v24H73zM97 104h10v16H97zM121 80h10v30h-10zM145 84h10v20h-10zM169 66h10v28h-10zM193 70h10v16h-10zM217 52h10v30h-10zM241 60h10v16h-10zM265 46h10v26h-10zM289 56h10v22h-10zM313 40h10v22h-10zM337 50h10v16h-10zM361 34h10v24h-10zM385 42h10v18h-10z"/></svg></aside>
 <main class="gate">
 <div class="bar">{% block back %}<a class="bk" href="/">{% include "icons/back.svg" %}tickr.bot</a>{% endblock %}{% include "app/lang.html" %}</div>
 <div class="col">
-<div class="mk">{% include "app/tile.html" with size=64 %}</div>
+<div class="mk"><span class="wm">{% include "brand.svg" %}</span></div>
 {% include "app/messages.html" %}
 {% block content %}{% endblock %}
 </div>
