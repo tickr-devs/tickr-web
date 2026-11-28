@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-28 00:20-0500\n"
+"POT-Creation-Date: 2026-11-28 00:25-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -76,6 +76,7 @@ msgstr "Reenviar código"
 
 #: tickrweb/templates/account/email/login_code_message.html:3
 #: tickrweb/templates/account/email/login_code_message.txt:1
+#: tickrweb/templates/account/email/login_code_subject.txt:1
 msgid "Your sign-in code"
 msgstr "Su código para entrar"
 
@@ -110,11 +111,6 @@ msgstr[2] ""
 #: tickrweb/templates/invites/body.html:7 tickrweb/templates/invites/body.txt:9
 msgid "You get this because this address has a tickr.bot account."
 msgstr "Recibe esto porque esta dirección tiene una cuenta en tickr.bot."
-
-#: tickrweb/templates/account/email/login_code_subject.txt:1
-#, python-format
-msgid "Your sign-in code: %(code)s"
-msgstr "Su código para entrar: %(code)s"
 
 #: tickrweb/templates/account/email/password_reset_key_message.html:3
 #: tickrweb/templates/account/email/password_reset_key_message.txt:1
