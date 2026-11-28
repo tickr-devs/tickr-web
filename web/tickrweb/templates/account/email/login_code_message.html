@@ -1,0 +1,7 @@
+{% extends "mail/base.html" %}{% load i18n %}
+{% block symbol %}{% include "mail/symbol.html" with name="key" %}{% endblock %}
+{% block heading %}{% translate "Your sign-in code" %}{% endblock %}
+{% block content %}<p>{% translate "Enter it in the tickr.bot window or app where you asked for it." %}</p>{% endblock %}
+{% block action %}{% include "mail/code.html" %}{% endblock %}
+{% block note %}{% blocktranslate count minutes=code_minutes %}The code works for {{ minutes }} minute. Didn't ask for it? Ignore this email: nobody can sign in without it.{% plural %}The code works for {{ minutes }} minutes. Didn't ask for it? Ignore this email: nobody can sign in without it.{% endblocktranslate %}{% endblock %}
+{% block reason %}{% translate "You get this because this address has a tickr.bot account." %}{% endblock %}

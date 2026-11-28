@@ -94,14 +94,15 @@ def test_admin_with_authenticator_gets_a_bot_grant():
     assert "email" not in claims
     notice = mail.outbox[-1]
     assert notice.bcc == ["owner@example.com"]
-    assert "owner@example.com signed in to the bot from the iPhone/iPad app" in notice.subject
+    assert notice.subject == "New sign-in to the bot from iPhone or iPad"
+    assert "owner@example.com" in notice.body
 
 
 def test_a_failed_notice_does_not_stop_the_sign_in(monkeypatch, caplog):
     def refuse(self, *args, **kwargs):
         raise OSError("mail refused")
 
-    monkeypatch.setattr("tickrweb.grants.EmailMultiAlternatives.send", refuse)
+    monkeypatch.setattr("tickrweb.mail.EmailMultiAlternatives.send", refuse)
     _, secret = _account("owner@example.com", "--superuser", totp=True)
     assert _grant(_sign_in("owner@example.com", secret)).status_code == 200
     assert "bot grant notice not sent: OSError" in caplog.text

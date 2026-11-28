@@ -1,10 +1,11 @@
-{% load i18n %}{% autoescape off %}{% translate "Hi," %}
+{% load i18n %}{% autoescape off %}{% translate "You're invited to tickr.bot" %}
 
-{% translate "You're invited to tickr.bot. Sign in with this email address; we'll send you a one-time code:" %}
+{% translate "Sign in with this email address. We'll send you a one-time code:" %}
 
 {{ login_url }}
 
-{% translate "After you sign in, add a passkey under Account so next time it takes one tap." %}
+{% translate "Then add a passkey under Account, and next time signing in takes one tap." %}
 
+{% translate "You get this because this address has a tickr.bot account." %}
 tickr.bot
 {% endautoescape %}

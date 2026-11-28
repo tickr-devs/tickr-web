@@ -3,6 +3,7 @@
 import logging
 
 from allauth.account.adapter import DefaultAccountAdapter
+from django.conf import settings
 
 from .mail import failure_summary
 
@@ -22,6 +23,8 @@ class AccountAdapter(DefaultAccountAdapter):
         error page there would say "this address has an account". It also keeps a mail outage
         (SES refusing, timing out) from turning those forms into a server error.
         """
+        # The sign-in code email says how long its code works.
+        context = {**context, "code_minutes": settings.ACCOUNT_LOGIN_BY_CODE_TIMEOUT // 60}
         try:
             super().send_mail(template_prefix, email, context)
         except Exception as error:  # noqa: BLE001 (see above; the cause is logged)

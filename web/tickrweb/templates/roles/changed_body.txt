@@ -1,5 +1,12 @@
-{% autoescape off %}{% if made_admin %}{{ by }} made {{ email }} an admin of tickr.bot.{% else %}{{ by }} removed {{ email }} from the admins of tickr.bot.{% endif %}
+{% load i18n %}{% autoescape off %}{% if made_admin %}{% translate "New admin" %}
 
-If this was not expected, sign in and check People:
+{% blocktranslate %}{{ by }} made {{ email }} an admin of tickr.bot.{% endblocktranslate %}{% else %}{% translate "Admin removed" %}
+
+{% blocktranslate %}{{ by }} removed {{ email }} from the admins of tickr.bot.{% endblocktranslate %}{% endif %}
+
+{% translate "Not expected? Sign in and check People right away:" %}
 {{ people_url }}
+
+{% translate "You get this because you are an admin of tickr.bot." %}
+tickr.bot
 {% endautoescape %}

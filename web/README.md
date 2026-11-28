@@ -94,6 +94,12 @@ uv run pytest -q
 
 CI runs the same in the `web-tests` job against a Postgres 16 service.
 
+Emails: each one is a plain-text template plus an `.html` beside it that extends
+`tickrweb/templates/mail/base.html` (the approved mail design); `tickrweb.mail.styled_email` sends
+the pair, and allauth picks up `account/email/*_message.html` itself. Email clients don't show SVG,
+so the wordmark and symbols are PNGs in `tickrweb/static/web/mail/`, drawn by
+`node tools/mail-images.cjs` (Node with Playwright); re-run it after changing `brand.svg` or a symbol.
+
 Spanish texts: `locale/es/LC_MESSAGES/django.po`; after editing it run
 `uv run python manage.py compilemessages --settings tickrweb.settings_test -i .venv`. The public
 site's Spanish is `site/pages/<page>.es.json` (shared parts in `site/build.py`); the build writes

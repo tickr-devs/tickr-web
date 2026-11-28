@@ -1,12 +1,13 @@
-{% load i18n %}{% autoescape off %}{% translate "Hi," %}
+{% load i18n %}{% autoescape off %}{% translate "Confirm your place on the list" %}
 
 {% translate "Someone, hopefully you, asked to join the tickr.bot beta list with this address. Confirm it here:" %}
 
 {{ confirm_url }}
 
-{% translate "If it wasn't you, ignore this email and the address is deleted in 7 days. To remove it now:" %}
+{% blocktranslate count days=keep_days %}Not you? Ignore this email and the address is deleted in {{ days }} day. To remove it now:{% plural %}Not you? Ignore this email and the address is deleted in {{ days }} days. To remove it now:{% endblocktranslate %}
 
 {{ unsubscribe_url }}
 
+{% translate "You get this because this address was entered on tickr.bot." %}
 tickr.bot
 {% endautoescape %}

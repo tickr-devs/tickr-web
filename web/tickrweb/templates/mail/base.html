@@ -1,0 +1,51 @@
+{% load i18n mail %}{% get_current_language as lang %}<!doctype html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark">
+<title>tickr.bot</title>
+{# The approved mail design (mockup board SiteEmails). Light colours are inline, for clients that drop <style>; dark ones replace them where the client follows prefers-color-scheme. #}
+<style>
+body{margin:0;padding:0}
+p{margin:14px 0 0}
+.dk{display:none}
+@media (prefers-color-scheme:dark){
+.bg{background:#05070F!important}
+.card{background:#0E1426!important;border-color:#1E2742!important}
+.tx{color:#EEF1FA!important}
+.tx2{color:#B9C1DA!important}
+.mut{color:#8F99BC!important}
+.soft{background:#151C33!important}
+.line{border-color:#1E2742!important}
+.btn{background:#2DD4BF!important;color:#05070F!important}
+.link{color:#2DD4BF!important}
+.lt{display:none!important}
+.dk{display:inline-block!important}
+}
+</style>
+</head>
+<body class="bg" style="margin:0;padding:0;background:#F3F5FA">
+<table role="presentation" class="bg" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F3F5FA">
+<tr><td align="center" style="padding:26px 16px 22px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px">
+<tr><td style="padding:0 4px 16px">
+<img class="lt" src="{% mail_image 'wordmark' 'light' %}" width="96" height="30" alt="tickr.bot" style="display:block;border:0">
+<img class="dk" src="{% mail_image 'wordmark' 'dark' %}" width="96" height="30" alt="tickr.bot" style="display:none;border:0">
+</td></tr>
+<tr><td class="card tx2" style="background:#FFFFFF;border:1px solid #E3E7F0;border-radius:16px;padding:26px 26px 22px;font:15px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Helvetica,Arial,sans-serif;color:#3A4466">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td class="soft" width="44" height="44" align="center" valign="middle" style="width:44px;height:44px;background:#F1F4FA;border-radius:12px">
+{% block symbol %}{% endblock %}
+</td></tr></table>
+<h1 class="tx" style="margin:14px 0 0;font:700 23px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Helvetica,Arial,sans-serif;letter-spacing:-.01em;color:#0B1020">{% block heading %}{% endblock %}</h1>
+{% block content %}{% endblock %}
+{% block action %}{% endblock %}
+<p class="mut" style="font-size:13px;color:#69728F">{% block note %}{% endblock %}</p>
+</td></tr>
+<tr><td class="mut" style="padding:14px 6px 0;font:12px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Helvetica,Arial,sans-serif;color:#69728F">{% block reason %}{% endblock %}<br>tickr.bot</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>

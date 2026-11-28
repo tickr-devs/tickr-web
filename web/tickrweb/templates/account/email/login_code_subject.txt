@@ -1,0 +1,1 @@
+{% load i18n %}{% autoescape off %}{% blocktranslate %}Your sign-in code: {{ code }}{% endblocktranslate %}{% endautoescape %}

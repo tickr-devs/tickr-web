@@ -1,1 +1,1 @@
-{% autoescape off %}tickr.bot: {{ email }} signed in to the bot from {{ app }}{% endautoescape %}
+{% load i18n %}{% autoescape off %}{% blocktranslate %}New sign-in to the bot from {{ app }}{% endblocktranslate %}{% endautoescape %}
