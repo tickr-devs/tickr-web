@@ -1,0 +1,7 @@
+{% extends "mail/base.html" %}{% load i18n %}
+{% block symbol %}{% include "mail/symbol.html" with name="shield" %}{% endblock %}
+{% block heading %}{% if made_admin %}{% translate "New admin" %}{% else %}{% translate "Admin removed" %}{% endif %}{% endblock %}
+{% block content %}<p>{% if made_admin %}{% blocktranslate %}{{ by }} made {{ email }} an admin of tickr.bot.{% endblocktranslate %}{% else %}{% blocktranslate %}{{ by }} removed {{ email }} from the admins of tickr.bot.{% endblocktranslate %}{% endif %}</p>{% endblock %}
+{% block action %}{% translate "Open People" as label %}{% include "mail/button.html" with url=people_url label=label %}{% endblock %}
+{% block note %}{% translate "Not expected? Sign in and check People right away." %}{% endblock %}
+{% block reason %}{% translate "You get this because you are an admin of tickr.bot." %}{% endblock %}

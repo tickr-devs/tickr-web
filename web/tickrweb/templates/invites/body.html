@@ -1,0 +1,7 @@
+{% extends "mail/base.html" %}{% load i18n %}
+{% block symbol %}{% include "mail/symbol.html" with name="star" %}{% endblock %}
+{% block heading %}{% translate "You're invited to tickr.bot" %}{% endblock %}
+{% block content %}<p>{% translate "Sign in with this email address. We'll send you a one-time code." %}</p>{% endblock %}
+{% block action %}{% translate "Sign in" as label %}{% include "mail/button.html" with url=login_url label=label %}{% endblock %}
+{% block note %}{% translate "Then add a passkey under Account, and next time signing in takes one tap." %}{% endblock %}
+{% block reason %}{% translate "You get this because this address has a tickr.bot account." %}{% endblock %}

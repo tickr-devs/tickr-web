@@ -31,14 +31,13 @@ import jwt
 from allauth.headless.internal.sessionkit import authenticate_by_x_session_token
 from cryptography.hazmat.primitives import serialization
 from django.conf import settings
-from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse, JsonResponse
-from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils import timezone, translation
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
 
-from .mail import failure_summary
+from .mail import failure_summary, styled_email
 from .roles import admins, is_admin, signed_in_with_a_strong_factor
 
 log = logging.getLogger(__name__)
@@ -48,7 +47,7 @@ CLIENT_IDS = {"tickr-ios", "tickr-mac"}
 # The only scope a grant carries: reach the bot API.
 BOT_SCOPE = "bot"
 # How each app is named in the notice email.
-APP_NAMES = {"tickr-ios": "the iPhone/iPad app", "tickr-mac": "the Mac app"}
+APP_NAMES = {"tickr-ios": "iPhone or iPad", "tickr-mac": "Mac"}
 
 
 def _private_key():
@@ -126,14 +125,15 @@ def _tell_admins(email: str, client_id: str) -> None:
         "email": email,
         "app": APP_NAMES[client_id],
         "when": timezone.localtime().strftime("%b %d, %H:%M"),
-        "security_url": f"https://{settings.SITE_HOST}/account/2fa/",
+        "devices_url": f"https://{settings.SITE_HOST}{reverse('usersessions_list')}",
     }
     try:
-        with translation.override("en"):
-            subject = render_to_string("grants/issued_subject.txt", context).strip()
-            body = render_to_string("grants/issued_body.txt", context)
         recipients = sorted({a.email for a in admins()})
-        EmailMultiAlternatives(subject, body, bcc=recipients).send()
+        with translation.override("en"):
+            message = styled_email(
+                "grants/issued_subject.txt", "grants/issued_body.txt", context, bcc=recipients
+            )
+        message.send()
     except Exception as error:
         log.error("bot grant notice not sent: %s", failure_summary(error))
 

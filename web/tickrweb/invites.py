@@ -7,10 +7,10 @@ code sent to that address, then adds a passkey and a password under /account/.
 from allauth.account.models import EmailAddress
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.core.mail import EmailMultiAlternatives
 from django.db import transaction
-from django.template.loader import render_to_string
 from django.utils import translation
+
+from .mail import styled_email
 
 
 class AlreadyHasAccount(Exception):
@@ -39,9 +39,8 @@ def create_invited_account(email: str, *, staff: bool = False, superuser: bool =
 def send_invitation(email: str, lang: str) -> None:
     context = {"login_url": f"https://{settings.SITE_HOST}/login"}
     with translation.override(lang):
-        subject = render_to_string("invites/subject.txt", context).strip()
-        body = render_to_string("invites/body.txt", context)
-    EmailMultiAlternatives(subject, body, to=[email]).send()
+        message = styled_email("invites/subject.txt", "invites/body.txt", context, to=[email])
+    message.send()
 
 
 def invite(email: str, lang: str) -> None:

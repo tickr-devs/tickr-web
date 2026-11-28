@@ -169,7 +169,7 @@ def test_a_failed_send_is_logged_without_the_address(client, monkeypatch, caplog
     def refuse(*args, **kwargs):
         raise Refused
 
-    monkeypatch.setattr("tickrweb.waitlist.EmailMultiAlternatives.send", refuse)
+    monkeypatch.setattr("tickrweb.mail.EmailMultiAlternatives.send", refuse)
     response = _join(client)
     assert response.json() == {"status": "error"}
     assert "Refused MessageRejected" in caplog.text
@@ -183,7 +183,7 @@ def test_an_access_error_is_logged_with_its_message(client, monkeypatch, caplog)
     def deny(*args, **kwargs):
         raise Denied
 
-    monkeypatch.setattr("tickrweb.waitlist.EmailMultiAlternatives.send", deny)
+    monkeypatch.setattr("tickrweb.mail.EmailMultiAlternatives.send", deny)
     _join(client)
     assert "no ses:GetAccount" in caplog.text
 
@@ -202,7 +202,7 @@ def test_an_access_error_naming_a_recipient_is_logged_without_it(client, monkeyp
     def deny(*args, **kwargs):
         raise Denied
 
-    monkeypatch.setattr("tickrweb.waitlist.EmailMultiAlternatives.send", deny)
+    monkeypatch.setattr("tickrweb.mail.EmailMultiAlternatives.send", deny)
     _join(client)
     assert "identity/<address> because" in caplog.text
     assert "ses:SendEmail on resource" in caplog.text

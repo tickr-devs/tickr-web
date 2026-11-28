@@ -14,12 +14,10 @@ from allauth.account.authentication import get_authentication_records
 from allauth.mfa.models import Authenticator
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.core.mail import EmailMultiAlternatives
 from django.db import transaction
-from django.template.loader import render_to_string
 from django.utils import translation
 
-from .mail import failure_summary
+from .mail import failure_summary, styled_email
 
 log = logging.getLogger(__name__)
 
@@ -102,6 +100,7 @@ def _notify(recipients, email, made_admin, by_email):
     context = {"email": email, "by": by_email, "made_admin": made_admin}
     context["people_url"] = f"https://{settings.SITE_HOST}/app/people"
     with translation.override("en"):
-        subject = render_to_string("roles/changed_subject.txt", context).strip()
-        body = render_to_string("roles/changed_body.txt", context)
-    EmailMultiAlternatives(subject, body, bcc=recipients).send()
+        message = styled_email(
+            "roles/changed_subject.txt", "roles/changed_body.txt", context, bcc=recipients
+        )
+    message.send()

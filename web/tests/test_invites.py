@@ -72,7 +72,7 @@ def test_a_failed_email_leaves_no_account(client, monkeypatch):
     def refuse(*args, **kwargs):
         raise OSError("mail is down")
 
-    monkeypatch.setattr("tickrweb.invites.EmailMultiAlternatives.send", refuse)
+    monkeypatch.setattr("tickrweb.mail.EmailMultiAlternatives.send", refuse)
     response = _invite(client, _subscriber("bo@example.com"))
     assert "could not be sent" in response.text
     assert not EmailAddress.objects.filter(email="bo@example.com").exists()

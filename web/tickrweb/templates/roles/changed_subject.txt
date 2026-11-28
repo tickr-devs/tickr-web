@@ -1,1 +1,1 @@
-{% if made_admin %}tickr.bot: {{ email }} is now an admin{% else %}tickr.bot: {{ email }} is no longer an admin{% endif %}
+{% load i18n %}{% autoescape off %}{% if made_admin %}{% blocktranslate %}{{ email }} is now an admin{% endblocktranslate %}{% else %}{% blocktranslate %}{{ email }} is no longer an admin{% endblocktranslate %}{% endif %}{% endautoescape %}

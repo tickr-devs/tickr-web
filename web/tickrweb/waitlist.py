@@ -13,24 +13,23 @@ from django.conf import settings
 from django.core import signing
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
-from django.core.mail import EmailMultiAlternatives
 from django.core.validators import validate_email
 from django.db import IntegrityError, transaction
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone, translation
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods, require_POST
 
-from .mail import failure_summary
+from .mail import failure_summary, styled_email
 from .models import Subscriber
 
 log = logging.getLogger(__name__)
 
 CONFIRM_SALT = "tickrweb.waitlist.confirm"
 UNSUBSCRIBE_SALT = "tickrweb.waitlist.unsubscribe"
+SECONDS_PER_DAY = 24 * 60 * 60
 
 
 def _reply(status: str, code: int = 200) -> JsonResponse:
@@ -64,19 +63,19 @@ def send_confirmation(subscriber: Subscriber) -> None:
     context = {
         "confirm_url": _site_url(reverse("waitlist_confirm") + f"?t={confirm}"),
         "unsubscribe_url": _site_url(reverse("waitlist_unsubscribe") + f"?t={leave}"),
+        "keep_days": settings.WAITLIST_CONFIRM_MAX_AGE_SECONDS // SECONDS_PER_DAY,
     }
     with translation.override(subscriber.lang):
-        subject = render_to_string("waitlist/confirm_subject.txt", context).strip()
-        body = render_to_string("waitlist/confirm_body.txt", context)
-    message = EmailMultiAlternatives(
-        subject,
-        body,
-        to=[subscriber.email],
-        headers={
-            "List-Unsubscribe": f"<{context['unsubscribe_url']}>",
-            "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
-        },
-    )
+        message = styled_email(
+            "waitlist/confirm_subject.txt",
+            "waitlist/confirm_body.txt",
+            context,
+            to=[subscriber.email],
+            headers={
+                "List-Unsubscribe": f"<{context['unsubscribe_url']}>",
+                "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+            },
+        )
     message.send()
 
 

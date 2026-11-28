@@ -1,0 +1,11 @@
+{% load i18n %}{% autoescape off %}{% translate "Your sign-in code" %}
+
+{% translate "Enter it in the tickr.bot window or app where you asked for it." %}
+
+{{ code }}
+
+{% blocktranslate count minutes=code_minutes %}The code works for {{ minutes }} minute. Didn't ask for it? Ignore this email: nobody can sign in without it.{% plural %}The code works for {{ minutes }} minutes. Didn't ask for it? Ignore this email: nobody can sign in without it.{% endblocktranslate %}
+
+{% translate "You get this because this address has a tickr.bot account." %}
+tickr.bot
+{% endautoescape %}

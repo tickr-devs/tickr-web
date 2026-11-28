@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-27 19:17+0000\n"
+"POT-Creation-Date: 2026-11-28 00:20-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,39 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
-
-#: tickrweb/admin.py:23 tickrweb/templates/cabinet/index.html:29
-msgid "Account"
-msgstr "Cuenta"
-
-#: tickrweb/admin.py:30
-msgid "Invite to tickr.bot"
-msgstr "Invitar a tickr.bot"
-
-#: tickrweb/admin.py:48
-#, python-format
-msgid "Invited %d address."
-msgid_plural "Invited %d addresses."
-msgstr[0] "Se invitó %d dirección."
-msgstr[1] "Se invitaron %d direcciones."
-msgstr[2] "Se invitaron %d direcciones."
-
-#: tickrweb/admin.py:55
-#, python-format
-msgid "Skipped %d: not confirmed yet or already has an account."
-msgid_plural "Skipped %d: not confirmed yet or already have an account."
-msgstr[0] "Se omitió %d: aún sin confirmar o ya tiene cuenta."
-msgstr[1] "Se omitieron %d: aún sin confirmar o ya tienen cuenta."
-msgstr[2] "Se omitieron %d: aún sin confirmar o ya tienen cuenta."
-
-#: tickrweb/admin.py:66 tickrweb/views.py:120
-#, python-format
-msgid "%d invitation could not be sent; no account was created."
-msgid_plural "%d invitations could not be sent; no accounts were created."
-msgstr[0] "No se pudo enviar %d invitación; no se creó ninguna cuenta."
-msgstr[1] "No se pudieron enviar %d invitaciones; no se crearon cuentas."
-msgstr[2] "No se pudieron enviar %d invitaciones; no se crearon cuentas."
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
 
 #: tickrweb/passwords.py:52
 msgid "This password is in a list of leaked passwords. Choose another one."
@@ -57,14 +26,14 @@ msgstr ""
 #: tickrweb/passwords.py:57
 msgid "Your password can't be one that appeared in a data breach."
 msgstr ""
-"Su contraseña no puede ser una que haya aparecido en una filtración de "
-"datos."
+"Su contraseña no puede ser una que haya aparecido en una filtración de datos."
 
 #: tickrweb/templates/account/confirm_login_code.html:4
 #: tickrweb/templates/account/login.html:5
 #: tickrweb/templates/account/login.html:10
 #: tickrweb/templates/account/password_reset_from_key_done.html:7
 #: tickrweb/templates/account/request_login_code.html:4
+#: tickrweb/templates/invites/body.html:5
 #: tickrweb/templates/mfa/authenticate.html:4
 msgid "Sign in"
 msgstr "Iniciar sesión"
@@ -88,6 +57,7 @@ msgstr "Ingrese el código de 6 dígitos que enviamos a %(email)s."
 
 #: tickrweb/templates/account/confirm_login_code.html:12
 #: tickrweb/templates/mfa/authenticate.html:13
+#: tickrweb/templates/mfa/totp/activate_form.html:16
 msgid "Code"
 msgstr "Código"
 
@@ -103,6 +73,79 @@ msgstr "El código vence en 15 min."
 #: tickrweb/templates/account/confirm_login_code.html:16
 msgid "Resend code"
 msgstr "Reenviar código"
+
+#: tickrweb/templates/account/email/login_code_message.html:3
+#: tickrweb/templates/account/email/login_code_message.txt:1
+msgid "Your sign-in code"
+msgstr "Su código para entrar"
+
+#: tickrweb/templates/account/email/login_code_message.html:4
+#: tickrweb/templates/account/email/login_code_message.txt:3
+msgid "Enter it in the tickr.bot window or app where you asked for it."
+msgstr "Escríbalo en la ventana o la app de tickr.bot donde lo pidió."
+
+#: tickrweb/templates/account/email/login_code_message.html:6
+#: tickrweb/templates/account/email/login_code_message.txt:7
+#, python-format
+msgid ""
+"The code works for %(minutes)s minute. Didn't ask for it? Ignore this email: "
+"nobody can sign in without it."
+msgid_plural ""
+"The code works for %(minutes)s minutes. Didn't ask for it? Ignore this "
+"email: nobody can sign in without it."
+msgstr[0] ""
+"El código vale %(minutes)s minuto. ¿No lo pidió? Ignore este correo: nadie "
+"puede entrar sin él."
+msgstr[1] ""
+"El código vale %(minutes)s minutos. ¿No lo pidió? Ignore este correo: nadie "
+"puede entrar sin él."
+msgstr[2] ""
+"El código vale %(minutes)s minutos. ¿No lo pidió? Ignore este correo: nadie "
+"puede entrar sin él."
+
+#: tickrweb/templates/account/email/login_code_message.html:7
+#: tickrweb/templates/account/email/login_code_message.txt:9
+#: tickrweb/templates/account/email/password_reset_key_message.html:7
+#: tickrweb/templates/account/email/password_reset_key_message.txt:9
+#: tickrweb/templates/invites/body.html:7 tickrweb/templates/invites/body.txt:9
+msgid "You get this because this address has a tickr.bot account."
+msgstr "Recibe esto porque esta dirección tiene una cuenta en tickr.bot."
+
+#: tickrweb/templates/account/email/login_code_subject.txt:1
+#, python-format
+msgid "Your sign-in code: %(code)s"
+msgstr "Su código para entrar: %(code)s"
+
+#: tickrweb/templates/account/email/password_reset_key_message.html:3
+#: tickrweb/templates/account/email/password_reset_key_message.txt:1
+#: tickrweb/templates/account/email/password_reset_key_subject.txt:1
+msgid "Reset your password"
+msgstr "Restablezca su contraseña"
+
+#: tickrweb/templates/account/email/password_reset_key_message.html:4
+msgid ""
+"Someone asked to reset the password for this account. If it was you, choose "
+"a new one."
+msgstr ""
+"Alguien pidió restablecer la contraseña de esta cuenta. Si fue usted, elija "
+"una nueva."
+
+#: tickrweb/templates/account/email/password_reset_key_message.html:5
+msgid "Choose a new password"
+msgstr "Elegir una contraseña nueva"
+
+#: tickrweb/templates/account/email/password_reset_key_message.html:6
+#: tickrweb/templates/account/email/password_reset_key_message.txt:7
+msgid "Didn't ask? Ignore this email and your password stays the same."
+msgstr "¿No lo pidió? Ignore este correo y su contraseña no cambia."
+
+#: tickrweb/templates/account/email/password_reset_key_message.txt:3
+msgid ""
+"Someone asked to reset the password for this account. If it was you, choose "
+"a new one:"
+msgstr ""
+"Alguien pidió restablecer la contraseña de esta cuenta. Si fue usted, elija "
+"una nueva:"
 
 #: tickrweb/templates/account/login.html:7
 msgid "Sign in to tickr.bot"
@@ -174,8 +217,7 @@ msgid "Reset password"
 msgstr "Restablecer contraseña"
 
 #: tickrweb/templates/account/password_reset.html:7
-msgid ""
-"Enter your account email. We’ll email you a link to set a new password."
+msgid "Enter your account email. We’ll email you a link to set a new password."
 msgstr ""
 "Ingrese el correo de su cuenta. Le enviaremos un enlace para crear una "
 "contraseña nueva."
@@ -242,33 +284,6 @@ msgstr "Le enviaremos un código de 6 dígitos. Sirve durante 15 min."
 msgid "Send Code"
 msgstr "Enviar código"
 
-#: tickrweb/templates/admin_refused.html:4
-#: tickrweb/templates/admin_refused.html:7 tickrweb/templates/app/nav.html:8
-#: tickrweb/templates/app/nav.html:12
-#: tickrweb/templates/cabinet/admin_refused.html:3
-#: tickrweb/templates/cabinet/index.html:32
-#: tickrweb/templates/cabinet/people.html:13
-msgid "Admin"
-msgstr "Administración"
-
-#: tickrweb/templates/admin_refused.html:5 tickrweb/templates/app/nav.html:2
-#: tickrweb/templates/cabinet/index.html:4
-#: tickrweb/templates/cabinet/index.html:6
-msgid "Overview"
-msgstr "Resumen"
-
-#: tickrweb/templates/admin_refused.html:7
-msgid ""
-"The admin opens only for staff who signed in with a passkey or an "
-"authenticator app."
-msgstr ""
-"La administración solo se abre para el personal que inició sesión con una "
-"llave de acceso o una app de autenticación."
-
-#: tickrweb/templates/admin_refused.html:8
-msgid "Passkeys and two-step sign-in"
-msgstr "Llaves de acceso y verificación en dos pasos"
-
 #: tickrweb/templates/allauth/layouts/base.html:16
 msgid "Legal"
 msgstr "Legal"
@@ -291,6 +306,11 @@ msgstr "En desarrollo"
 msgid "Language"
 msgstr "Idioma"
 
+#: tickrweb/templates/app/nav.html:2 tickrweb/templates/cabinet/index.html:4
+#: tickrweb/templates/cabinet/index.html:6
+msgid "Overview"
+msgstr "Resumen"
+
 #: tickrweb/templates/app/nav.html:3 tickrweb/templates/cabinet/bot.html:4
 #: tickrweb/templates/cabinet/bot.html:6
 #: tickrweb/templates/cabinet/index.html:11
@@ -308,8 +328,8 @@ msgstr "Apps"
 #: tickrweb/templates/app/nav.html:5
 #: tickrweb/templates/cabinet/admin_refused.html:8
 #: tickrweb/templates/cabinet/index.html:21
-#: tickrweb/templates/cabinet/index.html:27
-#: tickrweb/templates/mfa/index.html:4 tickrweb/templates/mfa/index.html:6
+#: tickrweb/templates/cabinet/index.html:27 tickrweb/templates/mfa/index.html:4
+#: tickrweb/templates/mfa/index.html:6
 msgid "Security"
 msgstr "Seguridad"
 
@@ -319,13 +339,18 @@ msgstr "Seguridad"
 msgid "Devices"
 msgstr "Dispositivos"
 
+#: tickrweb/templates/app/nav.html:8 tickrweb/templates/app/nav.html:12
+#: tickrweb/templates/cabinet/admin_refused.html:3
+#: tickrweb/templates/cabinet/index.html:32
+#: tickrweb/templates/cabinet/people.html:13
+msgid "Admin"
+msgstr "Administración"
+
 #: tickrweb/templates/app/nav.html:9
 #: tickrweb/templates/cabinet/early_access.html:4
 #: tickrweb/templates/cabinet/early_access.html:6
 #: tickrweb/templates/cabinet/index.html:43
 #: tickrweb/templates/cabinet/index.html:45
-#: tickrweb/templates/waitlist/result.html:4
-#: tickrweb/templates/waitlist/result.html:6
 msgid "Early access"
 msgstr "Acceso anticipado"
 
@@ -358,9 +383,9 @@ msgid ""
 "Admin sections open only in a session signed in with a passkey or an "
 "authenticator app. Sign out, then sign in with your passkey."
 msgstr ""
-"Las secciones de administración solo se abren en una sesión iniciada con una"
-" llave de acceso o una app de autenticación. Cierre sesión y vuelva a entrar"
-" con su llave de acceso."
+"Las secciones de administración solo se abren en una sesión iniciada con una "
+"llave de acceso o una app de autenticación. Cierre sesión y vuelva a entrar "
+"con su llave de acceso."
 
 #: tickrweb/templates/cabinet/admin_refused.html:7
 msgid "This section is for tickr.bot admins."
@@ -459,8 +484,7 @@ msgstr ""
 #: tickrweb/templates/cabinet/bot.html:19
 msgid "Pause, stop and emergency stop stay in the Mac and iPhone apps."
 msgstr ""
-"Pausar, detener y la parada de emergencia siguen en las apps de Mac y "
-"iPhone."
+"Pausar, detener y la parada de emergencia siguen en las apps de Mac y iPhone."
 
 #: tickrweb/templates/cabinet/early_access.html:7
 msgid ""
@@ -468,8 +492,8 @@ msgid ""
 "each gets an account and an email to sign in."
 msgstr ""
 "Personas que pidieron acceso anticipado en el sitio. Invite a las "
-"direcciones confirmadas: cada una recibe una cuenta y un correo para iniciar"
-" sesión."
+"direcciones confirmadas: cada una recibe una cuenta y un correo para iniciar "
+"sesión."
 
 #: tickrweb/templates/cabinet/early_access.html:12
 msgid "Invite"
@@ -501,9 +525,8 @@ msgstr "Esperando confirmación"
 msgid "Invite selected"
 msgstr "Invitar seleccionados"
 
-msgid "Beta"
-msgstr "Beta"
-
+#: tickrweb/templates/cabinet/early_access.html:22
+#, python-brace-format
 msgid "Invite {count}"
 msgstr "Invitar a {count}"
 
@@ -562,6 +585,8 @@ msgstr "Sin configurar"
 
 #: tickrweb/templates/cabinet/index.html:25
 #: tickrweb/templates/mfa/index.html:21
+#: tickrweb/templates/mfa/totp/activate_form.html:4
+#: tickrweb/templates/mfa/totp/activate_form.html:6
 msgid "Authenticator app"
 msgstr "App de autenticación"
 
@@ -574,6 +599,10 @@ msgstr "Activada"
 #: tickrweb/templates/mfa/index.html:22
 msgid "Off"
 msgstr "Desactivada"
+
+#: tickrweb/templates/cabinet/index.html:29
+msgid "Account"
+msgstr "Cuenta"
 
 #: tickrweb/templates/cabinet/index.html:32
 #: tickrweb/templates/cabinet/people.html:9
@@ -631,26 +660,78 @@ msgstr ""
 "Podrá ser administrador después de añadir una llave de acceso o una app de "
 "autenticación"
 
-#: tickrweb/templates/invites/body.txt:1
-#: tickrweb/templates/waitlist/confirm_body.txt:1
-msgid "Hi,"
-msgstr "Hola:"
+#: tickrweb/templates/grants/issued_body.html:3
+#: tickrweb/templates/grants/issued_body.txt:1
+msgid "New sign-in to the bot"
+msgstr "Nuevo inicio de sesión en el bot"
+
+#: tickrweb/templates/grants/issued_body.html:5
+#: tickrweb/templates/grants/issued_body.txt:3
+msgid "Who"
+msgstr "Quién"
+
+#: tickrweb/templates/grants/issued_body.html:6
+#: tickrweb/templates/grants/issued_body.txt:4
+msgid "App"
+msgstr "App"
+
+#: tickrweb/templates/grants/issued_body.html:7
+#: tickrweb/templates/grants/issued_body.txt:5
+msgid "When"
+msgstr "Cuándo"
+
+#: tickrweb/templates/grants/issued_body.html:9
+#: tickrweb/templates/grants/issued_body.txt:7
+msgid "Was it you or another admin? Then nothing to do."
+msgstr "¿Fue usted u otro administrador? Entonces no hay nada que hacer."
+
+#: tickrweb/templates/grants/issued_body.html:10
+msgid "Review devices"
+msgstr "Revisar dispositivos"
+
+#: tickrweb/templates/grants/issued_body.html:11
+#: tickrweb/templates/grants/issued_body.txt:9
+msgid ""
+"If not: end the other sessions under Devices, change the password, then sign "
+"the device out on the bot."
+msgstr ""
+"Si no: cierre las otras sesiones en Dispositivos, cambie la contraseña y "
+"luego cierre la sesión del dispositivo en el bot."
+
+#: tickrweb/templates/grants/issued_body.html:12
+#: tickrweb/templates/grants/issued_body.txt:12
+#: tickrweb/templates/roles/changed_body.html:7
+#: tickrweb/templates/roles/changed_body.txt:10
+msgid "You get this because you are an admin of tickr.bot."
+msgstr "Recibe esto porque es administrador de tickr.bot."
+
+#: tickrweb/templates/grants/issued_subject.txt:1
+#, python-format
+msgid "New sign-in to the bot from %(app)s"
+msgstr "Nuevo inicio de sesión en el bot desde %(app)s"
+
+#: tickrweb/templates/invites/body.html:3 tickrweb/templates/invites/body.txt:1
+msgid "You're invited to tickr.bot"
+msgstr "Lo invitamos a tickr.bot"
+
+#: tickrweb/templates/invites/body.html:4
+msgid "Sign in with this email address. We'll send you a one-time code."
+msgstr ""
+"Inicie sesión con esta dirección de correo. Le enviaremos un código de un "
+"solo uso."
+
+#: tickrweb/templates/invites/body.html:6 tickrweb/templates/invites/body.txt:7
+msgid ""
+"Then add a passkey under Account, and next time signing in takes one tap."
+msgstr ""
+"Luego añada una llave de acceso en Cuenta y la próxima vez entrar será un "
+"solo toque."
 
 #: tickrweb/templates/invites/body.txt:3
-msgid ""
-"You're invited to tickr.bot. Sign in with this email address; we'll send you"
-" a one-time code:"
+msgid "Sign in with this email address. We'll send you a one-time code:"
 msgstr ""
-"Lo invitamos a tickr.bot. Inicie sesión con esta dirección de correo; le "
-"enviaremos un código de un solo uso:"
-
-#: tickrweb/templates/invites/body.txt:7
-msgid ""
-"After you sign in, add a passkey under Account so next time it takes one "
-"tap."
-msgstr ""
-"Después de iniciar sesión, añada una llave de acceso en Cuenta para que la "
-"próxima vez baste un toque."
+"Inicie sesión con esta dirección de correo. Le enviaremos un código de un "
+"solo uso:"
 
 #: tickrweb/templates/invites/subject.txt:1
 msgid "Your tickr.bot account is ready"
@@ -732,6 +813,70 @@ msgstr "Generar códigos nuevos"
 msgid "Available after you set up an authenticator app."
 msgstr "Disponible después de configurar una app de autenticación."
 
+#: tickrweb/templates/mfa/totp/activate_form.html:7
+msgid ""
+"Scan the code with your authenticator app, then enter the 6-digit code it "
+"shows."
+msgstr ""
+"Escanee el código con su app de autenticación y luego escriba el código de 6 "
+"dígitos que muestra."
+
+#: tickrweb/templates/mfa/totp/activate_form.html:10
+msgid "QR code for your authenticator app"
+msgstr "Código QR para su app de autenticación"
+
+#: tickrweb/templates/mfa/totp/activate_form.html:14
+msgid "Or type this key"
+msgstr "O escriba esta clave"
+
+#: tickrweb/templates/mfa/totp/activate_form.html:17
+msgid "Turn on"
+msgstr "Activar"
+
+#: tickrweb/templates/roles/changed_body.html:3
+#: tickrweb/templates/roles/changed_body.txt:1
+msgid "New admin"
+msgstr "Nuevo administrador"
+
+#: tickrweb/templates/roles/changed_body.html:3
+#: tickrweb/templates/roles/changed_body.txt:3
+msgid "Admin removed"
+msgstr "Administrador quitado"
+
+#: tickrweb/templates/roles/changed_body.html:4
+#: tickrweb/templates/roles/changed_body.txt:3
+#, python-format
+msgid "%(by)s made %(email)s an admin of tickr.bot."
+msgstr "%(by)s hizo administrador de tickr.bot a %(email)s."
+
+#: tickrweb/templates/roles/changed_body.html:4
+#: tickrweb/templates/roles/changed_body.txt:5
+#, python-format
+msgid "%(by)s removed %(email)s from the admins of tickr.bot."
+msgstr "%(by)s quitó a %(email)s de los administradores de tickr.bot."
+
+#: tickrweb/templates/roles/changed_body.html:5
+msgid "Open People"
+msgstr "Abrir Personas"
+
+#: tickrweb/templates/roles/changed_body.html:6
+msgid "Not expected? Sign in and check People right away."
+msgstr "¿No lo esperaba? Inicie sesión y revise Personas ahora mismo."
+
+#: tickrweb/templates/roles/changed_body.txt:7
+msgid "Not expected? Sign in and check People right away:"
+msgstr "¿No lo esperaba? Inicie sesión y revise Personas ahora mismo:"
+
+#: tickrweb/templates/roles/changed_subject.txt:1
+#, python-format
+msgid "%(email)s is now an admin"
+msgstr "%(email)s ahora es administrador"
+
+#: tickrweb/templates/roles/changed_subject.txt:1
+#, python-format
+msgid "%(email)s is no longer an admin"
+msgstr "%(email)s ya no es administrador"
+
 #: tickrweb/templates/usersessions/usersession_list.html:7
 msgid "Browsers signed in to tickr.bot."
 msgstr "Navegadores con sesión iniciada en tickr.bot."
@@ -752,25 +897,82 @@ msgstr "Este navegador"
 msgid "Sign out other browsers"
 msgstr "Cerrar sesión en los demás navegadores"
 
+#: tickrweb/templates/waitlist/confirm_body.html:3
+#: tickrweb/templates/waitlist/confirm_body.txt:1
+msgid "Confirm your place on the list"
+msgstr "Confirme su lugar en la lista"
+
+#: tickrweb/templates/waitlist/confirm_body.html:4
+msgid ""
+"Someone, hopefully you, asked to join the tickr.bot beta list with this "
+"address."
+msgstr ""
+"Alguien, esperamos que usted, pidió unirse a la lista de la beta de tickr."
+"bot con esta dirección."
+
+#: tickrweb/templates/waitlist/confirm_body.html:5
+msgid "Confirm my email"
+msgstr "Confirmar mi correo"
+
+#: tickrweb/templates/waitlist/confirm_body.html:6
+#, python-format
+msgid ""
+"Not you? Ignore this email and the address is deleted in %(days)s day, or"
+msgid_plural ""
+"Not you? Ignore this email and the address is deleted in %(days)s days, or"
+msgstr[0] ""
+"¿No fue usted? Ignore este correo y la dirección se eliminará en %(days)s "
+"día, o"
+msgstr[1] ""
+"¿No fue usted? Ignore este correo y la dirección se eliminará en %(days)s "
+"días, o"
+msgstr[2] ""
+"¿No fue usted? Ignore este correo y la dirección se eliminará en %(days)s "
+"días, o"
+
+#: tickrweb/templates/waitlist/confirm_body.html:6
+msgid "remove it now"
+msgstr "elimínela ahora"
+
+#: tickrweb/templates/waitlist/confirm_body.html:7
+#: tickrweb/templates/waitlist/confirm_body.txt:11
+msgid "You get this because this address was entered on tickr.bot."
+msgstr "Recibe esto porque esta dirección se escribió en tickr.bot."
+
 #: tickrweb/templates/waitlist/confirm_body.txt:3
 msgid ""
 "Someone, hopefully you, asked to join the tickr.bot beta list with this "
 "address. Confirm it here:"
 msgstr ""
-"Alguien, esperamos que usted, pidió unirse a la lista de la beta de "
-"tickr.bot con esta dirección. Confírmela aquí:"
+"Alguien, esperamos que usted, pidió unirse a la lista de la beta de tickr."
+"bot con esta dirección. Confírmela aquí:"
 
 #: tickrweb/templates/waitlist/confirm_body.txt:7
+#, python-format
 msgid ""
-"If it wasn't you, ignore this email and the address is deleted in 7 days. To"
-" remove it now:"
-msgstr ""
-"Si no fue usted, ignore este correo y la dirección se eliminará en 7 días. "
-"Para eliminarla ahora:"
+"Not you? Ignore this email and the address is deleted in %(days)s day. To "
+"remove it now:"
+msgid_plural ""
+"Not you? Ignore this email and the address is deleted in %(days)s days. To "
+"remove it now:"
+msgstr[0] ""
+"¿No fue usted? Ignore este correo y la dirección se eliminará en %(days)s "
+"día. Para eliminarla ahora:"
+msgstr[1] ""
+"¿No fue usted? Ignore este correo y la dirección se eliminará en %(days)s "
+"días. Para eliminarla ahora:"
+msgstr[2] ""
+"¿No fue usted? Ignore este correo y la dirección se eliminará en %(days)s "
+"días. Para eliminarla ahora:"
 
 #: tickrweb/templates/waitlist/confirm_subject.txt:1
 msgid "Confirm your place on the tickr.bot list"
 msgstr "Confirme su lugar en la lista de tickr.bot"
+
+#: tickrweb/templates/waitlist/result.html:4
+#: tickrweb/templates/waitlist/result.html:6
+msgid "Beta"
+msgstr "Beta"
 
 #: tickrweb/templates/waitlist/result.html:7
 msgid "Confirm your address"
@@ -837,6 +1039,14 @@ msgstr[0] "Se invitó a %d persona."
 msgstr[1] "Se invitó a %d personas."
 msgstr[2] "Se invitó a %d personas."
 
+#: tickrweb/views.py:120
+#, python-format
+msgid "%d invitation could not be sent; no account was created."
+msgid_plural "%d invitations could not be sent; no accounts were created."
+msgstr[0] "No se pudo enviar %d invitación; no se creó ninguna cuenta."
+msgstr[1] "No se pudieron enviar %d invitaciones; no se crearon cuentas."
+msgstr[2] "No se pudieron enviar %d invitaciones; no se crearon cuentas."
+
 #: tickrweb/views.py:178
 #, python-format
 msgid ""
@@ -858,23 +1068,3 @@ msgstr "%(email)s ahora es administrador."
 #, python-format
 msgid "%(email)s is no longer an admin."
 msgstr "%(email)s ya no es administrador."
-
-#: tickrweb/templates/mfa/totp/activate_form.html
-msgid ""
-"Scan the code with your authenticator app, then enter the 6-digit code it "
-"shows."
-msgstr ""
-"Escanee el código con su app de autenticación y luego escriba el código de 6"
-" dígitos que muestra."
-
-#: tickrweb/templates/mfa/totp/activate_form.html
-msgid "QR code for your authenticator app"
-msgstr "Código QR para su app de autenticación"
-
-#: tickrweb/templates/mfa/totp/activate_form.html
-msgid "Or type this key"
-msgstr "O escriba esta clave"
-
-#: tickrweb/templates/mfa/totp/activate_form.html
-msgid "Turn on"
-msgstr "Activar"

@@ -1,4 +1,14 @@
-{% autoescape off %}{{ email }} signed in to the bot from {{ app }} at {{ when }} ET.
+{% load i18n %}{% autoescape off %}{% translate "New sign-in to the bot" %}
 
-If this was not you or another admin, sign in at {{ security_url }}, end the other sessions under Devices and change the password; then sign the device out on the bot.
+{% translate "Who" %}: {{ email }}
+{% translate "App" %}: {{ app }}
+{% translate "When" %}: {{ when }} ET
+
+{% translate "Was it you or another admin? Then nothing to do." %}
+
+{% translate "If not: end the other sessions under Devices, change the password, then sign the device out on the bot." %}
+{{ devices_url }}
+
+{% translate "You get this because you are an admin of tickr.bot." %}
+tickr.bot
 {% endautoescape %}

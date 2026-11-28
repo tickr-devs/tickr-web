@@ -1,0 +1,12 @@
+{% extends "mail/base.html" %}{% load i18n %}
+{% block symbol %}{% include "mail/symbol.html" with name="phone" %}{% endblock %}
+{% block heading %}{% translate "New sign-in to the bot" %}{% endblock %}
+{% block content %}<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:14px;font-size:14px">
+{% translate "Who" as who %}{% include "mail/row.html" with label=who value=email %}
+{% translate "App" as app_label %}{% include "mail/row.html" with label=app_label value=app %}
+{% translate "When" as when_label %}{% with when_value=when|add:" ET" %}{% include "mail/row.html" with label=when_label value=when_value %}{% endwith %}
+</table>
+<p>{% translate "Was it you or another admin? Then nothing to do." %}</p>{% endblock %}
+{% block action %}{% translate "Review devices" as label %}{% include "mail/button.html" with url=devices_url label=label %}{% endblock %}
+{% block note %}{% translate "If not: end the other sessions under Devices, change the password, then sign the device out on the bot." %}{% endblock %}
+{% block reason %}{% translate "You get this because you are an admin of tickr.bot." %}{% endblock %}

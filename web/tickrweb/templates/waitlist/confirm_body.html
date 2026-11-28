@@ -1,0 +1,7 @@
+{% extends "mail/base.html" %}{% load i18n %}
+{% block symbol %}{% include "mail/symbol.html" with name="mail" %}{% endblock %}
+{% block heading %}{% translate "Confirm your place on the list" %}{% endblock %}
+{% block content %}<p>{% translate "Someone, hopefully you, asked to join the tickr.bot beta list with this address." %}</p>{% endblock %}
+{% block action %}{% translate "Confirm my email" as label %}{% include "mail/button.html" with url=confirm_url label=label %}{% endblock %}
+{% block note %}{% blocktranslate count days=keep_days %}Not you? Ignore this email and the address is deleted in {{ days }} day, or{% plural %}Not you? Ignore this email and the address is deleted in {{ days }} days, or{% endblocktranslate %} <a class="link" href="{{ unsubscribe_url }}" style="color:#0B766F;font-weight:600">{% translate "remove it now" %}</a>.{% endblock %}
+{% block reason %}{% translate "You get this because this address was entered on tickr.bot." %}{% endblock %}

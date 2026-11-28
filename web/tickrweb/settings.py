@@ -177,7 +177,8 @@ ACCOUNT_LOGIN_BY_CODE_ENABLED = True
 # from the code and reset forms). Sign-up is by invitation, so that mail only reaches strangers
 # whose address someone typed; the forms answer the same either way.
 ACCOUNT_EMAIL_UNKNOWN_ACCOUNTS = False
-ACCOUNT_EMAIL_SUBJECT_PREFIX = "tickr.bot · "
+# No "tickr.bot · " before subjects: the sender name already says tickr.bot.
+ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
 ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = False
 ACCOUNT_SESSION_REMEMBER = True
 # Proxies in front of gunicorn: one, Caddy. It overwrites X-Forwarded-For with the address it
